@@ -18,7 +18,11 @@
   "author": "DmitryDzz",
   "license": "MIT",
   "devDependencies": {
+    "@types/blessed": "^0.1.19",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81"
   }
 }
