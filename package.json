@@ -1,0 +1,24 @@
+{
+  "name": "dinonode",
+  "version": "1.0.0",
+  "description": "A node.js terminal game.",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "game",
+    "dinosaur",
+    "dinonode",
+    "node",
+    "typescript"
+  ],
+  "author": "DmitryDzz",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  }
+}
