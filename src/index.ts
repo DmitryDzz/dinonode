@@ -1,4 +1,5 @@
 import {box, screen} from "blessed";
+import {Dino} from "./dino";
 
 console.log("Hello world!");
 
@@ -11,19 +12,21 @@ scr.title = "Dinonode game";
 // scr.addListener("resize", () => {
 // });
 
+const dino = new Dino();
+
 const bx = box({
     top: 'center',
     left: 0,
-    width: 12,
-    height: 3,
-    content: 'Hello {bold}world{/bold}!\ndsfsd',
+    width: dino.width,
+    height: dino.height,
+    content: dino.sprite.idle,
     tags: true,
     // border: {
     //     type: 'line'
     // },
     style: {
         fg: 'white',
-        bg: 'magenta',
+        // bg: 'magenta',
         border: {
             fg: '#f0f0f0'
         },
@@ -37,6 +40,7 @@ scr.append(bx);
 
 const interval = setInterval(() => {
     bx.left = bx.left as number + 1;
+    bx.setContent((bx.left / 6 >> 0) % 2 === 0 ? dino.sprite.runA : dino.sprite.runB);
     scr.render();
 }, 20);
 
