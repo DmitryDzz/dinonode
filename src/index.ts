@@ -1,51 +1,29 @@
-import {box, screen} from "blessed";
-import {Dino} from "./dino";
+import {screen} from "blessed";
+import {Scene} from "./scene";
 
-console.log("Hello world!");
+const main = (): void => {
+    console.log("Hello world!");
 
-const scr = screen({
-    smartCSR: true
-});
+    const scr = screen({
+        title: "Dinonode",
+        smartCSR: true
+    });
 
-scr.title = "Dinonode game";
+    // scr.addListener("resize", () => {
+    // });
 
-// scr.addListener("resize", () => {
-// });
+    const scene = new Scene(scr);
 
-const dino = new Dino();
+    const interval = setInterval(() => {
+        const time: number = Date.now(); // absolute millis
+        scene.update(time);
+        scr.render();
+    }, 20);
 
-const bx = box({
-    top: 'center',
-    left: 0,
-    width: dino.width,
-    height: dino.height,
-    content: dino.sprites.left.idle[0],
-    tags: true,
-    // border: {
-    //     type: 'line'
-    // },
-    style: {
-        fg: 'white',
-        // bg: 'magenta',
-        border: {
-            fg: '#f0f0f0'
-        },
-        hover: {
-            bg: 'green'
-        }
-    }
-});
+    scr.key(['escape', 'q', 'C-c'], function(ch, key) {
+        clearInterval(interval);
+        return process.exit(0);
+    });
+}
 
-scr.append(bx);
-
-const interval = setInterval(() => {
-
-    bx.left = bx.left as number + 1;
-    bx.setContent((bx.left / 6 >> 0) % 2 === 0 ? dino.sprites.left.run[1] : dino.sprites.left.run[3]);
-    scr.render();
-}, 20);
-
-scr.key(['escape', 'q', 'C-c'], function(ch, key) {
-    clearInterval(interval);
-    return process.exit(0);
-});
+main();
