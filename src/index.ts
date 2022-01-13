@@ -19,7 +19,7 @@ const bx = box({
     left: 0,
     width: dino.width,
     height: dino.height,
-    content: dino.sprite.idle,
+    content: dino.sprites.left.idle[0],
     tags: true,
     // border: {
     //     type: 'line'
@@ -39,8 +39,9 @@ const bx = box({
 scr.append(bx);
 
 const interval = setInterval(() => {
+
     bx.left = bx.left as number + 1;
-    bx.setContent((bx.left / 6 >> 0) % 2 === 0 ? dino.sprite.runA : dino.sprite.runB);
+    bx.setContent((bx.left / 6 >> 0) % 2 === 0 ? dino.sprites.left.run[1] : dino.sprites.left.run[3]);
     scr.render();
 }, 20);
 
