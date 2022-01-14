@@ -3,6 +3,23 @@ import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {Time} from "./time";
+import {
+    DeadLeftState,
+    DeadRightState,
+    IdleLeftState,
+    IdleRightState, JumpLeftState, JumpRightState,
+    RunLeftState,
+    RunRightState,
+    State, StateType
+} from "./states";
+
+enum Key {
+    Left = "a",
+    Right = "d",
+    Stop = "s",
+    Jump = "w",
+    Dead = "x",
+}
 
 export interface Animations {
     idle: string[];
@@ -47,7 +64,7 @@ export class Dino {
     static readonly width: integer = 20;
     static readonly height: integer = 11;
 
-    readonly sprites: {
+    static sprites: {
         left: Animations,
         right: Animations
     };
@@ -58,36 +75,69 @@ export class Dino {
     private _speed: float = Dino.ABS_SPEED;
     private readonly _pos: Position;
 
+    private _state: State;
+
     constructor(scr: Screen) {
         this._pos = new Position(0, scr.height as number - Dino.height);
 
         this._box = Dino.createBox(this._pos.column, this._pos.row);
         scr.append(this._box);
 
-        this.sprites = Dino.createSprites();
+        Dino.sprites = Dino.createSprites();
 
-        this._box.setContent(this.sprites.left.idle[0]);
+        this._state = new RunRightState();
 
-        scr.key(["h", "j", "o"], this._keyPressed);
+        scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Dead], this._keyPressed);
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
-        if (ch === "h")
+        if (ch === Key.Left) {
+            this._state = this.changeState("runL");
             this._speed = -Dino.ABS_SPEED;
-        else if (ch === "j")
+        } else if (ch === Key.Right) {
+            this._state = this.changeState("runR");
             this._speed = Dino.ABS_SPEED;
-        else if (ch === "o")
+        } else if (ch === Key.Stop) {
+            this._state = this._state.isLeftDirection()
+                ? this.changeState("idleL")
+                : this.changeState("idleR");
             this._speed = 0;
+        } else if (ch === Key.Jump) {
+            this._state = this._state.isLeftDirection()
+                ? this.changeState("jumpL")
+                : this.changeState("jumpR");
+            this._speed = 0;
+        } else if (ch === Key.Dead) {
+            this._state = this._state.isLeftDirection()
+                ? this.changeState("deadL")
+                : this.changeState("deadR");
+            this._speed = 0;
+        }
+    }
+
+    private changeState(stateType: StateType): State {
+        if (this._state.type === stateType) return this._state;
+        switch (stateType) {
+            case "idleL": return new IdleLeftState();
+            case "idleR": return new IdleRightState();
+            case "runL": return new RunLeftState();
+            case "runR": return new RunRightState();
+            case "jumpL": return new JumpLeftState();
+            case "jumpR": return new JumpRightState();
+            case "deadL": return new DeadLeftState();
+            case "deadR": return new DeadRightState();
+        }
     }
 
     update() {
         const bx = this._box;
-        const frame = this._speed > 0 ? this.sprites.right.run : this.sprites.left.run;
+
+        if (this._state.isFrameReady()) {
+            bx.setContent(this._state.frame);
+        }
 
         this._pos.update(this._speed * Time.deltaTime, 0);
         bx.left = this._pos.column;
-
-        bx.setContent((bx.left / 6 >> 0) % 2 === 0 ? frame[1] : frame[3]);
     }
 
     /** @internal **/
@@ -139,9 +189,7 @@ export class Dino {
                     Dino._textures.idle,
                 ],
                 run: [
-                    Dino._textures.idle,
                     Dino._textures.runA,
-                    Dino._textures.idle,
                     Dino._textures.runB,
                 ],
                 jump: [
@@ -156,9 +204,7 @@ export class Dino {
                     Dino.flip(Dino._textures.idle),
                 ],
                 run: [
-                    Dino.flip(Dino._textures.idle),
                     Dino.flip(Dino._textures.runA),
-                    Dino.flip(Dino._textures.idle),
                     Dino.flip(Dino._textures.runB),
                 ],
                 jump: [
@@ -222,17 +268,3 @@ export class Dino {
             "     █▄   █▄        ",
     };
 }
-
-/*
-▄████████▄
-███████▄██
-██████████
-  ▄▄▄█████
-      █████▄▖      █
-    █▀████████▄  ▄██
-      ██████████████
-       ███████████▀
-       ▀████████▀
-      ▘▀▀   ▀██
-             ▄█
- */

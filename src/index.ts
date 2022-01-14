@@ -13,6 +13,7 @@ const main = (): void => {
     // scr.addListener("resize", () => {
     // });
 
+    Time.update();
     const scene = new Scene(scr);
 
     const interval = setInterval(() => {
@@ -21,7 +22,7 @@ const main = (): void => {
         scr.render();
     }, 20);
 
-    scr.key(['escape', 'q', 'C-c'], function(ch, key) {
+    scr.key(['escape', 'q', 'C-c'], function(_ch, _key) {
         clearInterval(interval);
         return process.exit(0);
     });
