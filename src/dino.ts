@@ -153,8 +153,8 @@ export class Dino {
         this._pos.setLimits({
             c0: 0,
             r0: 0,
-            c1: this._scr.width as number - Dino.width - 1,
-            r1: this._scr.height as number - Dino.height - 1});
+            c1: this._scr.width as number - Dino.width,
+            r1: this._scr.height as number - Dino.height});
         this._pos.update(this._speed * Time.deltaTime, 0);
         bx.left = this._pos.column;
     }
