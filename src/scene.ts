@@ -12,7 +12,7 @@ export class Scene {
         this._dino = new Dino(scr);
     }
 
-    update(time: number) {
-        this._dino.update(time);
+    update() {
+        this._dino.update();
     }
 }

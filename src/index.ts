@@ -1,5 +1,6 @@
 import {screen} from "blessed";
 import {Scene} from "./scene";
+import {Time} from "./time";
 
 const main = (): void => {
     console.log("Hello world!");
@@ -15,8 +16,8 @@ const main = (): void => {
     const scene = new Scene(scr);
 
     const interval = setInterval(() => {
-        const time: number = Date.now(); // absolute millis
-        scene.update(time);
+        Time.update();
+        scene.update();
         scr.render();
     }, 20);
 

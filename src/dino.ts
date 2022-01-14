@@ -2,6 +2,7 @@ import {box, Widgets} from "blessed";
 import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
+import {Time} from "./time";
 
 export interface Animations {
     idle: string[];
@@ -52,9 +53,8 @@ export class Dino {
     };
 
     private readonly _box: BoxElement;
-    private _previousTime?: number = undefined;
 
-    private static readonly ABS_SPEED: float = 40.0 / 1000.0; // 40 symbols per second
+    private static readonly ABS_SPEED: float = 40.0; // 40 symbols per second
     private _speed: float = Dino.ABS_SPEED;
     private readonly _pos: Position;
 
@@ -80,14 +80,11 @@ export class Dino {
             this._speed = 0;
     }
 
-    update(time: number) {
-        const deltaTime = this._previousTime ? time - this._previousTime : 0;
-        this._previousTime = time;
-
+    update() {
         const bx = this._box;
         const frame = this._speed > 0 ? this.sprites.right.run : this.sprites.left.run;
 
-        this._pos.update(this._speed * deltaTime, 0);
+        this._pos.update(this._speed * Time.deltaTime, 0);
         bx.left = this._pos.column;
 
         bx.setContent((bx.left / 6 >> 0) % 2 === 0 ? frame[1] : frame[3]);
@@ -101,6 +98,17 @@ export class Dino {
             if (result.length > 0) result += "\n";
             result += row.split("").reverse().join("");
         });
+        result = result
+            .replace("\u2596", "Б")
+            .replace("\u2597", "Г")
+            .replace("\u2598", "Д")
+            .replace("\u259d", "Ж");
+        result = result
+            .replace("Б", "\u2597")
+            .replace("Г", "\u2596")
+            .replace("Д", "\u259d")
+            .replace("Ж", "\u2598");
+
         return result;
     }
 
@@ -214,3 +222,17 @@ export class Dino {
             "     █▄   █▄        ",
     };
 }
+
+/*
+▄████████▄
+███████▄██
+██████████
+  ▄▄▄█████
+      █████▄▖      █
+    █▀████████▄  ▄██
+      ██████████████
+       ███████████▀
+       ▀████████▀
+      ▘▀▀   ▀██
+             ▄█
+ */
