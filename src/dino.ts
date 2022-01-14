@@ -30,6 +30,7 @@ export interface Animations {
 
 type integer = number;
 type float = number;
+interface Rect { c0: integer, r0: integer, c1: integer, r1: integer }
 
 class Position {
     private _x: float;
@@ -52,11 +53,23 @@ class Position {
         this._y = this._row;
     }
 
+    private _rect?: Rect;
+
+    setLimits(rect: Rect) {
+        this._rect = rect;
+    }
+
     update(deltaX: float, deltaY: float) {
         this._x += deltaX;
         this._y += deltaY;
         this._column = Math.floor(this._x);
         this._row = Math.floor(this._y);
+        if (this._rect) {
+            if (this._column < this._rect.c0) { this._column = this._rect.c0; this._x = this._column; }
+            if (this._column > this._rect.c1) { this._column = this._rect.c1; this._x = this._column; }
+            if (this._row < this._rect.r0) { this._row = this._rect.r0; this._y = this._row; }
+            if (this._row > this._rect.r1) { this._row = this._rect.r1; this._y = this._row; }
+        }
     }
 }
 
@@ -69,6 +82,7 @@ export class Dino {
         right: Animations
     };
 
+    private readonly _scr: Screen;
     private readonly _box: BoxElement;
 
     private static readonly ABS_SPEED: float = 40.0; // 40 symbols per second
@@ -80,6 +94,7 @@ export class Dino {
     constructor(scr: Screen) {
         this._pos = new Position(0, scr.height as number - Dino.height);
 
+        this._scr = scr;
         this._box = Dino.createBox(this._pos.column, this._pos.row);
         scr.append(this._box);
 
@@ -106,7 +121,6 @@ export class Dino {
             this._state = this._state.isLeftDirection()
                 ? this.changeState("jumpL")
                 : this.changeState("jumpR");
-            this._speed = 0;
         } else if (ch === Key.Dead) {
             this._state = this._state.isLeftDirection()
                 ? this.changeState("deadL")
@@ -136,6 +150,11 @@ export class Dino {
             bx.setContent(this._state.frame);
         }
 
+        this._pos.setLimits({
+            c0: 0,
+            r0: 0,
+            c1: this._scr.width as number - Dino.width - 1,
+            r1: this._scr.height as number - Dino.height - 1});
         this._pos.update(this._speed * Time.deltaTime, 0);
         bx.left = this._pos.column;
     }
