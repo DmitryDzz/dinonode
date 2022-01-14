@@ -77,6 +77,8 @@ export class Dino {
     static readonly width: integer = 20;
     static readonly height: integer = 11;
 
+    private static readonly JUMP_DURATION = 0.5;
+
     static sprites: {
         left: Animations,
         right: Animations
@@ -105,31 +107,44 @@ export class Dino {
         scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Dead], this._keyPressed);
     }
 
+    private _returnToPrevStateTimeout?: NodeJS.Timeout;
+
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
+        if (this._returnToPrevStateTimeout) {
+            clearTimeout(this._returnToPrevStateTimeout);
+            this._returnToPrevStateTimeout = undefined;
+        }
+
         if (ch === Key.Left) {
-            this._state = this.changeState("runL");
+            this._state = this._changeState("runL");
             this._speed = -Dino.ABS_SPEED;
         } else if (ch === Key.Right) {
-            this._state = this.changeState("runR");
+            this._state = this._changeState("runR");
             this._speed = Dino.ABS_SPEED;
         } else if (ch === Key.Stop) {
             this._state = this._state.isLeftDirection()
-                ? this.changeState("idleL")
-                : this.changeState("idleR");
+                ? this._changeState("idleL")
+                : this._changeState("idleR");
             this._speed = 0;
         } else if (ch === Key.Jump) {
+            const currentStateType = this._state.type;
+            // console.log("1", currentStateType);
+            this._returnToPrevStateTimeout = setTimeout(() => {
+                // console.log("2", currentStateType);
+                this._state = this._changeState(currentStateType);
+            }, Dino.JUMP_DURATION * 1000);
             this._state = this._state.isLeftDirection()
-                ? this.changeState("jumpL")
-                : this.changeState("jumpR");
+                ? this._changeState("jumpL")
+                : this._changeState("jumpR");
         } else if (ch === Key.Dead) {
             this._state = this._state.isLeftDirection()
-                ? this.changeState("deadL")
-                : this.changeState("deadR");
+                ? this._changeState("deadL")
+                : this._changeState("deadR");
             this._speed = 0;
         }
     }
 
-    private changeState(stateType: StateType): State {
+    private _changeState(stateType: StateType): State {
         if (this._state.type === stateType) return this._state;
         switch (stateType) {
             case "idleL": return new IdleLeftState();
