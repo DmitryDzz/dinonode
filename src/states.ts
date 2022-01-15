@@ -1,6 +1,27 @@
 import {Time} from "./time";
 import {Dino} from "./dino";
 
+export class States {
+    private readonly _states: Map<StateType, State>;
+
+    constructor() {
+        this._states = new Map<StateType, State>([
+            ["idleL", new IdleLeftState()],
+            ["idleR", new IdleRightState()],
+            ["runL", new RunLeftState()],
+            ["runR", new RunRightState()],
+            ["jumpL", new JumpLeftState()],
+            ["jumpR", new JumpRightState()],
+            ["deadL", new DeadLeftState()],
+            ["deadR", new DeadRightState()],
+        ]);
+    }
+
+    getState(type: StateType): State {
+        return this._states.get(type)!;
+    }
+}
+
 export type StateType =
     "idleL" | "idleR" | "runL" | "runR" | "jumpL" | "jumpR" | "deadL" | "deadR";
 
@@ -24,7 +45,12 @@ export abstract class State {
         this._frames = frames;
         this.setFrameDuration();
         this.setFramesCount();
+        this.clear();
+    }
+
+    clear() {
         this._frameTime = undefined;
+        this._frameIndex = 0;
     }
 
     private setNextFrame(): void {

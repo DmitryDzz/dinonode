@@ -3,15 +3,7 @@ import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {Time} from "./time";
-import {
-    DeadLeftState,
-    DeadRightState,
-    IdleLeftState,
-    IdleRightState, JumpLeftState, JumpRightState,
-    RunLeftState,
-    RunRightState,
-    State, StateType
-} from "./states";
+import {State, States, StateType} from "./states";
 
 enum Key {
     Left = "a",
@@ -62,8 +54,8 @@ class Position {
     update(deltaX: float, deltaY: float) {
         this._x += deltaX;
         this._y += deltaY;
-        this._column = Math.floor(this._x);
-        this._row = Math.floor(this._y);
+        this._column = Math.round(this._x);
+        this._row = Math.round(this._y);
         if (this._rect) {
             if (this._column < this._rect.c0) { this._column = this._rect.c0; this._x = this._column; }
             if (this._column > this._rect.c1) { this._column = this._rect.c1; this._x = this._column; }
@@ -91,6 +83,7 @@ export class Dino {
     private _speed: float = Dino.ABS_SPEED;
     private readonly _pos: Position;
 
+    private readonly _states: States;
     private _state: State;
 
     constructor(scr: Screen) {
@@ -102,7 +95,8 @@ export class Dino {
 
         Dino.sprites = Dino.createSprites();
 
-        this._state = new RunRightState();
+        this._states = new States();
+        this._state = this._states.getState("runR");
 
         scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Dead], this._keyPressed);
     }
@@ -128,9 +122,7 @@ export class Dino {
             this._speed = 0;
         } else if (ch === Key.Jump) {
             const currentStateType = this._state.type;
-            // console.log("1", currentStateType);
             this._returnToPrevStateTimeout = setTimeout(() => {
-                // console.log("2", currentStateType);
                 this._state = this._changeState(currentStateType);
             }, Dino.JUMP_DURATION * 1000);
             this._state = this._state.isLeftDirection()
@@ -146,16 +138,9 @@ export class Dino {
 
     private _changeState(stateType: StateType): State {
         if (this._state.type === stateType) return this._state;
-        switch (stateType) {
-            case "idleL": return new IdleLeftState();
-            case "idleR": return new IdleRightState();
-            case "runL": return new RunLeftState();
-            case "runR": return new RunRightState();
-            case "jumpL": return new JumpLeftState();
-            case "jumpR": return new JumpRightState();
-            case "deadL": return new DeadLeftState();
-            case "deadR": return new DeadRightState();
-        }
+        this._state = this._states.getState(stateType);
+        this._state.clear();
+        return this._state;
     }
 
     update() {
