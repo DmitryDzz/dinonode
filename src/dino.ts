@@ -122,15 +122,23 @@ export class Dino {
             result += row.split("").reverse().join("");
         });
         result = result
-            .replace("\u2596", "Б")
-            .replace("\u2597", "Г")
-            .replace("\u2598", "Д")
-            .replace("\u259d", "Ж");
+            .replace(/\u2596/g, "Б")
+            .replace(/\u2597/g, "Г")
+            .replace(/\u2598/g, "Д")
+            .replace(/\u259d/g, "Ж")
+            .replace(/\u2599/g, "Й")
+            .replace(/\u259b/g, "Л")
+            .replace(/\u259c/g, "П")
+            .replace(/\u259f/g, "Ф");
         result = result
-            .replace("Б", "\u2597")
-            .replace("Г", "\u2596")
-            .replace("Д", "\u259d")
-            .replace("Ж", "\u2598");
+            .replace(/Б/g, "\u2597")
+            .replace(/Г/g, "\u2596")
+            .replace(/Д/g, "\u259d")
+            .replace(/Ж/g, "\u2598")
+            .replace(/Й/g, "\u259f")
+            .replace(/Л/g, "\u259c")
+            .replace(/П/g, "\u259b")
+            .replace(/Ф/g, "\u2599");
 
         return result;
     }
@@ -166,7 +174,7 @@ export class Dino {
                     Dino._textures.runB,
                 ],
                 jump: [
-                    Dino._textures.idle,
+                    Dino._textures.jump,
                 ],
                 dead: [
                     Dino._textures.dead,
@@ -181,7 +189,7 @@ export class Dino {
                     Dino.flip(Dino._textures.runB),
                 ],
                 jump: [
-                    Dino.flip(Dino._textures.idle),
+                    Dino.flip(Dino._textures.jump),
                 ],
                 dead: [
                     Dino.flip(Dino._textures.dead),
@@ -198,7 +206,7 @@ export class Dino {
             "          █████▄▄▄  \n" +
             "█      ▗▄█████      \n" +
             "██▄  ▄████████▀█    \n" +
-            "██████████████      \n" +
+            "▜█████████████      \n" +
             " ▀███████████       \n" +
             "   ▀████████▀       \n" +
             "     ██▀ ▀█         \n" +
@@ -210,7 +218,7 @@ export class Dino {
             "          █████▄▄▄  \n" +
             "█      ▗▄█████      \n" +
             "██▄  ▄████████▀█    \n" +
-            "██████████████      \n" +
+            "▜█████████████      \n" +
             " ▀███████████       \n" +
             "   ▀████████▀       \n" +
             "     ██▀   ▀▀▘      \n" +
@@ -222,11 +230,23 @@ export class Dino {
             "          █████▄▄▄  \n" +
             "█      ▗▄█████      \n" +
             "██▄  ▄████████▀█    \n" +
-            "██████████████      \n" +
+            "▜█████████████      \n" +
             " ▀███████████       \n" +
             "   ▀████████▀       \n" +
             "     ▀█▄ ▀█         \n" +
             "          █▄        ",
+        jump:
+            "          ▄████████▄\n" +
+            "          ██▄███████\n" +
+            "          ██████████\n" +
+            "          █████▄▄▄  \n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████       \n" +
+            "   ▀████████▀       \n" +
+            "     ██▀ █▛         \n" +
+            "     ▜▙  ▜▙         ",
         dead:
             "          ▄████████▄\n" +
             "          ██  ██████\n" +
@@ -234,7 +254,7 @@ export class Dino {
             "          ████████▀▀\n" +
             "█      ▗▄█████      \n" +
             "██▄  ▄████████▀█    \n" +
-            "██████████████      \n" +
+            "▜█████████████      \n" +
             " ▀███████████       \n" +
             "   ▀████████▀       \n" +
             "     ██▀ ▀█         \n" +
