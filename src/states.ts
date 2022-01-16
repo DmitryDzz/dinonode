@@ -91,8 +91,13 @@ export class IdleLeftState extends State {
         super("idleL", Dino.sprites.left.idle);
     }
 
-    protected setFrameDuration() {}
-    protected setFramesCount() {}
+    protected setFrameDuration() {
+        this._frameDuration = 0.2;
+    }
+
+    protected setFramesCount() {
+        this._framesCount = 2;
+    }
 }
 
 export class IdleRightState extends State {
@@ -100,8 +105,13 @@ export class IdleRightState extends State {
         super("idleR", Dino.sprites.right.idle);
     }
 
-    protected setFrameDuration() {}
-    protected setFramesCount() {}
+    protected setFrameDuration() {
+        this._frameDuration = 0.2;
+    }
+
+    protected setFramesCount() {
+        this._framesCount = 2;
+    }
 }
 
 export class RunLeftState extends State {
