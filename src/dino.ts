@@ -3,27 +3,27 @@ import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {State, States, StateType} from "./states";
-import {float, integer, Position} from "./position";
+import {float, Position} from "./position";
 
 enum Key {
     Left = "a",
     Right = "d",
     Stop = "s",
     Jump = "w",
-    Dead = "x",
+    Lean = "x",
+    Dead = "z",
 }
 
 export interface Animations {
     idle: string[];
     run: string[];
     jump: string[];
+    leaned: string[];
     dead: string[];
 }
 
 export class Dino {
-    static readonly width: integer = 20;
-    static readonly height: integer = 11;
-
+    private static readonly JUMP_HEIGHT = 6;
     private static readonly JUMP_DURATION = 0.5;
 
     static sprites: {
@@ -40,12 +40,7 @@ export class Dino {
     private _state: State;
 
     constructor(scr: Screen) {
-        this._pos = new Position(0, scr.height as number - Dino.height);
-        this._pos.setLimits({
-            c0: 0,
-            r0: 0,
-            c1: scr.width as number - Dino.width,
-            r1: scr.height as number - Dino.height});
+        this._pos = new Position(scr, 0, scr.height as number - Position.DEFAULT_HEIGHT);
 
         this._box = Dino.createBox(this._pos.column, this._pos.row);
         scr.append(this._box);
@@ -55,7 +50,7 @@ export class Dino {
         this._states = new States();
         this._state = this._states.getState("idleR");
 
-        scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Dead], this._keyPressed);
+        scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Lean, Key.Dead], this._keyPressed);
     }
 
     private _returnToPrevStateTimeout?: NodeJS.Timeout;
@@ -67,25 +62,35 @@ export class Dino {
         }
 
         if (ch === Key.Left) {
-            this._state = this._changeState("runL");
             this._pos.setSpeed(-Dino.ABS_SPEED);
+            this._state = this._changeState(this._pos.leaning ? "leanedL" : "runL");
         } else if (ch === Key.Right) {
-            this._state = this._changeState("runR");
             this._pos.setSpeed(Dino.ABS_SPEED);
+            this._state = this._changeState(this._pos.leaning ? "leanedR" : "runR");
         } else if (ch === Key.Stop) {
             this._state = this._state.isLeftDirection()
                 ? this._changeState("idleL")
                 : this._changeState("idleR");
             this._pos.setSpeed(0);
         } else if (ch === Key.Jump) {
-            const currentStateType = this._state.type;
-            this._returnToPrevStateTimeout = setTimeout(() => {
-                this._state = this._changeState(currentStateType);
-            }, Dino.JUMP_DURATION * 1000);
-            this._state = this._state.isLeftDirection()
-                ? this._changeState("jumpL")
-                : this._changeState("jumpR");
-            this._pos.jump(Dino.height, Dino.JUMP_DURATION);
+            let currentStateType = this._state.type;
+            if (currentStateType === "leanedL") currentStateType = "runL";
+            else if (currentStateType === "leanedR") currentStateType = "runR";
+
+            if (this._pos.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION)) {
+                this._returnToPrevStateTimeout = setTimeout(() => {
+                    this._state = this._changeState(currentStateType);
+                }, Dino.JUMP_DURATION * 1000);
+                this._state = this._state.isLeftDirection()
+                    ? this._changeState("jumpL")
+                    : this._changeState("jumpR");
+            }
+        } else if (ch === Key.Lean) {
+            if (this._pos.switchLean()) {
+                this._state = this._state.isLeftDirection()
+                    ? this._changeState(this._pos.leaning ? "leanedL" : "runL")
+                    : this._changeState(this._pos.leaning ? "leanedR" : "runR");
+            }
         } else if (ch === Key.Dead) {
             this._state = this._state.isLeftDirection()
                 ? this._changeState("deadL")
@@ -105,6 +110,8 @@ export class Dino {
         const bx = this._box;
 
         if (this._state.isFrameReady()) {
+            if (this._pos.width !== bx.width) bx.width = this._pos.width;
+            if (this._pos.height !== bx.height) bx.height = this._pos.height;
             bx.setContent(this._state.frame);
         }
 
@@ -145,8 +152,8 @@ export class Dino {
 
     private static createBox(column: number, row: number): BoxElement {
         return box({
-            width: Dino.width,
-            height: Dino.height,
+            width: Position.DEFAULT_WIDTH,
+            height: Position.DEFAULT_HEIGHT,
             top: row,
             left: column,
             tags: true,
@@ -177,6 +184,10 @@ export class Dino {
                 jump: [
                     Dino._textures.jump,
                 ],
+                leaned: [
+                    Dino._textures.leanedA,
+                    Dino._textures.leanedB,
+                ],
                 dead: [
                     Dino._textures.dead,
                 ],
@@ -192,6 +203,10 @@ export class Dino {
                 ],
                 jump: [
                     Dino.flip(Dino._textures.jump),
+                ],
+                leaned: [
+                    Dino.flip(Dino._textures.leanedA),
+                    Dino.flip(Dino._textures.leanedB),
                 ],
                 dead: [
                     Dino.flip(Dino._textures.dead),
@@ -261,6 +276,22 @@ export class Dino {
             "   ▀████████▘       \n" +
             "     ██▀ █▛         \n" +
             "     ▜▙  ▜▙         ",
+        leanedA:
+            "                  ▄▄▄▄▄▄▄▄ \n" +
+            "█▄▄    ▄▄▄▄▄▄▄  ▄██▀███████\n" +
+            "▀██████████████████████████\n" +
+            "  ▀█████████████▀█████▀▀▀▀▀\n" +
+            "    ▜███████▀▀█▘  ▀▀▀▀▀▀▀  \n" +
+            "    █▄  ██▀   ▀▀           \n" +
+            "        █▄                 ",
+        leanedB:
+            "                  ▄▄▄▄▄▄▄▄ \n" +
+            "█▄▄    ▄▄▄▄▄▄▄  ▄██▀███████\n" +
+            "▀██████████████████████████\n" +
+            "  ▀█████████████▀█████▀▀▀▀▀\n" +
+            "    ▜█████▛▀▀▀█▘  ▀▀▀▀▀▀▀  \n" +
+            "    ██▀  ▀█▄▄ ▀▀           \n" +
+            "    █▄                     ",
         dead:
             "          ▄████████▄\n" +
             "          ██  ██████\n" +

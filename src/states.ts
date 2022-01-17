@@ -12,6 +12,8 @@ export class States {
             ["runR", new RunRightState()],
             ["jumpL", new JumpLeftState()],
             ["jumpR", new JumpRightState()],
+            ["leanedL", new LeanedLeftState()],
+            ["leanedR", new LeanedRightState()],
             ["deadL", new DeadLeftState()],
             ["deadR", new DeadRightState()],
         ]);
@@ -23,7 +25,7 @@ export class States {
 }
 
 export type StateType =
-    "idleL" | "idleR" | "runL" | "runR" | "jumpL" | "jumpR" | "deadL" | "deadR";
+    "idleL" | "idleR" | "runL" | "runR" | "jumpL" | "jumpR" | "leanedL" | "leanedR" | "deadL" | "deadR";
 
 export abstract class State {
     private readonly _type: StateType;
@@ -82,7 +84,7 @@ export abstract class State {
 
     isLeftDirection(): boolean {
         const t = this._type;
-        return t === "idleL" || t === "runL" || t === "jumpL" || t === "deadL";
+        return t === "idleL" || t === "runL" || t === "jumpL" || t === "leanedL" || t === "deadL";
     }
 }
 
@@ -158,6 +160,34 @@ export class JumpRightState extends State {
 
     protected setFrameDuration() {}
     protected setFramesCount() {}
+}
+
+export class LeanedLeftState extends State {
+    constructor() {
+        super("leanedL", Dino.sprites.left.leaned);
+    }
+
+    protected setFrameDuration() {
+        this._frameDuration = 0.125;
+    }
+
+    protected setFramesCount() {
+        this._framesCount = 2;
+    }
+}
+
+export class LeanedRightState extends State {
+    constructor() {
+        super("leanedR", Dino.sprites.right.leaned);
+    }
+
+    protected setFrameDuration() {
+        this._frameDuration = 0.125;
+    }
+
+    protected setFramesCount() {
+        this._framesCount = 2;
+    }
 }
 
 export class DeadLeftState extends State {
