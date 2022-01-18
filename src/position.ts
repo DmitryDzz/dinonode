@@ -66,14 +66,18 @@ export class Position {
         };
     }
 
-    setSpeed(speed: float) {
+    get speed(): float {
+        return this._speed;
+    }
+
+    set speed(speed: float) {
         this._speed = speed;
     }
 
     private _jumpData?: JumpData;
 
-    jump(height: integer, duration: float): boolean {
-        if (this._jumpData) return false;
+    jump(height: integer, duration: float): void {
+        if (this.jumping) return;
         this._jumpData = {
             startTime: Time.time,
             height: height,
@@ -81,18 +85,20 @@ export class Position {
         };
         this._leaning = false;
         this._updateLimitsAndPosition();
-        return true;
     }
 
-    get leaning() {
+    get jumping(): boolean {
+        return this._jumpData !== undefined;
+    }
+
+    get leaning(): boolean {
         return this._leaning;
     }
 
-    switchLean(): boolean {
-        if (this._jumpData) return false;
+    switchLean(): void {
+        if (this.jumping) return;
         this._leaning = !this._leaning;
         this._updateLimitsAndPosition();
-        return true;
     }
 
     private _getDeltaY(): float {

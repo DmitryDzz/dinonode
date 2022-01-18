@@ -3,7 +3,7 @@ import {Scene} from "./scene";
 import {Time} from "./time";
 
 const main = (): void => {
-    console.log("Hello world!");
+    console.log("Hello Dino world!");
 
     const scr = screen({
         title: "Dinonode",
@@ -23,6 +23,7 @@ const main = (): void => {
     }, 20);
 
     scr.key(['escape', 'q', 'C-c'], function(_ch, _key) {
+        scene.destroy();
         clearInterval(interval);
         return process.exit(0);
     });

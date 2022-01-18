@@ -18,7 +18,8 @@ export interface Animations {
     idle: string[];
     run: string[];
     jump: string[];
-    leaned: string[];
+    leanIdle: string[];
+    leanRun: string[];
     dead: string[];
 }
 
@@ -39,6 +40,8 @@ export class Dino {
     private readonly _states: States;
     private _state: State;
 
+    private _returnToPrevStateTimeout?: NodeJS.Timeout;
+
     constructor(scr: Screen) {
         this._pos = new Position(scr, 0, scr.height as number - Position.DEFAULT_HEIGHT);
 
@@ -53,31 +56,27 @@ export class Dino {
         scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Lean, Key.Dead], this._keyPressed);
     }
 
-    private _returnToPrevStateTimeout?: NodeJS.Timeout;
-
-    private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
+    destroy() {
         if (this._returnToPrevStateTimeout) {
             clearTimeout(this._returnToPrevStateTimeout);
             this._returnToPrevStateTimeout = undefined;
         }
+    }
 
-        if (ch === Key.Left) {
-            this._pos.setSpeed(-Dino.ABS_SPEED);
-            this._state = this._changeState(this._pos.leaning ? "leanedL" : "runL");
-        } else if (ch === Key.Right) {
-            this._pos.setSpeed(Dino.ABS_SPEED);
-            this._state = this._changeState(this._pos.leaning ? "leanedR" : "runR");
-        } else if (ch === Key.Stop) {
-            this._state = this._state.isLeftDirection()
-                ? this._changeState("idleL")
-                : this._changeState("idleR");
-            this._pos.setSpeed(0);
-        } else if (ch === Key.Jump) {
-            let currentStateType = this._state.type;
-            if (currentStateType === "leanedL") currentStateType = "runL";
-            else if (currentStateType === "leanedR") currentStateType = "runR";
+    private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
+        if (this._pos.jumping) return;
 
-            if (this._pos.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION)) {
+        const jumpAction = () => {
+            if (this._pos.leaning) {
+                leanAction();
+            } else {
+                let currentStateType = this._state.type;
+                if (currentStateType === "leanIdleL") currentStateType = "idleL";
+                else if (currentStateType === "leanIdleR") currentStateType = "idleR";
+                else if (currentStateType === "leanRunL") currentStateType = "runL";
+                else if (currentStateType === "leanRunR") currentStateType = "runR";
+
+                this._pos.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION);
                 this._returnToPrevStateTimeout = setTimeout(() => {
                     this._state = this._changeState(currentStateType);
                 }, Dino.JUMP_DURATION * 1000);
@@ -85,17 +84,41 @@ export class Dino {
                     ? this._changeState("jumpL")
                     : this._changeState("jumpR");
             }
-        } else if (ch === Key.Lean) {
-            if (this._pos.switchLean()) {
+        };
+
+        const leanAction = () => {
+            this._pos.switchLean();
+            if (Math.abs(this._pos.speed) < 0.001) {
                 this._state = this._state.isLeftDirection()
-                    ? this._changeState(this._pos.leaning ? "leanedL" : "runL")
-                    : this._changeState(this._pos.leaning ? "leanedR" : "runR");
+                    ? this._changeState(this._pos.leaning ? "leanIdleL" : "idleL")
+                    : this._changeState(this._pos.leaning ? "leanIdleR" : "idleR");
+            } else {
+                this._state = this._state.isLeftDirection()
+                    ? this._changeState(this._pos.leaning ? "leanRunL" : "runL")
+                    : this._changeState(this._pos.leaning ? "leanRunR" : "runR");
             }
+        };
+
+        if (ch === Key.Left) {
+            this._pos.speed = -Dino.ABS_SPEED;
+            this._state = this._changeState(this._pos.leaning ? "leanRunL" : "runL");
+        } else if (ch === Key.Right) {
+            this._pos.speed = Dino.ABS_SPEED;
+            this._state = this._changeState(this._pos.leaning ? "leanRunR" : "runR");
+        } else if (ch === Key.Stop) {
+            this._state = this._state.isLeftDirection()
+                ? this._changeState(this._pos.leaning ? "leanIdleL" : "idleL")
+                : this._changeState(this._pos.leaning ? "leanIdleR" : "idleR");
+            this._pos.speed = 0;
+        } else if (ch === Key.Jump) {
+            jumpAction();
+        } else if (ch === Key.Lean) {
+            leanAction();
         } else if (ch === Key.Dead) {
             this._state = this._state.isLeftDirection()
                 ? this._changeState("deadL")
                 : this._changeState("deadR");
-            this._pos.setSpeed(0);
+            this._pos.speed = 0;
         }
     }
 
@@ -184,9 +207,13 @@ export class Dino {
                 jump: [
                     Dino._textures.jump,
                 ],
-                leaned: [
-                    Dino._textures.leanedA,
-                    Dino._textures.leanedB,
+                leanIdle: [
+                    Dino._textures.leanIdleA,
+                    Dino._textures.leanIdleB,
+                ],
+                leanRun: [
+                    Dino._textures.leanRunA,
+                    Dino._textures.leanRunB,
                 ],
                 dead: [
                     Dino._textures.dead,
@@ -204,9 +231,13 @@ export class Dino {
                 jump: [
                     Dino.flip(Dino._textures.jump),
                 ],
-                leaned: [
-                    Dino.flip(Dino._textures.leanedA),
-                    Dino.flip(Dino._textures.leanedB),
+                leanIdle: [
+                    Dino.flip(Dino._textures.leanIdleA),
+                    Dino.flip(Dino._textures.leanIdleB),
+                ],
+                leanRun: [
+                    Dino.flip(Dino._textures.leanRunA),
+                    Dino.flip(Dino._textures.leanRunB),
                 ],
                 dead: [
                     Dino.flip(Dino._textures.dead),
@@ -276,7 +307,23 @@ export class Dino {
             "   ▀████████▘       \n" +
             "     ██▀ █▛         \n" +
             "     ▜▙  ▜▙         ",
-        leanedA:
+        leanIdleA:
+            "▖                 ▄▄▄▄▄▄▄▄ \n" +
+            "█▄▄    ▄▄▄▄▄▄▄  ▄██▀███████\n" +
+            "▀██████████████████████████\n" +
+            "  ▀█████████████▀█████▀▀▀▀▀\n" +
+            "    ▜███████▀▀█▘  ▀▀▀▀▀▀▀  \n" +
+            "      ██▀ ▀█  ▀▀           \n" +
+            "      █▄   █▄              ",
+        leanIdleB:
+            "▗                ▄████████▄\n" +
+            "█▄▄    ▄▄▄▄▄▄▄  ▟██▄███████\n" +
+            "▀██████████████████████████\n" +
+            "  ▀█████████████▀▀████▄▄▄  \n" +
+            "    ▜███████▀▀█▘           \n" +
+            "      ██▀ ▀█  ▀▀           \n" +
+            "      █▄   █▄              ",
+        leanRunA:
             "▖                 ▄▄▄▄▄▄▄▄ \n" +
             "█▄▄    ▄▄▄▄▄▄▄  ▄██▀███████\n" +
             "▀██████████████████████████\n" +
@@ -284,7 +331,7 @@ export class Dino {
             "    ▜███████▀▀█▘  ▀▀▀▀▀▀▀  \n" +
             "    █▄  ██▀   ▀▀           \n" +
             "        █▄                 ",
-        leanedB:
+        leanRunB:
             "▗                ▄████████▄\n" +
             "█▄▄    ▄▄▄▄▄▄▄  ▟██▄███████\n" +
             "▀██████████████████████████\n" +

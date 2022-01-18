@@ -12,6 +12,10 @@ export class Scene {
         this._dino = new Dino(scr);
     }
 
+    destroy() {
+        this._dino.destroy();
+    }
+
     update() {
         this._dino.update();
     }
