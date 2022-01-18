@@ -4,6 +4,7 @@ import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {State, States, StateType} from "./states";
 import {float, Position} from "./position";
+import {Application} from "./application";
 
 enum Key {
     Left = "a",
@@ -54,13 +55,22 @@ export class Dino {
         this._state = this._states.getState("idleR");
 
         scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Lean, Key.Dead], this._keyPressed);
+
+        Application.getInstance().addListener("onWindowResize", this._onWindowResizeHandler);
     }
 
     destroy() {
+        Application.getInstance().removeListener("onWindowResize", this._onWindowResizeHandler);
+
         if (this._returnToPrevStateTimeout) {
             clearTimeout(this._returnToPrevStateTimeout);
             this._returnToPrevStateTimeout = undefined;
         }
+    }
+
+    private readonly _onWindowResizeHandler = (width: number, height: number) => {
+        //TODO DZZ
+        console.log(width, height);
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
