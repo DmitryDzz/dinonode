@@ -1,10 +1,10 @@
-import {box, Widgets} from "blessed";
+import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {State, States, StateType} from "./states";
 import {float, Position} from "./position";
-import {Application} from "./application";
+import {Sprite} from "./Sprite";
 
 enum Key {
     Left = "a",
@@ -15,7 +15,7 @@ enum Key {
     Dead = "z",
 }
 
-export interface Animations {
+interface Animations {
     idle: string[];
     run: string[];
     jump: string[];
@@ -24,7 +24,7 @@ export interface Animations {
     dead: string[];
 }
 
-export class Dino {
+export class Dino extends Sprite {
     private static readonly JUMP_HEIGHT = 6;
     private static readonly JUMP_DURATION = 0.5;
 
@@ -44,6 +44,7 @@ export class Dino {
     private _returnToPrevStateTimeout?: NodeJS.Timeout;
 
     constructor(scr: Screen) {
+        super(scr);
         this._pos = new Position(scr, 0, scr.height as number - Position.DEFAULT_HEIGHT);
 
         this._box = Dino.createBox(this._pos.column, this._pos.row);
@@ -55,22 +56,19 @@ export class Dino {
         this._state = this._states.getState("idleR");
 
         scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Lean, Key.Dead], this._keyPressed);
-
-        Application.getInstance().addListener("onWindowResize", this._onWindowResizeHandler);
     }
 
     destroy() {
-        Application.getInstance().removeListener("onWindowResize", this._onWindowResizeHandler);
-
+        super.destroy();
         if (this._returnToPrevStateTimeout) {
             clearTimeout(this._returnToPrevStateTimeout);
             this._returnToPrevStateTimeout = undefined;
         }
     }
 
-    private readonly _onWindowResizeHandler = (width: number, height: number) => {
+    protected _onWindowResizeHandler(width: number, height: number): void {
         //TODO DZZ
-        console.log(width, height);
+        console.log("Dino", width, height);
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
@@ -153,56 +151,6 @@ export class Dino {
         bx.top = this._pos.row;
     }
 
-    /** @internal **/
-    static flip(tex: string): string {
-        const rows: string[] = tex.split("\n");
-        let result: string = "";
-        rows.forEach(row => {
-            if (result.length > 0) result += "\n";
-            result += row.split("").reverse().join("");
-        });
-        result = result
-            .replace(/\u2596/g, "Б")
-            .replace(/\u2597/g, "Г")
-            .replace(/\u2598/g, "Д")
-            .replace(/\u259d/g, "Ж")
-            .replace(/\u2599/g, "Й")
-            .replace(/\u259b/g, "Л")
-            .replace(/\u259c/g, "П")
-            .replace(/\u259f/g, "Ф");
-        result = result
-            .replace(/Б/g, "\u2597")
-            .replace(/Г/g, "\u2596")
-            .replace(/Д/g, "\u259d")
-            .replace(/Ж/g, "\u2598")
-            .replace(/Й/g, "\u259f")
-            .replace(/Л/g, "\u259c")
-            .replace(/П/g, "\u259b")
-            .replace(/Ф/g, "\u2599");
-
-        return result;
-    }
-
-    private static createBox(column: number, row: number): BoxElement {
-        return box({
-            width: Position.DEFAULT_WIDTH,
-            height: Position.DEFAULT_HEIGHT,
-            top: row,
-            left: column,
-            tags: true,
-            style: {
-                fg: 'green',
-                // bg: 'magenta',
-                // border: {
-                //     fg: '#f0f0f0'
-                // },
-                // hover: {
-                //     bg: 'green'
-                // }
-            }
-        });
-    }
-
     private static createSprites() {
         return {
             right: {
@@ -231,26 +179,26 @@ export class Dino {
             },
             left: {
                 idle: [
-                    Dino.flip(Dino._textures.idleA),
-                    Dino.flip(Dino._textures.idleB),
+                    Sprite.flip(Dino._textures.idleA),
+                    Sprite.flip(Dino._textures.idleB),
                 ],
                 run: [
-                    Dino.flip(Dino._textures.runA),
-                    Dino.flip(Dino._textures.runB),
+                    Sprite.flip(Dino._textures.runA),
+                    Sprite.flip(Dino._textures.runB),
                 ],
                 jump: [
-                    Dino.flip(Dino._textures.jump),
+                    Sprite.flip(Dino._textures.jump),
                 ],
                 leanIdle: [
-                    Dino.flip(Dino._textures.leanIdleA),
-                    Dino.flip(Dino._textures.leanIdleB),
+                    Sprite.flip(Dino._textures.leanIdleA),
+                    Sprite.flip(Dino._textures.leanIdleB),
                 ],
                 leanRun: [
-                    Dino.flip(Dino._textures.leanRunA),
-                    Dino.flip(Dino._textures.leanRunB),
+                    Sprite.flip(Dino._textures.leanRunA),
+                    Sprite.flip(Dino._textures.leanRunB),
                 ],
                 dead: [
-                    Dino.flip(Dino._textures.dead),
+                    Sprite.flip(Dino._textures.dead),
                 ],
             },
         };
