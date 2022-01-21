@@ -1,10 +1,7 @@
 import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
 import {Time} from "./time";
-
-export type integer = number;
-export type float = number;
-export interface Rect { c0: integer, r0: integer, c1: integer, r1: integer }
+import {float, integer, Rect} from "./types";
 
 interface JumpData {
     startTime: number;
@@ -44,10 +41,10 @@ export class Position {
         return this._row;
     }
 
-    constructor(scr: Screen, column: number, row: number) {
+    constructor(scr: Screen, column: number) {
         this._scr = scr;
         this._column = column;
-        this._row = row;
+        this._row = scr.height as number - Position.DEFAULT_HEIGHT;
         this._x = this._column;
         this._y = this._row;
         this._baseY = this._y + this.height;

@@ -49,10 +49,10 @@ export abstract class Sprite {
         return result;
     }
 
-    static createBox(column: number, row: number): BoxElement {
+    static createBox(column: number, row: number, width: number, height: number): BoxElement {
         return box({
-            width: Position.DEFAULT_WIDTH,
-            height: Position.DEFAULT_HEIGHT,
+            width: width,
+            height: height,
             top: row,
             left: column,
             tags: true,

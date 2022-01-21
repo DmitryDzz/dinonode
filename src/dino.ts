@@ -2,9 +2,10 @@ import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
-import {State, States, StateType} from "./states";
-import {float, Position} from "./position";
-import {Sprite} from "./Sprite";
+import {DinoState, DinoStates, DinoStateType} from "./dino_states";
+import {Position} from "./position";
+import {Sprite} from "./sprite";
+import {float} from "./types";
 
 enum Key {
     Left = "a",
@@ -38,21 +39,21 @@ export class Dino extends Sprite {
     private static readonly ABS_SPEED: float = 40.0; // 40 symbols per second
     private readonly _pos: Position;
 
-    private readonly _states: States;
-    private _state: State;
+    private readonly _states: DinoStates;
+    private _state: DinoState;
 
     private _returnToPrevStateTimeout?: NodeJS.Timeout;
 
     constructor(scr: Screen) {
         super(scr);
-        this._pos = new Position(scr, 0, scr.height as number - Position.DEFAULT_HEIGHT);
+        this._pos = new Position(scr, 0);
 
-        this._box = Dino.createBox(this._pos.column, this._pos.row);
+        this._box = Dino.createBox(this._pos.column, this._pos.row, Position.DEFAULT_WIDTH, Position.DEFAULT_HEIGHT);
         scr.append(this._box);
 
         Dino.sprites = Dino.createSprites();
 
-        this._states = new States();
+        this._states = new DinoStates();
         this._state = this._states.getState("idleR");
 
         scr.key([Key.Left, Key.Right, Key.Stop, Key.Jump, Key.Lean, Key.Dead], this._keyPressed);
@@ -130,7 +131,7 @@ export class Dino extends Sprite {
         }
     }
 
-    private _changeState(stateType: StateType): State {
+    private _changeState(stateType: DinoStateType): DinoState {
         if (this._state.type === stateType) return this._state;
         this._state = this._states.getState(stateType);
         this._state.clear();
