@@ -1,7 +1,7 @@
 import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
-import {Time} from "./time";
-import {float, integer, Rect} from "./types";
+import {Time} from "../time";
+import {float, integer, Rect} from "../types";
 
 interface JumpData {
     startTime: number;
@@ -9,7 +9,7 @@ interface JumpData {
     duration: float;
 }
 
-export class Position {
+export class DinoRect {
     static readonly DEFAULT_WIDTH: integer = 20;
     static readonly DEFAULT_HEIGHT: integer = 11;
 
@@ -26,11 +26,11 @@ export class Position {
     private _leaning: boolean = false;
 
     get width(): integer {
-        return this._leaning ? 27 : Position.DEFAULT_WIDTH;
+        return this._leaning ? 27 : DinoRect.DEFAULT_WIDTH;
     }
 
     get height(): integer {
-        return this._leaning ? 7 : Position.DEFAULT_HEIGHT;
+        return this._leaning ? 7 : DinoRect.DEFAULT_HEIGHT;
     }
 
     get column(): integer {
@@ -44,7 +44,7 @@ export class Position {
     constructor(scr: Screen, column: number) {
         this._scr = scr;
         this._column = column;
-        this._row = scr.height as number - Position.DEFAULT_HEIGHT;
+        this._row = scr.height as number - DinoRect.DEFAULT_HEIGHT;
         this._x = this._column;
         this._y = this._row;
         this._baseY = this._y + this.height;

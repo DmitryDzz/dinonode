@@ -1,4 +1,4 @@
-import {State} from "./states";
+import {State} from "../states";
 import {Pterosaur} from "./pterosaur";
 
 export class FlyLeft extends State {

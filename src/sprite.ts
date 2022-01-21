@@ -1,13 +1,12 @@
 import {box, Widgets} from "blessed";
 import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
-import {Position} from "./position";
 import {Application} from "./application";
 
 export abstract class Sprite {
     protected readonly _scr: Screen;
 
-    constructor(scr: Screen) {
+    protected constructor(scr: Screen) {
         this._scr = scr;
         Application.getInstance().addListener("onWindowResize", this._onWindowResizeHandler);
     }

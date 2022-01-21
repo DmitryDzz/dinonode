@@ -1,6 +1,6 @@
 import {Widgets} from "blessed";
-import {Dino} from "./dino";
-import {MoveDirection, Pterosaur} from "./pterosaur";
+import {Dino} from "./characters/dino";
+import {EnemyMoveDirection, Pterosaur} from "./characters/pterosaur";
 import Screen = Widgets.Screen;
 
 export class Scene {
@@ -11,7 +11,7 @@ export class Scene {
 
     constructor(scr: Screen) {
         this._scr = scr;
-        this._pterosaur = new Pterosaur(scr, MoveDirection.MoveRight);
+        this._pterosaur = new Pterosaur(scr, EnemyMoveDirection.MoveRight);
         this._dino = new Dino(scr);
     }
 

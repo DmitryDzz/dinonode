@@ -3,9 +3,9 @@ import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {DinoState, DinoStates, DinoStateType} from "./dino_states";
-import {Position} from "./position";
-import {Sprite} from "./sprite";
-import {float} from "./types";
+import {DinoRect} from "./dino_rect";
+import {Sprite} from "../sprite";
+import {float} from "../types";
 
 enum Key {
     Left = "a",
@@ -37,7 +37,7 @@ export class Dino extends Sprite {
     private readonly _box: BoxElement;
 
     private static readonly ABS_SPEED: float = 40.0; // 40 symbols per second
-    private readonly _pos: Position;
+    private readonly _pos: DinoRect;
 
     private readonly _states: DinoStates;
     private _state: DinoState;
@@ -46,9 +46,9 @@ export class Dino extends Sprite {
 
     constructor(scr: Screen) {
         super(scr);
-        this._pos = new Position(scr, 0);
+        this._pos = new DinoRect(scr, 0);
 
-        this._box = Dino.createBox(this._pos.column, this._pos.row, Position.DEFAULT_WIDTH, Position.DEFAULT_HEIGHT);
+        this._box = Dino.createBox(this._pos.column, this._pos.row, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT);
         scr.append(this._box);
 
         Dino.sprites = Dino.createSprites();

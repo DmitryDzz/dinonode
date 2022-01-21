@@ -1,4 +1,4 @@
-import {Dino} from "../src/dino";
+import {Dino} from "../src/characters/dino";
 
 describe("Test sprites", () => {
     it("flip empty texture", () => {

@@ -1,5 +1,5 @@
 import {Dino} from "./dino";
-import {State} from "./states";
+import {State} from "../states";
 
 export class DinoStates {
     private readonly _states: Map<DinoStateType, DinoState>;

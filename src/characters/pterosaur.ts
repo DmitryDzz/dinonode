@@ -1,17 +1,17 @@
 import {Widgets} from "blessed";
 import BoxElement = Widgets.BoxElement;
 import Screen = Widgets.Screen;
-import {Sprite} from "./sprite";
-import {float, integer} from "./types";
-import {Time} from "./time";
-import {State} from "./states";
+import {Sprite} from "../sprite";
+import {float, integer} from "../types";
+import {Time} from "../time";
+import {State} from "../states";
 import {FlyLeft, FlyRight} from "./pterosaur_states";
 
 interface Animations {
     fly: string[];
 }
 
-export enum MoveDirection {
+export enum EnemyMoveDirection {
     MoveLeft,
     MoveRight
 }
@@ -24,7 +24,7 @@ export class Pterosaur extends Sprite {
     private _y: float;
     private readonly _baseY: float;
     private _column: integer;
-    private _row: integer;
+    private readonly _row: integer;
     private readonly _speed: float;
 
     private readonly _box: BoxElement;
@@ -37,25 +37,25 @@ export class Pterosaur extends Sprite {
         right: Animations
     };
 
-    constructor(scr: Screen, direction: MoveDirection) {
+    constructor(scr: Screen, direction: EnemyMoveDirection) {
         super(scr);
 
         this._width = 23;
         this._height = 10;
         this._baseY = 6;
         this._row = scr.height as number - this._height - this._baseY;
-        this._column = direction === MoveDirection.MoveLeft ? 0 : scr.width as number - this._width;
+        this._column = direction === EnemyMoveDirection.MoveLeft ? 0 : scr.width as number - this._width;
         this._x = this._column;
         this._y = this._row;
 
-        this._speed = direction === MoveDirection.MoveLeft ? Pterosaur.ABS_SPEED : -Pterosaur.ABS_SPEED;
+        this._speed = direction === EnemyMoveDirection.MoveLeft ? Pterosaur.ABS_SPEED : -Pterosaur.ABS_SPEED;
 
         this._box = Pterosaur.createBox(this._column, this._row, this._width, this._height);
         scr.append(this._box);
 
         Pterosaur.sprites = Pterosaur.createSprites();
 
-        this._state = direction === MoveDirection.MoveLeft ? new FlyLeft() : new FlyRight();
+        this._state = direction === EnemyMoveDirection.MoveLeft ? new FlyLeft() : new FlyRight();
     }
 
     destroy() {
