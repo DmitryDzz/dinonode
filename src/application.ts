@@ -1,23 +1,10 @@
 import {screen, Widgets} from "blessed";
 import Screen = Widgets.Screen;
-import {TypedEmitter} from "tiny-typed-emitter";
 import {Scene} from "./scene";
 import {Time} from "./time";
+import {ApplicationPublisher} from "./application_publisher";
 
-export interface ApplicationEvents {
-    "onWindowResize": (width: number, height: number) => void;
-}
-
-export class Application extends TypedEmitter<ApplicationEvents> {
-    private static _instance: Application | undefined = undefined;
-
-    static getInstance(): Application {
-        if (Application._instance === undefined) {
-            Application._instance = new Application();
-        }
-        return Application._instance;
-    }
-
+export class Application {
     private _screenWidth?: number;
     private _screenHeight?: number;
 
@@ -57,7 +44,7 @@ export class Application extends TypedEmitter<ApplicationEvents> {
             if (w !== this._screenWidth || h !== this._screenHeight) {
                 this._screenWidth = w;
                 this._screenHeight = h;
-                this.emit("onWindowResize", w, h);
+                ApplicationPublisher.getInstance().emit("onWindowResize", w, h);
             }
         }
     }
