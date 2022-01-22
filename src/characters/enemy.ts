@@ -64,7 +64,7 @@ export abstract class Enemy extends Sprite {
 
         this._state.update();
         const spriteRect: RectW = {c: this._column, r: this._row, w: this._width, h: this._height};
-        const croppedSprite = Enemy.cropFrame(
+        const croppedSprite = Sprite.cropFrame(
             spriteRect, this._scr.width as number, this._scr.height as number, this._state.frame);
         if (croppedSprite.spriteRect && croppedSprite.frameContent) {
             this._box.top = this._row;
@@ -75,33 +75,5 @@ export abstract class Enemy extends Sprite {
         } else {
             this.destroy();
         }
-    }
-
-    static cropFrame(spriteRect: RectW, scrWidth: integer, scrHeight: integer, frameContent: string):
-        { spriteRect?: RectW, frameContent?: string } {
-
-        let croppedRect: RectW = Object.assign({}, spriteRect);
-        croppedRect.w = spriteRect.c < 0
-            ? spriteRect.c + spriteRect.w
-            : (spriteRect.c + spriteRect.w >= scrWidth ? scrWidth - spriteRect.c : spriteRect.w);
-
-        if (croppedRect.w <= 0)
-            return {};
-
-        if (croppedRect.w === spriteRect.w)
-            return {spriteRect: croppedRect, frameContent: frameContent};
-
-        const rows: string[] = frameContent.split("\n");
-        let croppedFrameContent: string = "";
-        rows.forEach((row: string, i: number) => {
-            croppedFrameContent += spriteRect.c < 0
-                ? row.slice(-croppedRect.w)
-                : row.slice(0, croppedRect.w);
-            if (i < rows.length - 1) {
-                croppedFrameContent += "\n";
-            }
-        });
-        croppedRect.c = spriteRect.c < 0 ? 0 : scrWidth - croppedRect.w;
-        return {spriteRect: croppedRect, frameContent: croppedFrameContent};
     }
 }
