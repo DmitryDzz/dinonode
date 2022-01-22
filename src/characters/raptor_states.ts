@@ -7,7 +7,7 @@ export class RunLeft extends State {
     }
 
     protected setFrameDuration() {
-        this._frameDuration = 0.125;
+        this._frameDuration = 0.08;
     }
 
     protected setFramesCount() {
@@ -25,7 +25,7 @@ export class RunRight extends State {
     }
 
     protected setFrameDuration() {
-        this._frameDuration = 0.125;
+        this._frameDuration = 0.08;
     }
 
     protected setFramesCount() {
