@@ -180,7 +180,7 @@ export class LeanRunLeftState extends DinoState {
     }
 
     protected setFrameDuration() {
-        this._frameDuration = 0.125;
+        this._frameDuration = 0.096;
     }
 
     protected setFramesCount() {
@@ -198,7 +198,7 @@ export class LeanRunRightState extends DinoState {
     }
 
     protected setFrameDuration() {
-        this._frameDuration = 0.125;
+        this._frameDuration = 0.096;
     }
 
     protected setFramesCount() {

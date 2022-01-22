@@ -92,9 +92,9 @@ export class DinoRect {
         return this._leaning;
     }
 
-    switchLean(): void {
+    setLean(value: boolean): void {
         if (this.jumping) return;
-        this._leaning = !this._leaning;
+        this._leaning = value;
         this._updateLimitsAndPosition();
     }
 
