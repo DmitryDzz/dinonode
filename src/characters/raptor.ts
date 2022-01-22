@@ -4,6 +4,7 @@ import {State} from "../states";
 import {Enemy, EnemyMoveDirection} from "./enemy";
 import {float, integer} from "../types";
 import {RunLeft, RunRight} from "./raptor_states";
+import {onDestroyCallback} from "../sprite";
 
 export class Raptor extends Enemy {
     private static readonly ABS_SPEED: float = 40.0; // 40 symbols per second
@@ -11,8 +12,8 @@ export class Raptor extends Enemy {
     private static readonly HEIGHT: integer = 8;
     private static readonly BASE_Y: integer = 0;
 
-    constructor(scr: Screen, direction: EnemyMoveDirection) {
-        super(scr, direction, Raptor.WIDTH, Raptor.HEIGHT, Raptor.BASE_Y, Raptor.ABS_SPEED);
+    constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: onDestroyCallback) {
+        super(scr, direction, Raptor.WIDTH, Raptor.HEIGHT, Raptor.BASE_Y, Raptor.ABS_SPEED, onDestroy);
     }
 
     protected _createState(direction: EnemyMoveDirection): State {

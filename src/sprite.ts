@@ -3,16 +3,28 @@ import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
 import {ApplicationPublisher} from "./application_publisher";
 
+export type onDestroyCallback = (sprite: Sprite) => void;
+
 export abstract class Sprite {
+    private static _last_id: number = 0;
+
+    readonly id: number;
+
     protected readonly _scr: Screen;
 
-    protected constructor(scr: Screen) {
+    private readonly _onDestroy?: onDestroyCallback;
+
+    protected constructor(scr: Screen, onDestroy?: onDestroyCallback) {
+        this.id = Sprite._last_id++;
         this._scr = scr;
+        this._onDestroy = onDestroy;
         ApplicationPublisher.getInstance().addListener("onWindowResize", this._onWindowResizeHandler);
     }
 
     destroy(): void {
         ApplicationPublisher.getInstance().removeListener("onWindowResize", this._onWindowResizeHandler);
+        if (this._onDestroy)
+            this._onDestroy(this);
     }
 
     abstract update(): void;

@@ -1,7 +1,7 @@
 import {Widgets} from "blessed";
 import BoxElement = Widgets.BoxElement;
 import Screen = Widgets.Screen;
-import {Sprite} from "../sprite";
+import {onDestroyCallback, Sprite} from "../sprite";
 import {float, integer, RectW} from "../types";
 import {Time} from "../time";
 import {State} from "../states";
@@ -26,14 +26,17 @@ export abstract class Enemy extends Sprite {
     protected readonly _state: State;
 
     protected constructor(scr: Screen, direction: EnemyMoveDirection,
-                          width: integer, height: integer, baseY: integer, absSpeed: float) {
-        super(scr);
+                          width: integer, height: integer, baseY: integer, absSpeed: float,
+                          onDestroy?: onDestroyCallback) {
+        super(scr, onDestroy);
 
         this._width = width;
         this._height = height;
         this._baseY = baseY;
         this._row = scr.height as number - this._height - this._baseY;
-        this._column = direction === EnemyMoveDirection.MoveRight ? 0 : scr.width as number - this._width;
+        this._column = direction === EnemyMoveDirection.MoveRight
+            ? 1 - this._width
+            : scr.width as number - 1;
         this._x = this._column;
         this._y = this._row;
 
@@ -49,6 +52,7 @@ export abstract class Enemy extends Sprite {
         if (this._destroyed) return;
         this._scr.remove(this._box);
         this._destroyed = true;
+        super.destroy();
     }
 
     protected abstract _createState(direction: EnemyMoveDirection): State;
@@ -58,29 +62,27 @@ export abstract class Enemy extends Sprite {
         this._x += this._speed * Time.deltaTime;
         this._column = Math.round(this._x);
 
-        this._box.left = this._column;
-        this._box.top = this._row;
+        this._state.update();
+        const spriteRect: RectW = {c: this._column, r: this._row, w: this._width, h: this._height};
+        const croppedSprite = Enemy.cropFrame(
+            spriteRect, this._scr.width as number, this._scr.height as number, this._state.frame);
+        if (croppedSprite.spriteRect && croppedSprite.frameContent) {
+            this._box.top = this._row;
+            this._box.left = croppedSprite.spriteRect.c;
+            this._box.width = croppedSprite.spriteRect.w;
 
-        if (this._state.isFrameReady()) {
-            const spriteRect: RectW = {c: this._column, r: this._row, w: this._width, h: this._height};
-            const croppedSprite = Enemy.cropFrame(
-                spriteRect, this._scr.width as number, this._scr.height as number, this._state.frame);
-            if (croppedSprite.spriteRect && croppedSprite.frameContent) {
-                this._box.left = croppedSprite.spriteRect.c;
-                this._box.width = croppedSprite.spriteRect.w;
-                this._box.setContent(croppedSprite.frameContent);
-            } else {
-                this.destroy();
-            }
+            this._box.setContent(croppedSprite.frameContent);
+        } else {
+            this.destroy();
         }
     }
 
     static cropFrame(spriteRect: RectW, scrWidth: integer, scrHeight: integer, frameContent: string):
         { spriteRect?: RectW, frameContent?: string } {
 
-        let croppedRect: RectW = spriteRect;
+        let croppedRect: RectW = Object.assign({}, spriteRect);
         croppedRect.w = spriteRect.c < 0
-            ? spriteRect.c + spriteRect.c
+            ? spriteRect.c + spriteRect.w
             : (spriteRect.c + spriteRect.w >= scrWidth ? scrWidth - spriteRect.c : spriteRect.w);
 
         if (croppedRect.w <= 0)
@@ -94,11 +96,12 @@ export abstract class Enemy extends Sprite {
         rows.forEach((row: string, i: number) => {
             croppedFrameContent += spriteRect.c < 0
                 ? row.slice(-croppedRect.w)
-                : row.slice(0, croppedRect.w - 1);
+                : row.slice(0, croppedRect.w);
             if (i < rows.length - 1) {
                 croppedFrameContent += "\n";
             }
         });
+        croppedRect.c = spriteRect.c < 0 ? 0 : scrWidth - croppedRect.w;
         return {spriteRect: croppedRect, frameContent: croppedFrameContent};
     }
 }

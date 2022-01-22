@@ -29,7 +29,7 @@ export abstract class State {
         this._frameIndex = (++this._frameIndex) % this._framesCount;
     }
 
-    isFrameReady(): boolean {
+    update(): boolean {
         if (this._frameTime === undefined) {
             this._frameTime = Time.time;
             return true;

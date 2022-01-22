@@ -125,7 +125,7 @@ export class Dino extends Sprite {
     update() {
         const bx = this._box;
 
-        if (this._state.isFrameReady()) {
+        if (this._state.update()) {
             if (this._pos.width !== bx.width) bx.width = this._pos.width;
             if (this._pos.height !== bx.height) bx.height = this._pos.height;
             bx.setContent(this._state.frame);
