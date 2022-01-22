@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "madge": "madge --circular --extensions ts ."
   },
   "keywords": [
     "game",
@@ -25,6 +26,7 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "blessed": "^0.1.81"
+    "blessed": "^0.1.81",
+    "madge": "^5.0.1"
   }
 }

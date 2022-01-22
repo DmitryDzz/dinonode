@@ -16,23 +16,9 @@ enum Key {
     Dead = "z",
 }
 
-interface Animations {
-    idle: string[];
-    run: string[];
-    jump: string[];
-    leanIdle: string[];
-    leanRun: string[];
-    dead: string[];
-}
-
 export class Dino extends Sprite {
     private static readonly JUMP_HEIGHT = 6;
     private static readonly JUMP_DURATION = 0.5;
-
-    static sprites: {
-        left: Animations,
-        right: Animations
-    };
 
     private readonly _box: BoxElement;
 
@@ -50,8 +36,6 @@ export class Dino extends Sprite {
 
         this._box = Dino.createBox(this._pos.column, this._pos.row, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT);
         scr.append(this._box);
-
-        Dino.sprites = Dino.createSprites();
 
         this._states = new DinoStates();
         this._state = this._states.getState("idleR");
@@ -151,164 +135,4 @@ export class Dino extends Sprite {
         bx.left = this._pos.column;
         bx.top = this._pos.row;
     }
-
-    private static createSprites() {
-        return {
-            right: {
-                idle: [
-                    Dino._textures.idleA,
-                    Dino._textures.idleB,
-                ],
-                run: [
-                    Dino._textures.runA,
-                    Dino._textures.runB,
-                ],
-                jump: [
-                    Dino._textures.jump,
-                ],
-                leanIdle: [
-                    Dino._textures.leanIdleA,
-                    Dino._textures.leanIdleB,
-                ],
-                leanRun: [
-                    Dino._textures.leanRunA,
-                    Dino._textures.leanRunB,
-                ],
-                dead: [
-                    Dino._textures.dead,
-                ],
-            },
-            left: {
-                idle: [
-                    Sprite.flip(Dino._textures.idleA),
-                    Sprite.flip(Dino._textures.idleB),
-                ],
-                run: [
-                    Sprite.flip(Dino._textures.runA),
-                    Sprite.flip(Dino._textures.runB),
-                ],
-                jump: [
-                    Sprite.flip(Dino._textures.jump),
-                ],
-                leanIdle: [
-                    Sprite.flip(Dino._textures.leanIdleA),
-                    Sprite.flip(Dino._textures.leanIdleB),
-                ],
-                leanRun: [
-                    Sprite.flip(Dino._textures.leanRunA),
-                    Sprite.flip(Dino._textures.leanRunB),
-                ],
-                dead: [
-                    Sprite.flip(Dino._textures.dead),
-                ],
-            },
-        };
-    }
-
-    private static readonly _textures = {
-        idleA:
-            "          ▄████████▄\n" +
-            "          ██▄███████\n" +
-            "          ██████████\n" +
-            "          █████▄▄▄  \n" +
-            "█      ▗▄█████      \n" +
-            "██▄  ▄████████▀█    \n" +
-            "▜█████████████      \n" +
-            " ▀███████████▘      \n" +
-            "   ▀████████▘       \n" +
-            "     ██▀ ▀█         \n" +
-            "     █▄   █▄        ",
-        idleB:
-            "           ▄▄▄▄▄▄▄▄ \n" +
-            "          ██▀███████\n" +
-            "          ██████████\n" +
-            "          █████▀▀▀▀▀\n" +
-            "▟▘     ▗▄█████▀▀▀▀  \n" +
-            "██▄  ▄████████▀█    \n" +
-            "▜█████████████      \n" +
-            " ▀███████████▘      \n" +
-            "   ▀████████▘       \n" +
-            "     ██▀ ▀█         \n" +
-            "     █▄   █▄        ",
-        runA:
-            "          ▄████████▄\n" +
-            "          ██▄███████\n" +
-            "          ██████████\n" +
-            "          █████▄▄▄  \n" +
-            "█      ▗▄█████      \n" +
-            "██▄  ▄████████▀█    \n" +
-            "▜█████████████      \n" +
-            " ▀███████████▘      \n" +
-            "   ▀████████▘       \n" +
-            "     ██▀   ▀▀▘      \n" +
-            "     █▄             ",
-        runB:
-            "           ▄▄▄▄▄▄▄▄ \n" +
-            "          ██▀███████\n" +
-            "          ██████████\n" +
-            "          █████▀▀▀▀▀\n" +
-            "▟▘     ▗▄█████▀▀▀▀  \n" +
-            "██▄  ▄████████▀█    \n" +
-            "▜█████████████      \n" +
-            " ▀███████████▘      \n" +
-            "   ▀████████▘       \n" +
-            "     ▀█▄ ▀█         \n" +
-            "          █▄        ",
-        jump:
-            "          ▄████████▄\n" +
-            "          ██▄███████\n" +
-            "          ██████████\n" +
-            "          █████▄▄▄  \n" +
-            "█      ▗▄█████      \n" +
-            "██▄  ▄████████▀█    \n" +
-            "▜█████████████      \n" +
-            " ▀███████████▘      \n" +
-            "   ▀████████▘       \n" +
-            "     ██▀ █▛         \n" +
-            "     ▜▙  ▜▙         ",
-        leanIdleA:
-            "▖                 ▄▄▄▄▄▄▄▄ \n" +
-            "█▄▄    ▄▄▄▄▄▄▄  ▄██▀███████\n" +
-            "▀██████████████████████████\n" +
-            "  ▀█████████████▀█████▀▀▀▀▀\n" +
-            "    ▜███████▀▀█▘  ▀▀▀▀▀▀▀  \n" +
-            "      ██▀ ▀█  ▀▀           \n" +
-            "      █▄   █▄              ",
-        leanIdleB:
-            "▗                ▄████████▄\n" +
-            "█▄▄    ▄▄▄▄▄▄▄  ▟██▄███████\n" +
-            "▀██████████████████████████\n" +
-            "  ▀█████████████▀▀████▄▄▄  \n" +
-            "    ▜███████▀▀█▘           \n" +
-            "      ██▀ ▀█  ▀▀           \n" +
-            "      █▄   █▄              ",
-        leanRunA:
-            "▖                 ▄▄▄▄▄▄▄▄ \n" +
-            "█▄▄    ▄▄▄▄▄▄▄  ▄██▀███████\n" +
-            "▀██████████████████████████\n" +
-            "  ▀█████████████▀█████▀▀▀▀▀\n" +
-            "    ▜███████▀▀█▘  ▀▀▀▀▀▀▀  \n" +
-            "    █▄  ██▀   ▀▀           \n" +
-            "        █▄                 ",
-        leanRunB:
-            "▗                ▄████████▄\n" +
-            "█▄▄    ▄▄▄▄▄▄▄  ▟██▄███████\n" +
-            "▀██████████████████████████\n" +
-            "  ▀█████████████▀▀████▄▄▄  \n" +
-            "    ▜█████▛▀▀▀█▘           \n" +
-            "    ██▀  ▀█▄▄ ▀▀           \n" +
-            "    █▄                     ",
-        dead:
-            "          ▄████████▄\n" +
-            "          ██  ██████\n" +
-            "          ██████████\n" +
-            "          ████████▀▀\n" +
-            "█      ▗▄█████      \n" +
-            "██▄  ▄████████▀█    \n" +
-            "▜█████████████      \n" +
-            " ▀███████████▘      \n" +
-            "   ▀████████▘       \n" +
-            "     ██▀ ▀█         \n" +
-            "     █▄   █▄        ",
-    };
 }

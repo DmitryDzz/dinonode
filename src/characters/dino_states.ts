@@ -1,5 +1,5 @@
-import {Dino} from "./dino";
 import {State} from "../states";
+import {Sprite} from "../sprites/dino";
 
 export class DinoStates {
     private readonly _states: Map<DinoStateType, DinoState>;
@@ -42,7 +42,7 @@ export abstract class DinoState extends State {
 
 export class IdleLeftState extends DinoState {
     constructor() {
-        super("idleL", Dino.sprites.left.idle);
+        super("idleL", Sprite.Dino.left.idle);
     }
 
     protected setFrameDuration() {
@@ -60,7 +60,7 @@ export class IdleLeftState extends DinoState {
 
 export class IdleRightState extends DinoState {
     constructor() {
-        super("idleR", Dino.sprites.right.idle);
+        super("idleR", Sprite.Dino.right.idle);
     }
 
     protected setFrameDuration() {
@@ -78,7 +78,7 @@ export class IdleRightState extends DinoState {
 
 export class RunLeftState extends DinoState {
     constructor() {
-        super("runL", Dino.sprites.left.run);
+        super("runL", Sprite.Dino.left.run);
     }
 
     protected setFrameDuration() {
@@ -96,7 +96,7 @@ export class RunLeftState extends DinoState {
 
 export class RunRightState extends DinoState {
     constructor() {
-        super("runR", Dino.sprites.right.run);
+        super("runR", Sprite.Dino.right.run);
     }
 
     protected setFrameDuration() {
@@ -114,7 +114,7 @@ export class RunRightState extends DinoState {
 
 export class JumpLeftState extends DinoState {
     constructor() {
-        super("jumpL", Dino.sprites.left.jump);
+        super("jumpL", Sprite.Dino.left.jump);
     }
 
     protected setFrameDuration() {}
@@ -127,7 +127,7 @@ export class JumpLeftState extends DinoState {
 
 export class JumpRightState extends DinoState {
     constructor() {
-        super("jumpR", Dino.sprites.right.jump);
+        super("jumpR", Sprite.Dino.right.jump);
     }
 
     protected setFrameDuration() {}
@@ -140,7 +140,7 @@ export class JumpRightState extends DinoState {
 
 export class LeanIdleLeftState extends DinoState {
     constructor() {
-        super("leanIdleL", Dino.sprites.left.leanIdle);
+        super("leanIdleL", Sprite.Dino.left.leanIdle);
     }
 
     protected setFrameDuration() {
@@ -158,7 +158,7 @@ export class LeanIdleLeftState extends DinoState {
 
 export class LeanIdleRightState extends DinoState {
     constructor() {
-        super("leanIdleR", Dino.sprites.right.leanIdle);
+        super("leanIdleR", Sprite.Dino.right.leanIdle);
     }
 
     protected setFrameDuration() {
@@ -176,7 +176,7 @@ export class LeanIdleRightState extends DinoState {
 
 export class LeanRunLeftState extends DinoState {
     constructor() {
-        super("leanRunL", Dino.sprites.left.leanRun);
+        super("leanRunL", Sprite.Dino.left.leanRun);
     }
 
     protected setFrameDuration() {
@@ -194,7 +194,7 @@ export class LeanRunLeftState extends DinoState {
 
 export class LeanRunRightState extends DinoState {
     constructor() {
-        super("leanRunR", Dino.sprites.right.leanRun);
+        super("leanRunR", Sprite.Dino.right.leanRun);
     }
 
     protected setFrameDuration() {
@@ -212,7 +212,7 @@ export class LeanRunRightState extends DinoState {
 
 export class DeadLeftState extends DinoState {
     constructor() {
-        super("deadL", Dino.sprites.left.dead);
+        super("deadL", Sprite.Dino.left.dead);
     }
 
     protected setFrameDuration() {}
@@ -225,7 +225,7 @@ export class DeadLeftState extends DinoState {
 
 export class DeadRightState extends DinoState {
     constructor() {
-        super("deadR", Dino.sprites.right.dead);
+        super("deadR", Sprite.Dino.right.dead);
     }
 
     protected setFrameDuration() {}

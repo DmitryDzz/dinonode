@@ -1,6 +1,6 @@
 import {Dino} from "../src/characters/dino";
 
-describe("Test sprites", () => {
+describe("Test horizontal flip sprites", () => {
     it("flip empty texture", () => {
         const tex = "";
         expect(Dino.flip(tex)).toBe("");

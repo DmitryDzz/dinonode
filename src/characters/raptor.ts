@@ -39,14 +39,14 @@ export class Raptor extends Enemy {
         return {
             right: {
                 run: [
-                    Raptor._textures.runA,
-                    Raptor._textures.runB,
+                    Sprite.flip(Raptor._textures.runA),
+                    Sprite.flip(Raptor._textures.runB),
                 ],
             },
             left: {
                 run: [
-                    Sprite.flip(Raptor._textures.runA),
-                    Sprite.flip(Raptor._textures.runB),
+                    Raptor._textures.runA,
+                    Raptor._textures.runB,
                 ],
             },
         };

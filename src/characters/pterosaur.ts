@@ -39,14 +39,14 @@ export class Pterosaur extends Enemy {
         return {
             right: {
                 fly: [
-                    Pterosaur._textures.flyA,
-                    Pterosaur._textures.flyB,
+                    Sprite.flip(Pterosaur._textures.flyA),
+                    Sprite.flip(Pterosaur._textures.flyB),
                 ],
             },
             left: {
                 fly: [
-                    Sprite.flip(Pterosaur._textures.flyA),
-                    Sprite.flip(Pterosaur._textures.flyB),
+                    Pterosaur._textures.flyA,
+                    Pterosaur._textures.flyB,
                 ],
             },
         };
