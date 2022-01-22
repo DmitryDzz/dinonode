@@ -17,12 +17,12 @@ enum Key {
 }
 
 export class Dino extends Sprite {
-    private static readonly JUMP_HEIGHT = 6;
-    private static readonly JUMP_DURATION = 0.5;
+    private static readonly JUMP_HEIGHT = 8;
+    private static readonly JUMP_DURATION = 0.8;
 
     private readonly _box: BoxElement;
 
-    private static readonly ABS_SPEED: float = 40.0; // 40 symbols per second
+    private static readonly ABS_SPEED: float = 40.0; // symbols per second
     private readonly _pos: DinoRect;
 
     private readonly _states: DinoStates;

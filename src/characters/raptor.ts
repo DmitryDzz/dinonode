@@ -7,7 +7,7 @@ import {RunLeft, RunRight} from "./raptor_states";
 import {onDestroyCallback} from "../sprite";
 
 export class Raptor extends Enemy {
-    private static readonly ABS_SPEED: float = 40.0; // 40 symbols per second
+    private static readonly ABS_SPEED: float = 50.0; // symbols per second
     private static readonly WIDTH: integer = 28;
     private static readonly HEIGHT: integer = 8;
     private static readonly BASE_Y: integer = 0;
