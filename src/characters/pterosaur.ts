@@ -13,7 +13,11 @@ export class Pterosaur extends Enemy {
     private static readonly BASE_Y: integer = 7;
 
     constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: onDestroyCallback) {
-        super(scr, direction, Pterosaur.WIDTH, Pterosaur.HEIGHT, Pterosaur.BASE_Y, Pterosaur.ABS_SPEED, onDestroy);
+        const row: integer = scr.height as number - Pterosaur.HEIGHT - Pterosaur.BASE_Y;
+        const column: integer = direction === EnemyMoveDirection.MoveRight
+            ? 1 - Pterosaur.WIDTH
+            : scr.width as number - 1;
+        super(scr, direction, Pterosaur.ABS_SPEED, column, row, Pterosaur.WIDTH, Pterosaur.HEIGHT, onDestroy);
     }
 
     protected _createState(direction: EnemyMoveDirection): State {

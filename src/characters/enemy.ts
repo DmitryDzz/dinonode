@@ -8,39 +8,43 @@ import {State} from "../states";
 
 export enum EnemyMoveDirection {
     MoveLeft,
-    MoveRight
+    MoveRight,
+    MoveDown
 }
 
 export abstract class Enemy extends Sprite {
     private _destroyed: boolean = false;
+    private _column: integer;
+    private _row: integer;
     private readonly _width: integer;
     private readonly _height: integer;
     private _x: float;
     private _y: float;
-    private readonly _baseY: float;
-    private _column: integer;
-    private readonly _row: integer;
-    private readonly _speed: float;
+    private readonly _speedX: float;
+    private readonly _speedY: float;
 
     private readonly _box: BoxElement;
     protected readonly _state: State;
 
-    protected constructor(scr: Screen, direction: EnemyMoveDirection,
-                          width: integer, height: integer, baseY: integer, absSpeed: float,
+    protected constructor(scr: Screen, direction: EnemyMoveDirection, absSpeed: float,
+                          column: integer, row: integer, width: integer, height: integer,
                           onDestroy?: onDestroyCallback) {
         super(scr, onDestroy);
 
+        this._column = column;
+        this._row = row;
         this._width = width;
         this._height = height;
-        this._baseY = baseY;
-        this._row = scr.height as number - this._height - this._baseY;
-        this._column = direction === EnemyMoveDirection.MoveRight
-            ? 1 - this._width
-            : scr.width as number - 1;
         this._x = this._column;
         this._y = this._row;
 
-        this._speed = direction === EnemyMoveDirection.MoveRight ? absSpeed : -absSpeed;
+        if (direction === EnemyMoveDirection.MoveDown) {
+            this._speedX = 0;
+            this._speedY = absSpeed;
+        } else {
+            this._speedX = direction === EnemyMoveDirection.MoveRight ? absSpeed : -absSpeed;
+            this._speedY = 0;
+        }
 
         this._box = Sprite.createBox(this._column, this._row, this._width, this._height);
         scr.append(this._box);
@@ -59,8 +63,10 @@ export abstract class Enemy extends Sprite {
 
     public update(): void {
         if (this._destroyed) return;
-        this._x += this._speed * Time.deltaTime;
+        this._x += this._speedX * Time.deltaTime;
+        this._y += this._speedY * Time.deltaTime;
         this._column = Math.round(this._x);
+        this._row = Math.round(this._y);
 
         this._state.update();
         const spriteRect: RectW = {c: this._column, r: this._row, w: this._width, h: this._height};

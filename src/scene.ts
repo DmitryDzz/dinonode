@@ -5,6 +5,7 @@ import {Raptor} from "./characters/raptor";
 import {EnemyMoveDirection} from "./characters/enemy";
 import Screen = Widgets.Screen;
 import {onDestroyCallback, Sprite} from "./sprite";
+import {Comet} from "./characters/comet";
 
 interface SpriteObject {
     sprite: Sprite;
@@ -14,6 +15,8 @@ interface SpriteObject {
 export class Scene {
     private static readonly MIN_ANIMAL_SPAWN_INTERVAL = 5_000;
     private static readonly MAX_ANIMAL_SPAWN_INTERVAL = 9_000;
+    private static readonly MIN_COMET_SPAWN_INTERVAL = 1_000;
+    private static readonly MAX_COMET_SPAWN_INTERVAL = 2_000;
 
     private readonly _scr: Screen;
 
@@ -21,15 +24,18 @@ export class Scene {
     private _sprites: SpriteObject[] = [];
 
     private _createAnimalInterval?: NodeJS.Timer;
+    private _createCometInterval?: NodeJS.Timer;
 
     constructor(scr: Screen) {
         this._scr = scr;
         this._dino = new Dino(scr);
         this._createRandomAnimal();
+        this._createComet();
     }
 
     destroy() {
         if (this._createAnimalInterval !== undefined) clearInterval(this._createAnimalInterval);
+        if (this._createCometInterval !== undefined) clearInterval(this._createCometInterval);
         this._sprites.forEach(x => x.sprite.destroy());
         this._dino.destroy();
     }
@@ -56,6 +62,18 @@ export class Scene {
 
             if (this._createAnimalInterval !== undefined) clearInterval(this._createAnimalInterval);
             this._createRandomAnimal();
+        }, delayMillis);
+    }
+
+    private _createComet() {
+        const delayMillis = Math.random() * (Scene.MAX_COMET_SPAWN_INTERVAL - Scene.MIN_COMET_SPAWN_INTERVAL) +
+            Scene.MIN_COMET_SPAWN_INTERVAL;
+        this._createCometInterval = setInterval(() => {
+            const comet = new Comet(this._scr, this._onSpriteDestroy);
+            this._sprites.push({sprite: comet, id: comet.id});
+
+            if (this._createCometInterval !== undefined) clearInterval(this._createCometInterval);
+            this._createComet();
         }, delayMillis);
     }
 }

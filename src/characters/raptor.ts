@@ -10,10 +10,13 @@ export class Raptor extends Enemy {
     private static readonly ABS_SPEED: float = 50.0; // symbols per second
     private static readonly WIDTH: integer = 28;
     private static readonly HEIGHT: integer = 8;
-    private static readonly BASE_Y: integer = 0;
 
     constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: onDestroyCallback) {
-        super(scr, direction, Raptor.WIDTH, Raptor.HEIGHT, Raptor.BASE_Y, Raptor.ABS_SPEED, onDestroy);
+        const row: integer = scr.height as number - Raptor.HEIGHT;
+        const column: integer = direction === EnemyMoveDirection.MoveRight
+            ? 1 - Raptor.WIDTH
+            : scr.width as number - 1;
+        super(scr, direction, Raptor.ABS_SPEED, column, row, Raptor.WIDTH, Raptor.HEIGHT, onDestroy);
     }
 
     protected _createState(direction: EnemyMoveDirection): State {
