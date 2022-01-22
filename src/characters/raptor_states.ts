@@ -1,9 +1,9 @@
 import {State} from "../states";
-import {Raptor} from "./raptor";
+import {Sprite} from "../resources/raptor_resources";
 
 export class RunLeft extends State {
     constructor() {
-        super(Raptor.sprites.left.run);
+        super(Sprite.Raptor.left.run);
     }
 
     protected setFrameDuration() {
@@ -21,7 +21,7 @@ export class RunLeft extends State {
 
 export class RunRight extends State {
     constructor() {
-        super(Raptor.sprites.right.run);
+        super(Sprite.Raptor.right.run);
     }
 
     protected setFrameDuration() {

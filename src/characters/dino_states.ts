@@ -1,5 +1,5 @@
 import {State} from "../states";
-import {Sprite} from "../sprites/dino";
+import {Sprite} from "../resources/dino_resources";
 
 export class DinoStates {
     private readonly _states: Map<DinoStateType, DinoState>;

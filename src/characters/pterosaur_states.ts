@@ -1,9 +1,9 @@
 import {State} from "../states";
-import {Pterosaur} from "./pterosaur";
+import {Sprite} from "../resources/pterosaur_resources";
 
 export class FlyLeft extends State {
     constructor() {
-        super(Pterosaur.sprites.left.fly);
+        super(Sprite.Pterosaur.left.fly);
     }
 
     protected setFrameDuration() {
@@ -21,7 +21,7 @@ export class FlyLeft extends State {
 
 export class FlyRight extends State {
     constructor() {
-        super(Pterosaur.sprites.right.fly);
+        super(Sprite.Pterosaur.right.fly);
     }
 
     protected setFrameDuration() {

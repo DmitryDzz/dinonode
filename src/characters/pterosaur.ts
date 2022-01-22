@@ -1,14 +1,9 @@
 import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
-import {Sprite} from "../sprite";
 import {State} from "../states";
 import {FlyLeft, FlyRight} from "./pterosaur_states";
 import {Enemy, EnemyMoveDirection} from "./enemy";
 import {float, integer} from "../types";
-
-interface PterosaurAnimations {
-    fly: string[];
-}
 
 export class Pterosaur extends Enemy {
     private static readonly ABS_SPEED: float = 40.0; // 40 symbols per second
@@ -21,7 +16,6 @@ export class Pterosaur extends Enemy {
     }
 
     protected _createState(direction: EnemyMoveDirection): State {
-        Pterosaur.sprites = Pterosaur._createSprites();
         return direction === EnemyMoveDirection.MoveLeft ? new FlyLeft() : new FlyRight();
     }
 
@@ -29,51 +23,4 @@ export class Pterosaur extends Enemy {
         //TODO DZZ
         console.log("Pterosaur", width, height);
     }
-
-    static sprites: {
-        left: PterosaurAnimations,
-        right: PterosaurAnimations
-    };
-
-    private static _createSprites() {
-        return {
-            right: {
-                fly: [
-                    Sprite.flip(Pterosaur._textures.flyA),
-                    Sprite.flip(Pterosaur._textures.flyB),
-                ],
-            },
-            left: {
-                fly: [
-                    Pterosaur._textures.flyA,
-                    Pterosaur._textures.flyB,
-                ],
-            },
-        };
-    }
-
-    private static readonly _textures = {
-        flyA:
-            "        ▄              \n" +
-            "        ██▄            \n" +
-            "    ▄██  ███▄          \n" +
-            "  ▄█████ █████▄        \n" +
-            " ▀▀▀▀▀▀████████▄       \n" +
-            "        ▀██████████▛▀▀▘\n" +
-            "          ▀███████▛▀▀▘ \n" +
-            "                       \n" +
-            "                       \n" +
-            "                       ",
-        flyB:
-            "                       \n" +
-            "                       \n" +
-            "    ▄██                \n" +
-            "  ▄█████               \n" +
-            " ▀▀▀▀▀▀████████▄       \n" +
-            "        ▀██████████▛▀▀▘\n" +
-            "         █████████▛▀▀▘ \n" +
-            "         ███▀          \n" +
-            "         ██            \n" +
-            "         ▀             ",
-    };
 }
