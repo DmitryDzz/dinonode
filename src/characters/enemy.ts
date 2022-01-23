@@ -1,5 +1,4 @@
 import {Widgets} from "blessed";
-import BoxElement = Widgets.BoxElement;
 import Screen = Widgets.Screen;
 import {onDestroyCallback, Sprite} from "../sprite";
 import {float, integer, RectW} from "../types";
@@ -13,28 +12,18 @@ export enum EnemyMoveDirection {
 }
 
 export abstract class Enemy extends Sprite {
-    private _destroyed: boolean = false;
-    private _column: integer;
-    private _row: integer;
-    private readonly _width: integer;
-    private readonly _height: integer;
     private _x: float;
     private _y: float;
     private readonly _speedX: float;
     private readonly _speedY: float;
 
-    private readonly _box: BoxElement;
     protected readonly _state: State;
 
     protected constructor(scr: Screen, direction: EnemyMoveDirection, absSpeed: float,
                           column: integer, row: integer, width: integer, height: integer,
                           onDestroy?: onDestroyCallback) {
-        super(scr, onDestroy);
+        super(scr, column, row, width, height, onDestroy);
 
-        this._column = column;
-        this._row = row;
-        this._width = width;
-        this._height = height;
         this._x = this._column;
         this._y = this._row;
 
@@ -46,16 +35,10 @@ export abstract class Enemy extends Sprite {
             this._speedY = 0;
         }
 
-        this._box = Sprite.createBox(this._column, this._row, this._width, this._height);
-        scr.append(this._box);
-
         this._state = this._createState(direction);
     }
 
     destroy() {
-        if (this._destroyed) return;
-        this._scr.remove(this._box);
-        this._destroyed = true;
         super.destroy();
     }
 

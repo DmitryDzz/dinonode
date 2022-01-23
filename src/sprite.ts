@@ -11,18 +11,38 @@ export abstract class Sprite {
 
     readonly id: number;
 
-    protected readonly _scr: Screen;
+    protected _column: integer;
+    protected _row: integer;
+    protected readonly _width: integer;
+    protected readonly _height: integer;
 
+    protected readonly _scr: Screen;
+    protected readonly _box: BoxElement;
+
+    protected _destroyed: boolean = false;
     private readonly _onDestroy?: onDestroyCallback;
 
-    protected constructor(scr: Screen, onDestroy?: onDestroyCallback) {
+    protected constructor(scr: Screen,
+                          column: integer, row: integer, width: integer, height: integer,
+                          onDestroy?: onDestroyCallback) {
         this.id = Sprite._last_id++;
         this._scr = scr;
         this._onDestroy = onDestroy;
         ApplicationPublisher.getInstance().addListener("onWindowResize", this._onWindowResizeHandler);
+
+        this._column = column;
+        this._row = row;
+        this._width = width;
+        this._height = height;
+
+        this._box = Sprite.createBox(this._column, this._row, this._width, this._height);
+        scr.append(this._box);
     }
 
     destroy(): void {
+        if (this._destroyed) return;
+        this._scr.remove(this._box);
+        this._destroyed = true;
         ApplicationPublisher.getInstance().removeListener("onWindowResize", this._onWindowResizeHandler);
         if (this._onDestroy)
             this._onDestroy(this);

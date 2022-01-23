@@ -21,8 +21,6 @@ export class Dino extends Sprite {
     private static readonly JUMP_DURATION = 0.8;
     private static readonly LEAN_DURATION = 0.6;
 
-    private readonly _box: BoxElement;
-
     private static readonly ABS_NORMAL_SPEED: float = 40.0; // symbols per second
     private static readonly ABS_FAST_SPEED: float = 52.0; // symbols per second
     private readonly _pos: DinoRect;
@@ -33,11 +31,11 @@ export class Dino extends Sprite {
     private _returnToPrevStateTimeout?: NodeJS.Timeout;
 
     constructor(scr: Screen) {
-        super(scr);
+        super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT);
         this._pos = new DinoRect(scr, (scr.width as number - DinoRect.DEFAULT_WIDTH) / 2);
 
-        this._box = Dino.createBox(this._pos.column, this._pos.row, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT);
-        scr.append(this._box);
+        this._box.left = this._pos.column;
+        this._box.top = this._pos.row;
 
         this._states = new DinoStates();
         this._state = this._states.getState("idleR");
@@ -125,6 +123,8 @@ export class Dino extends Sprite {
     }
 
     update() {
+        if (this._destroyed) return;
+
         const bx = this._box;
 
         if (this._state.update()) {

@@ -6,6 +6,8 @@ import {EnemyMoveDirection} from "./characters/enemy";
 import Screen = Widgets.Screen;
 import {onDestroyCallback, Sprite} from "./sprite";
 import {Comet} from "./characters/comet";
+import {Score} from "./gui/score";
+import {Lives} from "./gui/lives";
 
 interface SpriteObject {
     sprite: Sprite;
@@ -20,6 +22,8 @@ export class Scene {
 
     private readonly _scr: Screen;
 
+    private readonly _score: Score;
+    private readonly _lives: Lives;
     private readonly _dino: Dino;
     private _sprites: SpriteObject[] = [];
 
@@ -31,6 +35,9 @@ export class Scene {
         this._dino = new Dino(scr);
         this._createRandomAnimal();
         this._createComet();
+
+        this._score = new Score(scr);
+        this._lives = new Lives(scr);
     }
 
     destroy() {
@@ -38,11 +45,15 @@ export class Scene {
         if (this._createCometInterval !== undefined) clearInterval(this._createCometInterval);
         this._sprites.forEach(x => x.sprite.destroy());
         this._dino.destroy();
+        this._score.destroy();
+        this._lives.destroy();
     }
 
     update() {
         this._dino.update();
         this._sprites.forEach(x => x.sprite.update());
+        this._score.update();
+        this._lives.update();
     }
 
     private readonly _onSpriteDestroy: onDestroyCallback = (sprite: Sprite): void => {
