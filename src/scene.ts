@@ -57,6 +57,7 @@ export class Scene {
     }
 
     private readonly _onSpriteDestroy: onDestroyCallback = (sprite: Sprite): void => {
+        this._score.value++;
         this._sprites = this._sprites.filter(s => s.id !== sprite.id);
         //console.log("onDestroy", sprite.id, "count", this._sprites.length);
     }
