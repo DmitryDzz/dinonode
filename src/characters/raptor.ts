@@ -16,7 +16,7 @@ export class Raptor extends Enemy {
         const column: integer = direction === EnemyMoveDirection.MoveRight
             ? 1 - Raptor.WIDTH
             : scr.width as number - 1;
-        super(scr, direction, Raptor.ABS_SPEED, column, row, Raptor.WIDTH, Raptor.HEIGHT, onDestroy);
+        super(scr, direction, Raptor.ABS_SPEED, column, row, Raptor.WIDTH, Raptor.HEIGHT, "#608080", onDestroy);
     }
 
     protected _createState(direction: EnemyMoveDirection): State {

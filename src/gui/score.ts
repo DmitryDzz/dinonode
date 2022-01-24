@@ -20,13 +20,16 @@ export class Score extends Sprite {
 
     private _value: number = 0;
 
+    private static readonly COLOR = "#008000";
+
     constructor(scr: Screen) {
-        super(scr, scr.width as number - Score.DESCR_RIGHT, Score.TOP, Score.DESCR_WIDTH, Score.HEIGHT);
+        super(scr, scr.width as number - Score.DESCR_RIGHT, Score.TOP, Score.DESCR_WIDTH, Score.HEIGHT,
+            Score.COLOR);
 
         const w = scr.width as number;
-        this._boxD2 = Sprite.createBox(w - Score.DIGIT_2_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT);
-        this._boxD1 = Sprite.createBox(w - Score.DIGIT_1_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT);
-        this._boxD0 = Sprite.createBox(w - Score.DIGIT_0_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT);
+        this._boxD2 = Sprite.createBox(w - Score.DIGIT_2_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT, Score.COLOR);
+        this._boxD1 = Sprite.createBox(w - Score.DIGIT_1_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT, Score.COLOR);
+        this._boxD0 = Sprite.createBox(w - Score.DIGIT_0_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT, Score.COLOR);
         scr.append(this._boxD2);
         scr.append(this._boxD1);
         scr.append(this._boxD0);

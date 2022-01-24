@@ -17,7 +17,8 @@ export class Pterosaur extends Enemy {
         const column: integer = direction === EnemyMoveDirection.MoveRight
             ? 1 - Pterosaur.WIDTH
             : scr.width as number - 1;
-        super(scr, direction, Pterosaur.ABS_SPEED, column, row, Pterosaur.WIDTH, Pterosaur.HEIGHT, onDestroy);
+        super(scr, direction, Pterosaur.ABS_SPEED, column, row, Pterosaur.WIDTH, Pterosaur.HEIGHT,
+            "#B04000", onDestroy);
     }
 
     protected _createState(direction: EnemyMoveDirection): State {

@@ -31,7 +31,7 @@ export class Dino extends Sprite {
     private _returnToPrevStateTimeout?: NodeJS.Timeout;
 
     constructor(scr: Screen) {
-        super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT);
+        super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT, "#608000");
         this._pos = new DinoRect(scr, (scr.width as number - DinoRect.DEFAULT_WIDTH) / 2);
 
         this._box.left = this._pos.column;

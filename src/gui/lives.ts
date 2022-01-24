@@ -8,7 +8,7 @@ export class Lives extends Sprite {
     private static readonly HEIGHT = 4;
 
     constructor(scr: Screen) {
-        super(scr, 1, 1, Lives.WIDTH, Lives.HEIGHT);
+        super(scr, 1, 1, Lives.WIDTH, Lives.HEIGHT, "#F02000");
     }
 
     protected _onWindowResizeHandler(width: number, height: number): void {

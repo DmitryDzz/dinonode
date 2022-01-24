@@ -15,7 +15,8 @@ export class Comet extends Enemy {
         const scrWidth: integer = scr.width as number;
         const column: integer = Math.round(Math.random() * 0.95 * scrWidth + 0.025 * scrWidth);
         const row: integer = 1 - Comet.HEIGHT;
-        super(scr, EnemyMoveDirection.MoveDown, Comet.ABS_SPEED, column, row, Comet.WIDTH, Comet.HEIGHT, onDestroy);
+        super(scr, EnemyMoveDirection.MoveDown, Comet.ABS_SPEED, column, row, Comet.WIDTH, Comet.HEIGHT,
+            "#808000",onDestroy);
     }
 
     protected _createState(direction: EnemyMoveDirection): State {

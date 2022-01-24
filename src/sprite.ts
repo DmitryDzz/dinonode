@@ -24,7 +24,7 @@ export abstract class Sprite {
 
     protected constructor(scr: Screen,
                           column: integer, row: integer, width: integer, height: integer,
-                          onDestroy?: onDestroyCallback) {
+                          baseColor: string, onDestroy?: onDestroyCallback) {
         this.id = Sprite._last_id++;
         this._scr = scr;
         this._onDestroy = onDestroy;
@@ -35,7 +35,7 @@ export abstract class Sprite {
         this._width = width;
         this._height = height;
 
-        this._box = Sprite.createBox(this._column, this._row, this._width, this._height);
+        this._box = Sprite.createBox(this._column, this._row, this._width, this._height, baseColor);
         scr.append(this._box);
     }
 
@@ -81,7 +81,7 @@ export abstract class Sprite {
         return result;
     }
 
-    static createBox(column: number, row: number, width: number, height: number): BoxElement {
+    static createBox(column: number, row: number, width: number, height: number, baseColor: string): BoxElement {
         return box({
             width: width,
             height: height,
@@ -89,14 +89,8 @@ export abstract class Sprite {
             left: column,
             tags: true,
             style: {
-                fg: 'green',
+                fg: baseColor,
                 // bg: 'magenta',
-                // border: {
-                //     fg: '#f0f0f0'
-                // },
-                // hover: {
-                //     bg: 'green'
-                // }
             }
         });
     }

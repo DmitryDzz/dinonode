@@ -21,8 +21,8 @@ export abstract class Enemy extends Sprite {
 
     protected constructor(scr: Screen, direction: EnemyMoveDirection, absSpeed: float,
                           column: integer, row: integer, width: integer, height: integer,
-                          onDestroy?: onDestroyCallback) {
-        super(scr, column, row, width, height, onDestroy);
+                          baseColor: string, onDestroy?: onDestroyCallback) {
+        super(scr, column, row, width, height, baseColor, onDestroy);
 
         this._x = this._column;
         this._y = this._row;
