@@ -17,7 +17,7 @@ export abstract class Sprite {
     protected readonly _height: integer;
 
     protected readonly _scr: Screen;
-    protected readonly _box: BoxElement;
+    protected _box: BoxElement;
 
     protected _destroyed: boolean = false;
     private readonly _onDestroy?: onDestroyCallback;
