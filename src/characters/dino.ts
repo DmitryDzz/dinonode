@@ -1,6 +1,5 @@
 import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
-import BoxElement = Widgets.BoxElement;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {DinoState, DinoStates, DinoStateType} from "./dino_states";
 import {DinoRect} from "./dino_rect";
