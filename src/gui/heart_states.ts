@@ -26,7 +26,7 @@ export abstract class HeartState extends State {
     get type(): HeartStateType { return this._type; }
 
     protected constructor(type: HeartStateType, frames: string[]) {
-        super(frames);
+        super(frames, true);
         this._type = type;
     }
 }
@@ -37,7 +37,6 @@ export class AliveState extends HeartState {
     }
 
     protected setFrameDuration() {}
-    protected setFramesCount() {}
 }
 
 export class DeadState extends HeartState {
@@ -46,7 +45,6 @@ export class DeadState extends HeartState {
     }
 
     protected setFrameDuration() {}
-    protected setFramesCount() {}
 }
 
 export class AppearState extends HeartState {
@@ -57,10 +55,6 @@ export class AppearState extends HeartState {
     protected setFrameDuration() {
         this._frameDuration = 0.125;
     }
-
-    protected setFramesCount() {
-        this._framesCount = 2;
-    }
 }
 
 export class DisappearState extends HeartState {
@@ -70,9 +64,5 @@ export class DisappearState extends HeartState {
 
     protected setFrameDuration() {
         this._frameDuration = 0.125;
-    }
-
-    protected setFramesCount() {
-        this._framesCount = 2;
     }
 }

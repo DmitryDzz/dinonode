@@ -7,15 +7,11 @@ export abstract class PterosaurState extends State {
 
 export class FlyLeft extends PterosaurState {
     constructor() {
-        super(Sprite.Pterosaur.left.fly);
+        super(Sprite.Pterosaur.left.fly, true);
     }
 
     protected setFrameDuration() {
         this._frameDuration = 0.125;
-    }
-
-    protected setFramesCount() {
-        this._framesCount = 2;
     }
 
     isLeftDirection(): boolean {
@@ -25,15 +21,11 @@ export class FlyLeft extends PterosaurState {
 
 export class FlyRight extends PterosaurState {
     constructor() {
-        super(Sprite.Pterosaur.right.fly);
+        super(Sprite.Pterosaur.right.fly, true);
     }
 
     protected setFrameDuration() {
         this._frameDuration = 0.125;
-    }
-
-    protected setFramesCount() {
-        this._framesCount = 2;
     }
 
     isLeftDirection(): boolean {

@@ -8,14 +8,15 @@ export abstract class State {
     private _frameIndex: number = 0;
 
     protected abstract setFrameDuration(): void;
-    protected abstract setFramesCount(): void;
 
     protected readonly _frames: string[];
+    protected readonly _isLooped: boolean;
 
-    protected constructor(frames: string[]) {
+    protected constructor(frames: string[], isLooped: boolean) {
         this._frames = frames;
+        this._isLooped = isLooped;
+        this._framesCount = frames.length;
         this.setFrameDuration();
-        this.setFramesCount();
         this.clear();
     }
 

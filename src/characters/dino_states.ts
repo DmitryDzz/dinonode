@@ -36,13 +36,9 @@ export abstract class DinoState extends State {
     private readonly _type: DinoStateType;
     get type(): DinoStateType { return this._type; }
 
-    protected constructor(type: DinoStateType, frames: string[]) {
-        super(frames);
+    protected constructor(type: DinoStateType, frames: string[], isLooped: boolean) {
+        super(frames, isLooped);
         this._type = type;
-    }
-
-    protected setFramesCount() {
-        this._framesCount = this._frames.length;
     }
 
     abstract isLeftDirection(): boolean;
@@ -50,7 +46,7 @@ export abstract class DinoState extends State {
 
 export class IdleLeftState extends DinoState {
     constructor() {
-        super("idleL", Sprite.Dino.left.idle);
+        super("idleL", Sprite.Dino.left.idle, true);
     }
 
     protected setFrameDuration() {
@@ -64,7 +60,7 @@ export class IdleLeftState extends DinoState {
 
 export class IdleRightState extends DinoState {
     constructor() {
-        super("idleR", Sprite.Dino.right.idle);
+        super("idleR", Sprite.Dino.right.idle, true);
     }
 
     protected setFrameDuration() {
@@ -78,7 +74,7 @@ export class IdleRightState extends DinoState {
 
 export class RunLeftState extends DinoState {
     constructor() {
-        super("runL", Sprite.Dino.left.run);
+        super("runL", Sprite.Dino.left.run, true);
     }
 
     protected setFrameDuration() {
@@ -92,7 +88,7 @@ export class RunLeftState extends DinoState {
 
 export class RunRightState extends DinoState {
     constructor() {
-        super("runR", Sprite.Dino.right.run);
+        super("runR", Sprite.Dino.right.run, true);
     }
 
     protected setFrameDuration() {
@@ -106,7 +102,7 @@ export class RunRightState extends DinoState {
 
 export class JumpLeftState extends DinoState {
     constructor() {
-        super("jumpL", Sprite.Dino.left.jump);
+        super("jumpL", Sprite.Dino.left.jump, true);
     }
 
     protected setFrameDuration() {}
@@ -118,7 +114,7 @@ export class JumpLeftState extends DinoState {
 
 export class JumpRightState extends DinoState {
     constructor() {
-        super("jumpR", Sprite.Dino.right.jump);
+        super("jumpR", Sprite.Dino.right.jump, true);
     }
 
     protected setFrameDuration() {}
@@ -130,7 +126,7 @@ export class JumpRightState extends DinoState {
 
 export class LeanIdleLeftState extends DinoState {
     constructor() {
-        super("leanIdleL", Sprite.Dino.left.leanIdle);
+        super("leanIdleL", Sprite.Dino.left.leanIdle, true);
     }
 
     protected setFrameDuration() {
@@ -144,7 +140,7 @@ export class LeanIdleLeftState extends DinoState {
 
 export class LeanIdleRightState extends DinoState {
     constructor() {
-        super("leanIdleR", Sprite.Dino.right.leanIdle);
+        super("leanIdleR", Sprite.Dino.right.leanIdle, true);
     }
 
     protected setFrameDuration() {
@@ -158,7 +154,7 @@ export class LeanIdleRightState extends DinoState {
 
 export class LeanRunLeftState extends DinoState {
     constructor() {
-        super("leanRunL", Sprite.Dino.left.leanRun);
+        super("leanRunL", Sprite.Dino.left.leanRun, true);
     }
 
     protected setFrameDuration() {
@@ -172,7 +168,7 @@ export class LeanRunLeftState extends DinoState {
 
 export class LeanRunRightState extends DinoState {
     constructor() {
-        super("leanRunR", Sprite.Dino.right.leanRun);
+        super("leanRunR", Sprite.Dino.right.leanRun, true);
     }
 
     protected setFrameDuration() {
@@ -186,7 +182,7 @@ export class LeanRunRightState extends DinoState {
 
 export class DeadLeftState extends DinoState {
     constructor() {
-        super("deadL", Sprite.Dino.left.dead);
+        super("deadL", Sprite.Dino.left.dead, true);
     }
 
     protected setFrameDuration() {}
@@ -198,7 +194,7 @@ export class DeadLeftState extends DinoState {
 
 export class DeadRightState extends DinoState {
     constructor() {
-        super("deadR", Sprite.Dino.right.dead);
+        super("deadR", Sprite.Dino.right.dead, true);
     }
 
     protected setFrameDuration() {}
@@ -210,7 +206,7 @@ export class DeadRightState extends DinoState {
 
 export class DeadHeadLeftState extends DinoState {
     constructor() {
-        super("deadHeadL", Sprite.Dino.left.deadHead);
+        super("deadHeadL", Sprite.Dino.left.deadHead, false);
     }
 
     protected setFrameDuration() {
@@ -224,7 +220,7 @@ export class DeadHeadLeftState extends DinoState {
 
 export class DeadHeadRightState extends DinoState {
     constructor() {
-        super("deadHeadR", Sprite.Dino.right.deadHead);
+        super("deadHeadR", Sprite.Dino.right.deadHead, false);
     }
 
     protected setFrameDuration() {
