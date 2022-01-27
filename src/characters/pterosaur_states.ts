@@ -1,7 +1,11 @@
 import {State} from "../states";
 import {Sprite} from "../resources/pterosaur_resources";
 
-export class FlyLeft extends State {
+export abstract class PterosaurState extends State {
+    abstract isLeftDirection(): boolean;
+}
+
+export class FlyLeft extends PterosaurState {
     constructor() {
         super(Sprite.Pterosaur.left.fly);
     }
@@ -19,7 +23,7 @@ export class FlyLeft extends State {
     }
 }
 
-export class FlyRight extends State {
+export class FlyRight extends PterosaurState {
     constructor() {
         super(Sprite.Pterosaur.right.fly);
     }

@@ -12,7 +12,8 @@ enum Key {
     Jump = "w",
     Lean = "s",
     Stop = "z",
-    Dead = "x",
+    Dead = "1",
+    DeadHead = "2",
 }
 
 export class Dino extends Sprite {
@@ -39,7 +40,8 @@ export class Dino extends Sprite {
         this._states = new DinoStates();
         this._state = this._states.getState("idleR");
 
-        scr.key([Key.Left, Key.Right, Key.Jump, Key.Lean, Key.Stop, Key.Dead], this._keyPressed);
+        scr.key([Key.Left, Key.Right, Key.Jump, Key.Lean, Key.Stop,
+            Key.Dead, Key.DeadHead], this._keyPressed);
     }
 
     destroy() {
@@ -111,7 +113,16 @@ export class Dino extends Sprite {
                 ? this._changeState("deadL")
                 : this._changeState("deadR");
             this._pos.speed = 0;
+        } else if (ch === Key.DeadHead) {
+            this._performDeadHead();
         }
+    }
+
+    private _performDeadHead() {
+        this._pos.die();
+        this._state = this._state.isLeftDirection()
+            ? this._changeState("deadHeadL")
+            : this._changeState("deadHeadR");
     }
 
     private _changeState(stateType: DinoStateType): DinoState {

@@ -118,7 +118,15 @@ export class DinoRect {
         this.update();
     }
 
+    private _isDead: boolean = false;
+
+    die() {
+        this._isDead = true;
+    }
+
     update() {
+        if (this._isDead) return;
+
         this._x += this._speed * Time.deltaTime;
         this._y = this._baseY - this.height - this._getDeltaY();
         this._column = Math.round(this._x);

@@ -13,8 +13,4 @@ export class Fall extends State {
     protected setFramesCount() {
         this._framesCount = 3;
     }
-
-    isLeftDirection(): boolean {
-        return false;
-    }
 }

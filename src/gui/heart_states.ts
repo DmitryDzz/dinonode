@@ -29,10 +29,6 @@ export abstract class HeartState extends State {
         super(frames);
         this._type = type;
     }
-
-    isLeftDirection(): boolean {
-        return false;
-    }
 }
 
 export class AliveState extends HeartState {

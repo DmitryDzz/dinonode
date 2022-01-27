@@ -10,7 +10,7 @@ export abstract class State {
     protected abstract setFrameDuration(): void;
     protected abstract setFramesCount(): void;
 
-    private readonly _frames: string[];
+    protected readonly _frames: string[];
 
     protected constructor(frames: string[]) {
         this._frames = frames;
@@ -50,6 +50,4 @@ export abstract class State {
     }
 
     get frame(): string { return this._frames[this._frameIndex]; }
-
-    abstract isLeftDirection(): boolean;
 }

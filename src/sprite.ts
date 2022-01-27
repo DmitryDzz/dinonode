@@ -67,7 +67,9 @@ export abstract class Sprite {
             .replace(/\u2599/g, "Й")
             .replace(/\u259b/g, "Л")
             .replace(/\u259c/g, "П")
-            .replace(/\u259f/g, "Ф");
+            .replace(/\u259f/g, "Ф")
+            .replace(/\u259a/g, "Ц")
+            .replace(/\u259e/g, "Ч");
         result = result
             .replace(/Б/g, "\u2597")
             .replace(/Г/g, "\u2596")
@@ -76,7 +78,9 @@ export abstract class Sprite {
             .replace(/Й/g, "\u259f")
             .replace(/Л/g, "\u259c")
             .replace(/П/g, "\u259b")
-            .replace(/Ф/g, "\u2599");
+            .replace(/Ф/g, "\u2599")
+            .replace(/Ц/g, "\u259e")
+            .replace(/Ч/g, "\u259a");
 
         return result;
     }

@@ -106,6 +106,102 @@ export namespace Texture {
             "   ▀████████▘       \n" +
             "     ██▀ ▀█         \n" +
             "     █▄   █▄        ";
+        static readonly deadHeadA =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadHeadB =
+            "                    \n" +
+            "                    \n" +
+            "                    \n{#f02000-fg}" +
+            "           ▖▗       {/}\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadHeadC =
+            "                    \n" +
+            "                    \n" +
+            "                    \n{#f02000-fg}" +
+            "          ▚ ▞       {/}\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadHeadD =
+            "                    \n" +
+            "                    \n" +
+            "                    \n{#f02000-fg}" +
+            "         ▝▝ ▝▝      {/}\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadHeadE =
+            "                    \n" +
+            "                    \n" +
+            "                    \n{#f02000-fg}" +
+            "         ▞   ▚      {/}\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadHeadF =
+            "                    \n" +
+            "                    \n" +
+            "                    \n{#f02000-fg}" +
+            "         ▖   ▗      {/}\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadHeadG =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "▄▄         ▄▄       \n" +
+            " ███▄  ▄▄█████▄     \n" +
+            "  ▜████████████▀    \n" +
+            "   ▀██████████▜▙    \n" +
+            "     ▀██████▀ ▄█    \n" +
+            "   ▄▄██▀▄█▀         ";
+        static readonly deadHeadH =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "       ▄█████████▄  \n" +
+            "    ▄▄████████████▄ \n" +
+            "▄██████████████████▄";
 
     }
 }
@@ -118,6 +214,7 @@ export namespace Sprite {
         leanIdle: string[];
         leanRun: string[];
         dead: string[];
+        deadHead: string[];
     }
 
     export class Dino {
@@ -144,6 +241,23 @@ export namespace Sprite {
             dead: [
                 Texture.Dino.dead,
             ],
+            deadHead: [
+                Texture.Dino.deadHeadA,
+                Texture.Dino.deadHeadB,
+                Texture.Dino.deadHeadC,
+                Texture.Dino.deadHeadD,
+                Texture.Dino.deadHeadE,
+                Texture.Dino.deadHeadF,
+                Texture.Dino.deadHeadA,
+                Texture.Dino.deadHeadB,
+                Texture.Dino.deadHeadC,
+                Texture.Dino.deadHeadD,
+                Texture.Dino.deadHeadE,
+                Texture.Dino.deadHeadF,
+                Texture.Dino.deadHeadA,
+                Texture.Dino.deadHeadG,
+                Texture.Dino.deadHeadH,
+            ],
         };
         static readonly left: DinoAnimations = {
             idle: [
@@ -167,6 +281,23 @@ export namespace Sprite {
             ],
             dead: [
                 SpriteClass.flip(Texture.Dino.dead),
+            ],
+            deadHead: [
+                SpriteClass.flip(Texture.Dino.deadHeadA),
+                SpriteClass.flip(Texture.Dino.deadHeadB),
+                SpriteClass.flip(Texture.Dino.deadHeadC),
+                SpriteClass.flip(Texture.Dino.deadHeadD),
+                SpriteClass.flip(Texture.Dino.deadHeadE),
+                SpriteClass.flip(Texture.Dino.deadHeadF),
+                SpriteClass.flip(Texture.Dino.deadHeadA),
+                SpriteClass.flip(Texture.Dino.deadHeadB),
+                SpriteClass.flip(Texture.Dino.deadHeadC),
+                SpriteClass.flip(Texture.Dino.deadHeadD),
+                SpriteClass.flip(Texture.Dino.deadHeadE),
+                SpriteClass.flip(Texture.Dino.deadHeadF),
+                SpriteClass.flip(Texture.Dino.deadHeadA),
+                SpriteClass.flip(Texture.Dino.deadHeadG),
+                SpriteClass.flip(Texture.Dino.deadHeadH),
             ],
         };
     }
