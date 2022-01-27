@@ -19,7 +19,7 @@ export class Lives {
         for (let i = 0; i < Lives.COUNT; i++) {
             const heart = new Heart(scr);
             this._hearts.push(heart);
-            heart.column = i * (heart.width + 1);
+            heart.column = i * heart.width + 1;
             heart.row = 1;
         }
         ApplicationPublisher.getInstance().addListener("onWindowResize", this._onWindowResizeHandler);
