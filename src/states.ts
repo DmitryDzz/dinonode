@@ -27,7 +27,13 @@ export abstract class State {
 
     private setNextFrame(): void {
         if (this._framesCount <= 1) return;
-        this._frameIndex = (++this._frameIndex) % this._framesCount;
+        if (this._isLooped) {
+            this._frameIndex = (++this._frameIndex) % this._framesCount;
+        } else {
+            this._frameIndex++;
+            if (this._frameIndex / this._framesCount < 1) return;
+            this._frameIndex = this._framesCount - 1;
+        }
     }
 
     update(): boolean {
