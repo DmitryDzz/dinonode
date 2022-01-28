@@ -57,7 +57,8 @@ export abstract class Sprite {
         let result: string = "";
         rows.forEach(row => {
             if (result.length > 0) result += "\n";
-            result += row.split("").reverse().join("");
+            // result += row.split("").reverse().join("");
+            result += Sprite.flipRow(row);
         });
         result = result
             .replace(/\u2596/g, "Б")
@@ -82,6 +83,50 @@ export abstract class Sprite {
             .replace(/Ц/g, "\u259e")
             .replace(/Ч/g, "\u259a");
 
+        return result;
+    }
+
+    static flipRow(row: string): string {
+        let result: string = "";
+        const commands: BlessCommand[] = [];
+        let command: BlessCommand | undefined = undefined;
+        let inCommand: boolean = false;
+        let commandText: string = "";
+        for (let i = 0, col = 0; i < row.length; i++) {
+            const ch: string = row[i];
+            if (ch === "{") {
+                inCommand = true;
+                commandText = ch;
+            } else if (ch === "}") {
+                commandText += ch;
+                if (command === undefined) {
+                    command = {
+                        beginCmd: commandText,
+                        beginCmdPos: col,
+                    };
+                } else {
+                    command.endCmd = commandText;
+                    command.endCmdPos = col;
+                    commands.push(Object.assign({}, command));
+                    command = undefined;
+                }
+                inCommand = false;
+            } else if (inCommand) {
+                commandText += ch;
+            } else {
+                result += ch;
+                col++;
+            }
+        }
+        result = result.split("").reverse().join("");
+        const rowLength = result.length;
+        for (let i = 0; i < commands.length; i++) {
+            const c: BlessCommand = commands[i];
+            const beginPos = rowLength - c.endCmdPos!;
+            const endPos = rowLength - c.beginCmdPos;
+            result = result.substring(0, endPos) + c.endCmd + result.substring(endPos);
+            result = result.substring(0, beginPos) + c.beginCmd + result.substring(beginPos);
+        }
         return result;
     }
 
@@ -174,4 +219,11 @@ export abstract class Sprite {
         rows = rows.slice(0, -rowsToDelete);
         return rows.join("\n");
     }
+}
+
+interface BlessCommand {
+    beginCmd: string;
+    beginCmdPos: number;
+    endCmd?: string;
+    endCmdPos?: number;
 }
