@@ -1,9 +1,15 @@
 export class Time {
     private static _time?: number;
     private static _deltaTime: number = 0.0;
+    private static _factor: number = 1.0;
 
     private static _getCurrentTime(): number {
-        return Date.now() / 1000.0;
+        return Date.now() / 1000.0 * Time._factor;
+    }
+
+    static setFactor(timeFactor: number) {
+        Time._factor = timeFactor;
+        Time._time = Time._getCurrentTime();
     }
 
     static update() {

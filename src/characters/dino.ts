@@ -30,6 +30,8 @@ export class Dino extends Sprite {
 
     private _returnToPrevStateTimeout?: NodeJS.Timeout;
 
+    private _isPaused: boolean = false;
+
     constructor(scr: Screen) {
         super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT, "#608000");
         this._pos = new DinoRect(scr, (scr.width as number - DinoRect.DEFAULT_WIDTH) / 2);
@@ -52,17 +54,32 @@ export class Dino extends Sprite {
         }
     }
 
+    pause() {
+        this._isPaused = true;
+    }
+
+    unpause() {
+        this._isPaused = false;
+    }
+
     protected _onWindowResizeHandler(width: number, height: number): void {
         //TODO DZZ
         //console.log("Dino", width, height);
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
+        if (this._isPaused) return;
+
         const jumpAction = () => {
             this._pos.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION);
             this._returnToPrevStateTimeout = setTimeout(() => {
-                const nextState: DinoStateType = this._state.isLeftDirection() ? "runL" : "runR";
-                this._state = this._changeState(nextState);
+                if (this._state.isLeftDirection()) {
+                    this._pos.speed = -Dino.ABS_NORMAL_SPEED;
+                    this._state = this._changeState("runL");
+                } else {
+                    this._pos.speed = Dino.ABS_NORMAL_SPEED;
+                    this._state = this._changeState("runR");
+                }
             }, Dino.JUMP_DURATION * 1000);
             const jumpState: DinoStateType = this._state.isLeftDirection() ? "jumpL" : "jumpR";
             this._state = this._changeState(jumpState);
