@@ -60,12 +60,10 @@ export class Lives {
         let animatedIndex: number | undefined = undefined;
         if (direction === ChangeHealthDirection.INCREASE) {
             animatedIndex = this._value - 1;
-            this._hearts[animatedIndex].changeState(
-                "appear", {duration: 1, nextStateType: "alive"});
+            this._hearts[animatedIndex].changeState("appear");
         } else if (direction === ChangeHealthDirection.DECREASE) {
             animatedIndex = this._value;
-            this._hearts[animatedIndex].changeState(
-                "disappear", {duration: 1, nextStateType: "dead"});
+            this._hearts[animatedIndex].changeState("disappear");
         }
         if (animatedIndex !== undefined) {
             for (let i = 0; i < animatedIndex; i++) {

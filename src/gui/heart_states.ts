@@ -26,7 +26,7 @@ export abstract class HeartState extends State {
     get type(): HeartStateType { return this._type; }
 
     protected constructor(type: HeartStateType, frames: string[]) {
-        super(frames, true);
+        super(frames, false);
         this._type = type;
     }
 }

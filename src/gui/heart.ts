@@ -4,28 +4,17 @@ import {Sprite} from "../sprite";
 import {integer} from "../types";
 import {HeartState, HeartStates, HeartStateType} from "./heart_states";
 
-interface StateTransition {
-    duration: number; // current state duration in seconds
-    nextStateType: HeartStateType;
-}
-
 export class Heart extends Sprite {
     private static readonly WIDTH = 10;
     private static readonly HEIGHT = 4;
 
     private readonly _states: HeartStates;
     private _state: HeartState;
-    private _animationTimeout?: NodeJS.Timeout;
 
     constructor(scr: Screen) {
         super(scr, 1, 1, Heart.WIDTH, Heart.HEIGHT, "#000000");
         this._states = new HeartStates();
         this._state = this._states.getState("alive");
-    }
-
-    destroy() {
-        if (this._animationTimeout) clearTimeout(this._animationTimeout);
-        super.destroy();
     }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
@@ -67,16 +56,8 @@ export class Heart extends Sprite {
         }
     }
 
-    changeState(stateType: HeartStateType, nextStateTransition?: StateTransition): HeartState {
+    changeState(stateType: HeartStateType): HeartState {
         if (this._state.type === stateType) return this._state;
-
-        if (this._animationTimeout) clearTimeout(this._animationTimeout);
-        if (nextStateTransition) {
-            this._animationTimeout = setTimeout(() => {
-                this.changeState(nextStateTransition.nextStateType)
-            }, nextStateTransition.duration * 1000);
-        }
-
         this._state = this._states.getState(stateType);
         this._state.clear();
         return this._state;

@@ -1,62 +1,58 @@
 export namespace Texture {
     export class Heart {
-        static readonly alive =
+        static readonly small_red =
             "{#f02000-fg}" +
             "  ▄▖  ▗▄  \n" +
             " ▝██▙▟██▘ \n" +
             "   ▀██▀   \n" +
             "    ▝▘    {/}";
-        static readonly dead =
+        static readonly small_gray =
             "{#606060-fg}" +
             "  ▄▖  ▗▄  \n" +
             " ▝██▙▟██▘ \n" +
             "   ▀██▀   \n" +
             "    ▝▘    {/}";
-        static readonly appearA =
+        static readonly big_red =
             "{#f02000-fg}" +
             "▗███▖▗███▖\n" +
             " ▀██████▀ \n" +
             "   ▜██▛   \n" +
             "    ▜▛    {/}";
-        static readonly appearB =
-            "{#f02000-fg}" +
-            "  ▄▖  ▗▄  \n" +
-            " ▝██▙▟██▘ \n" +
-            "   ▀██▀   \n" +
-            "    ▝▘    {/}";
-        static readonly disappearA =
+        static readonly big_gray =
             "{#606060-fg}" +
             "▗███▖▗███▖\n" +
             " ▀██████▀ \n" +
             "   ▜██▛   \n" +
             "    ▜▛    {/}";
-        static readonly disappearB =
-            "{#606060-fg}" +
-            "  ▄▖  ▗▄  \n" +
-            " ▝██▙▟██▘ \n" +
-            "   ▀██▀   \n" +
-            "    ▝▘    {/}";
     }
 }
 
 export namespace Sprite {
     export class Heart {
         static readonly alive: string[] = [
-            Texture.Heart.alive,
+            Texture.Heart.small_red,
         ];
 
         static readonly dead: string[] = [
-            Texture.Heart.dead,
+            Texture.Heart.small_gray,
         ];
 
         static readonly appear: string[] = [
-            Texture.Heart.appearA,
-            Texture.Heart.appearB,
+            Texture.Heart.big_red,
+            Texture.Heart.small_red,
+            Texture.Heart.big_red,
+            Texture.Heart.small_red,
+            Texture.Heart.big_red,
+            Texture.Heart.small_red,
         ]
 
         static readonly disappear: string[] = [
-            Texture.Heart.disappearA,
-            Texture.Heart.disappearB,
+            Texture.Heart.big_gray,
+            Texture.Heart.small_gray,
+            Texture.Heart.big_gray,
+            Texture.Heart.small_gray,
+            Texture.Heart.big_gray,
+            Texture.Heart.small_gray,
         ]
     }
 }
