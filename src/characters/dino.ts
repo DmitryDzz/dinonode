@@ -1,4 +1,5 @@
 import {Widgets} from "blessed";
+import BoxElement = Widgets.BoxElement;
 import Screen = Widgets.Screen;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {DinoState, DinoStates, DinoStateType} from "./dino_states";
@@ -6,6 +7,8 @@ import {DinoRect} from "./dino_rect";
 import {Sprite} from "../sprite";
 import {float} from "../types";
 import {Time} from "../time";
+import {DinoColliders} from "./dino_colliders";
+import {Options} from "../options";
 
 enum Key {
     Left = "a",
@@ -24,7 +27,8 @@ export class Dino extends Sprite {
 
     private static readonly ABS_NORMAL_SPEED: float = 40.0; // symbols per second
     private static readonly ABS_FAST_SPEED: float = 52.0; // symbols per second
-    private readonly _pos: DinoRect;
+    private readonly _dinoRect: DinoRect;
+    private readonly _dinoColliders: DinoColliders;
 
     private readonly _states: DinoStates;
     private _state: DinoState;
@@ -33,18 +37,32 @@ export class Dino extends Sprite {
 
     private _isPaused: boolean = false;
 
+    private _debugHeadColliderBox?: BoxElement;
+    private _debugTailColliderBox?: BoxElement;
+    private _debugBodyColliderBox?: BoxElement;
+
     constructor(scr: Screen) {
         super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT, "#608000");
-        this._pos = new DinoRect(scr, (scr.width as number - DinoRect.DEFAULT_WIDTH) / 2);
+        this._dinoRect = new DinoRect(scr, (scr.width as number - DinoRect.DEFAULT_WIDTH) / 2);
 
-        this._box.left = this._pos.column;
-        this._box.top = this._pos.row;
+        this._box.left = this._dinoRect.column;
+        this._box.top = this._dinoRect.row;
 
         this._states = new DinoStates();
         this._state = this._states.getState("idleR");
 
+        this._dinoColliders = new DinoColliders(this._dinoRect);
+        this._dinoColliders.updateLocalColliders(this._state.type);
+
         scr.key([Key.Left, Key.Right, Key.Jump, Key.Lean, Key.Stop,
             Key.Dead, Key.DeadHead], this._keyPressed);
+    }
+
+    destroy() {
+        this._debugHeadColliderBox?.destroy();
+        this._debugTailColliderBox?.destroy();
+        this._debugBodyColliderBox?.destroy();
+        super.destroy();
     }
 
     pause() {
@@ -62,12 +80,12 @@ export class Dino extends Sprite {
 
     private _updatePrevState() {
         if (this._returnToPrevStateTime !== undefined && Time.time >= this._returnToPrevStateTime) {
-            this._pos.setLean(false);
+            this._dinoRect.setLean(false);
             if (this._state.isLeftDirection()) {
-                this._pos.speed = -Dino.ABS_NORMAL_SPEED;
+                this._dinoRect.speed = -Dino.ABS_NORMAL_SPEED;
                 this._state = this._changeState("runL");
             } else {
-                this._pos.speed = Dino.ABS_NORMAL_SPEED;
+                this._dinoRect.speed = Dino.ABS_NORMAL_SPEED;
                 this._state = this._changeState("runR");
             }
             this._returnToPrevStateTime = undefined;
@@ -78,55 +96,55 @@ export class Dino extends Sprite {
         if (this._isPaused) return;
 
         const jumpAction = () => {
-            this._pos.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION);
+            this._dinoRect.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION);
             this._returnToPrevStateTime = Time.time + Dino.JUMP_DURATION;
             const jumpState: DinoStateType = this._state.isLeftDirection() ? "jumpL" : "jumpR";
             this._state = this._changeState(jumpState);
         };
 
         const leanAction = () => {
-            this._pos.setLean(true);
+            this._dinoRect.setLean(true);
             if (this._state.isLeftDirection()) {
-                this._pos.speed = -Dino.ABS_FAST_SPEED;
+                this._dinoRect.speed = -Dino.ABS_FAST_SPEED;
                 this._state = this._changeState("leanRunL");
             } else {
-                this._pos.speed = Dino.ABS_FAST_SPEED;
+                this._dinoRect.speed = Dino.ABS_FAST_SPEED;
                 this._state = this._changeState("leanRunR");
             }
             this._returnToPrevStateTime = Time.time + Dino.LEAN_DURATION;
         };
 
         if (ch === Key.Left) {
-            this._pos.speed = this._pos.leaning ? -Dino.ABS_FAST_SPEED : -Dino.ABS_NORMAL_SPEED;
-            this._state = this._pos.jumping
+            this._dinoRect.speed = this._dinoRect.leaning ? -Dino.ABS_FAST_SPEED : -Dino.ABS_NORMAL_SPEED;
+            this._state = this._dinoRect.jumping
                 ? this._changeState("jumpL")
-                : this._changeState(this._pos.leaning ? "leanRunL" : "runL");
+                : this._changeState(this._dinoRect.leaning ? "leanRunL" : "runL");
         } else if (ch === Key.Right) {
-            this._pos.speed = this._pos.leaning ? Dino.ABS_FAST_SPEED : Dino.ABS_NORMAL_SPEED;
-            this._state = this._pos.jumping
+            this._dinoRect.speed = this._dinoRect.leaning ? Dino.ABS_FAST_SPEED : Dino.ABS_NORMAL_SPEED;
+            this._state = this._dinoRect.jumping
                 ? this._changeState("jumpR")
-                : this._changeState(this._pos.leaning ? "leanRunR" : "runR");
-        } else if (ch === Key.Jump && !this._pos.jumping && !this._pos.leaning) {
+                : this._changeState(this._dinoRect.leaning ? "leanRunR" : "runR");
+        } else if (ch === Key.Jump && !this._dinoRect.jumping && !this._dinoRect.leaning) {
             jumpAction();
-        } else if (ch === Key.Lean && !this._pos.jumping && !this._pos.leaning) {
+        } else if (ch === Key.Lean && !this._dinoRect.jumping && !this._dinoRect.leaning) {
             leanAction();
-        } else if (ch === Key.Stop && !this._pos.jumping && !this._pos.leaning) {
+        } else if (ch === Key.Stop && !this._dinoRect.jumping && !this._dinoRect.leaning) {
             this._state = this._state.isLeftDirection()
-                ? this._changeState(this._pos.leaning ? "leanIdleL" : "idleL")
-                : this._changeState(this._pos.leaning ? "leanIdleR" : "idleR");
-            this._pos.speed = 0;
-        } else if (ch === Key.Dead && !this._pos.jumping && !this._pos.leaning) {
+                ? this._changeState(this._dinoRect.leaning ? "leanIdleL" : "idleL")
+                : this._changeState(this._dinoRect.leaning ? "leanIdleR" : "idleR");
+            this._dinoRect.speed = 0;
+        } else if (ch === Key.Dead && !this._dinoRect.jumping && !this._dinoRect.leaning) {
             this._state = this._state.isLeftDirection()
                 ? this._changeState("deadL")
                 : this._changeState("deadR");
-            this._pos.speed = 0;
+            this._dinoRect.speed = 0;
         } else if (ch === Key.DeadHead) {
             this._performDeadHead();
         }
     }
 
     private _performDeadHead() {
-        this._pos.die();
+        this._dinoRect.die();
         this._state = this._state.isLeftDirection()
             ? this._changeState("deadHeadL")
             : this._changeState("deadHeadR");
@@ -136,6 +154,7 @@ export class Dino extends Sprite {
         if (this._state.type === stateType) return this._state;
         this._state = this._states.getState(stateType);
         this._state.clear();
+        this._dinoColliders.updateLocalColliders(this._state.type);
         return this._state;
     }
 
@@ -145,15 +164,51 @@ export class Dino extends Sprite {
         const bx = this._box;
 
         if (this._state.update()) {
-            if (this._pos.width !== bx.width) bx.width = this._pos.width;
-            if (this._pos.height !== bx.height) bx.height = this._pos.height;
+            if (this._dinoRect.width !== bx.width) bx.width = this._dinoRect.width;
+            if (this._dinoRect.height !== bx.height) bx.height = this._dinoRect.height;
             bx.setContent(this._state.frame);
         }
 
-        this._pos.update();
-        bx.left = this._pos.column;
-        bx.top = this._pos.row;
+        this._dinoRect.update();
+        bx.left = this._dinoRect.column;
+        bx.top = this._dinoRect.row;
 
         this._updatePrevState();
+
+        this._dinoColliders.update();
+
+        if (Options.debug.showColliders) {
+            this._debugUpdateColliderBoxes();
+        }
+    }
+
+    private _debugUpdateColliderBoxes() {
+        if (this._debugHeadColliderBox === undefined) {
+            this._debugHeadColliderBox = Sprite.createBox(0, 0, 0, 0, "#000000", "#882200");
+            this._scr.append(this._debugHeadColliderBox);
+        }
+        if (this._debugTailColliderBox === undefined) {
+            this._debugTailColliderBox = Sprite.createBox(0, 0, 0, 0, "#000000", "#882200");
+            this._scr.append(this._debugTailColliderBox);
+        }
+        if (this._debugBodyColliderBox === undefined) {
+            this._debugBodyColliderBox = Sprite.createBox(0, 0, 0, 0, "#000000", "#882200");
+            this._scr.append(this._debugBodyColliderBox);
+        }
+
+        this._debugHeadColliderBox.left = this._dinoColliders.headCollider.c0;
+        this._debugHeadColliderBox.top = this._dinoColliders.headCollider.r0;
+        this._debugHeadColliderBox.width = this._dinoColliders.headCollider.c1 - this._dinoColliders.headCollider.c0 + 1;
+        this._debugHeadColliderBox.height = this._dinoColliders.headCollider.r1 - this._dinoColliders.headCollider.r0 + 1;
+
+        this._debugTailColliderBox.left = this._dinoColliders.tailCollider.c0;
+        this._debugTailColliderBox.top = this._dinoColliders.tailCollider.r0;
+        this._debugTailColliderBox.width = this._dinoColliders.tailCollider.c1 - this._dinoColliders.tailCollider.c0 + 1;
+        this._debugTailColliderBox.height = this._dinoColliders.tailCollider.r1 - this._dinoColliders.tailCollider.r0 + 1;
+
+        this._debugBodyColliderBox.left = this._dinoColliders.bodyCollider.c0;
+        this._debugBodyColliderBox.top = this._dinoColliders.bodyCollider.r0;
+        this._debugBodyColliderBox.width = this._dinoColliders.bodyCollider.c1 - this._dinoColliders.bodyCollider.c0 + 1;
+        this._debugBodyColliderBox.height = this._dinoColliders.bodyCollider.r1 - this._dinoColliders.bodyCollider.r0 + 1;
     }
 }

@@ -130,18 +130,20 @@ export abstract class Sprite {
         return result;
     }
 
-    static createBox(column: number, row: number, width: number, height: number, baseColor: string): BoxElement {
-        return box({
+    static createBox(column: number, row: number, width: number, height: number, fgColor: string, bgColor?: string): BoxElement {
+        let result: BoxElement = box({
             width: width,
             height: height,
             top: row,
             left: column,
             tags: true,
             style: {
-                fg: baseColor,
-                // bg: 'magenta',
+                fg: fgColor,
+                bg: bgColor,
             }
         });
+        // if (bgColor) result.bg = bgColor;
+        return result;
     }
 
     static cropFrame(spriteRect: RectW, scrWidth: integer, scrHeight: integer, frameContent: string):
