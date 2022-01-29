@@ -5,6 +5,7 @@ import {DinoState, DinoStates, DinoStateType} from "./dino_states";
 import {DinoRect} from "./dino_rect";
 import {Sprite} from "../sprite";
 import {float} from "../types";
+import {Time} from "../time";
 
 enum Key {
     Left = "a",
@@ -28,7 +29,7 @@ export class Dino extends Sprite {
     private readonly _states: DinoStates;
     private _state: DinoState;
 
-    private _returnToPrevStateTimeout?: NodeJS.Timeout;
+    private _returnToPrevStateTime?: number;
 
     private _isPaused: boolean = false;
 
@@ -46,14 +47,6 @@ export class Dino extends Sprite {
             Key.Dead, Key.DeadHead], this._keyPressed);
     }
 
-    destroy() {
-        super.destroy();
-        if (this._returnToPrevStateTimeout) {
-            clearTimeout(this._returnToPrevStateTimeout);
-            this._returnToPrevStateTimeout = undefined;
-        }
-    }
-
     pause() {
         this._isPaused = true;
     }
@@ -67,20 +60,26 @@ export class Dino extends Sprite {
         //console.log("Dino", width, height);
     }
 
+    private _updatePrevState() {
+        if (this._returnToPrevStateTime !== undefined && Time.time >= this._returnToPrevStateTime) {
+            this._pos.setLean(false);
+            if (this._state.isLeftDirection()) {
+                this._pos.speed = -Dino.ABS_NORMAL_SPEED;
+                this._state = this._changeState("runL");
+            } else {
+                this._pos.speed = Dino.ABS_NORMAL_SPEED;
+                this._state = this._changeState("runR");
+            }
+            this._returnToPrevStateTime = undefined;
+        }
+    }
+
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
         if (this._isPaused) return;
 
         const jumpAction = () => {
             this._pos.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION);
-            this._returnToPrevStateTimeout = setTimeout(() => {
-                if (this._state.isLeftDirection()) {
-                    this._pos.speed = -Dino.ABS_NORMAL_SPEED;
-                    this._state = this._changeState("runL");
-                } else {
-                    this._pos.speed = Dino.ABS_NORMAL_SPEED;
-                    this._state = this._changeState("runR");
-                }
-            }, Dino.JUMP_DURATION * 1000);
+            this._returnToPrevStateTime = Time.time + Dino.JUMP_DURATION;
             const jumpState: DinoStateType = this._state.isLeftDirection() ? "jumpL" : "jumpR";
             this._state = this._changeState(jumpState);
         };
@@ -94,16 +93,7 @@ export class Dino extends Sprite {
                 this._pos.speed = Dino.ABS_FAST_SPEED;
                 this._state = this._changeState("leanRunR");
             }
-            this._returnToPrevStateTimeout = setTimeout(() => {
-                this._pos.setLean(false);
-                if (this._state.isLeftDirection()) {
-                    this._pos.speed = -Dino.ABS_NORMAL_SPEED;
-                    this._state = this._changeState("runL");
-                } else {
-                    this._pos.speed = Dino.ABS_NORMAL_SPEED;
-                    this._state = this._changeState("runR");
-                }
-            }, Dino.LEAN_DURATION * 1000);
+            this._returnToPrevStateTime = Time.time + Dino.LEAN_DURATION;
         };
 
         if (ch === Key.Left) {
@@ -163,5 +153,7 @@ export class Dino extends Sprite {
         this._pos.update();
         bx.left = this._pos.column;
         bx.top = this._pos.row;
+
+        this._updatePrevState();
     }
 }
