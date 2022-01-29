@@ -37,6 +37,7 @@ export class Application {
 
         if (this._screen && this._scene) {
             this._scene.update();
+            this._scene.checkColliders(); // make separate interval maybe?...
             this._screen.render();
 
             const w: number = this._screen.width as number;

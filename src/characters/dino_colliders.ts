@@ -1,4 +1,4 @@
-import {Rect} from "../types";
+import {Rect} from "../rect";
 import {DinoStateType} from "./dino_states";
 import {DinoRect} from "./dino_rect";
 

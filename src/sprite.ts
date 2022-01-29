@@ -1,10 +1,11 @@
 import {box, Widgets} from "blessed";
+import {ApplicationPublisher} from "./application_publisher";
+import {integer} from "./types";
 import Screen = Widgets.Screen;
 import BoxElement = Widgets.BoxElement;
-import {ApplicationPublisher} from "./application_publisher";
-import {integer, RectW} from "./types";
+import {RectW} from "./rect";
 
-export type onDestroyCallback = (sprite: Sprite) => void;
+export type OnDestroyCallback = (sprite: Sprite) => void;
 
 export abstract class Sprite {
     private static _last_id: number = 0;
@@ -20,11 +21,11 @@ export abstract class Sprite {
     protected _box: BoxElement;
 
     protected _destroyed: boolean = false;
-    private readonly _onDestroy?: onDestroyCallback;
+    private readonly _onDestroy?: OnDestroyCallback;
 
     protected constructor(scr: Screen,
                           column: integer, row: integer, width: integer, height: integer,
-                          baseColor: string, onDestroy?: onDestroyCallback) {
+                          baseColor: string, onDestroy?: OnDestroyCallback) {
         this.id = Sprite._last_id++;
         this._scr = scr;
         this._onDestroy = onDestroy;
@@ -131,7 +132,7 @@ export abstract class Sprite {
     }
 
     static createBox(column: number, row: number, width: number, height: number, fgColor: string, bgColor?: string): BoxElement {
-        let result: BoxElement = box({
+        return box({
             width: width,
             height: height,
             top: row,
@@ -142,8 +143,6 @@ export abstract class Sprite {
                 bg: bgColor,
             }
         });
-        // if (bgColor) result.bg = bgColor;
-        return result;
     }
 
     static cropFrame(spriteRect: RectW, scrWidth: integer, scrHeight: integer, frameContent: string):

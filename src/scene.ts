@@ -2,9 +2,9 @@ import {Widgets} from "blessed";
 import {Dino} from "./characters/dino";
 import {Pterosaur} from "./characters/pterosaur";
 import {Raptor} from "./characters/raptor";
-import {EnemyMoveDirection} from "./characters/enemy";
+import {Enemy, EnemyMoveDirection} from "./characters/enemy";
 import Screen = Widgets.Screen;
-import {onDestroyCallback, Sprite} from "./sprite";
+import {OnDestroyCallback, Sprite} from "./sprite";
 import {Comet} from "./characters/comet";
 import {Score} from "./gui/score";
 import {Lives} from "./gui/lives";
@@ -13,11 +13,6 @@ import IKeyEventArg = Widgets.Events.IKeyEventArg;
 
 enum Key {
     Pause = "p",
-}
-
-interface SpriteObject {
-    sprite: Sprite;
-    id: number;
 }
 
 export class Scene {
@@ -31,7 +26,7 @@ export class Scene {
     private readonly _score: Score;
     private readonly _lives: Lives;
     private readonly _dino: Dino;
-    private _sprites: SpriteObject[] = [];
+    private _enemies: Enemy[] = [];
 
     private _createAnimalTime?: number;
     private _createCometTime?: number;
@@ -49,7 +44,7 @@ export class Scene {
     }
 
     destroy() {
-        this._sprites.forEach(x => x.sprite.destroy());
+        this._enemies.forEach(x => x.destroy());
         this._dino.destroy();
         this._score.destroy();
         this._lives.destroy();
@@ -59,7 +54,7 @@ export class Scene {
         this._dino.update();
         this._updateRandomAnimalRespawn();
         this._updateCometRespawn();
-        this._sprites.forEach(x => x.sprite.update());
+        this._enemies.forEach(x => x.update());
         this._score.update();
         this._lives.update();
     }
@@ -81,10 +76,9 @@ export class Scene {
         this._isPaused = !this._isPaused;
     }
 
-    private readonly _onSpriteDestroy: onDestroyCallback = (sprite: Sprite): void => {
+    private readonly _onEnemyDestroy: OnDestroyCallback = (sprite: Sprite): void => {
         this._score.value++;
-        this._sprites = this._sprites.filter(s => s.id !== sprite.id);
-        //console.log("onDestroy", sprite.id, "count", this._sprites.length);
+        this._enemies = this._enemies.filter(s => s.id !== sprite.id);
     }
 
     private _updateRandomAnimalRespawn() {
@@ -97,9 +91,9 @@ export class Scene {
         if (Time.time >= this._createAnimalTime) {
             const direction = Math.random() > 0.5 ? EnemyMoveDirection.MoveLeft : EnemyMoveDirection.MoveRight;
             const enemy = Math.random() > 0.5
-                ? new Pterosaur(this._scr, direction, this._onSpriteDestroy)
-                : new Raptor(this._scr, direction, this._onSpriteDestroy);
-            this._sprites.push({sprite: enemy, id: enemy.id});
+                ? new Pterosaur(this._scr, direction, this._onEnemyDestroy)
+                : new Raptor(this._scr, direction, this._onEnemyDestroy);
+            this._enemies.push(enemy);
 
             this._createAnimalTime = undefined;
         }
@@ -113,10 +107,15 @@ export class Scene {
         }
 
         if (Time.time >= this._createCometTime) {
-            const comet = new Comet(this._scr, this._onSpriteDestroy);
-            this._sprites.push({sprite: comet, id: comet.id});
+            const comet = new Comet(this._scr, this._onEnemyDestroy);
+            this._enemies.push(comet);
 
             this._createCometTime = undefined;
         }
+    }
+
+    checkColliders() {
+        this._dino.checkColliders(this._enemies);
+        this._enemies.forEach((x: Enemy) => x.checkColliders(this._enemies));
     }
 }

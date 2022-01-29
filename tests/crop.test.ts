@@ -1,5 +1,5 @@
 import {Sprite} from "../src/sprite";
-import {RectW} from "../src/types";
+import {RectW} from "../src/rect";
 
 describe("Test sprite crop", () => {
     const frame: string =

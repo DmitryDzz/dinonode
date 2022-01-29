@@ -2,7 +2,7 @@ import {Widgets} from "blessed";
 import {State} from "../states";
 import {Enemy, EnemyMoveDirection} from "./enemy";
 import {float, integer} from "../types";
-import {onDestroyCallback} from "../sprite";
+import {OnDestroyCallback} from "../sprite";
 import Screen = Widgets.Screen;
 import {Fall} from "./comet_states";
 
@@ -11,7 +11,7 @@ export class Comet extends Enemy {
     private static readonly WIDTH: integer = 4;
     private static readonly HEIGHT: integer = 5;
 
-    constructor(scr: Screen, onDestroy?: onDestroyCallback) {
+    constructor(scr: Screen, onDestroy?: OnDestroyCallback) {
         const scrWidth: integer = scr.width as number;
         const column: integer = Math.round(Math.random() * 0.95 * scrWidth + 0.025 * scrWidth);
         const row: integer = 1 - Comet.HEIGHT;
@@ -26,5 +26,12 @@ export class Comet extends Enemy {
     protected _onWindowResizeHandler(width: number, height: number): void {
         //TODO DZZ
         console.log("Comet", width, height);
+    }
+
+    protected _setLocalCollider(_direction: EnemyMoveDirection): void {
+        this._localCollider.c0 = 0;
+        this._localCollider.r0 = 3;
+        this._localCollider.c1 = 3;
+        this._localCollider.r1 = 4;
     }
 }

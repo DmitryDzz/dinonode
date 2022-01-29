@@ -1,7 +1,8 @@
 import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
 import {Time} from "../time";
-import {float, integer, Rect} from "../types";
+import {float, integer} from "../types";
+import {Rect} from "../rect";
 
 interface JumpData {
     startTime: number;

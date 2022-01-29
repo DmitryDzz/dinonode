@@ -9,6 +9,7 @@ import {float} from "../types";
 import {Time} from "../time";
 import {DinoColliders} from "./dino_colliders";
 import {Options} from "../options";
+import {Enemy} from "./enemy";
 
 enum Key {
     Left = "a",
@@ -176,10 +177,15 @@ export class Dino extends Sprite {
         this._updatePrevState();
 
         this._dinoColliders.update();
-
         if (Options.debug.showColliders) {
             this._debugUpdateColliderBoxes();
         }
+    }
+
+    checkColliders(enemies: Enemy[]) {
+        enemies.forEach((enemy: Enemy) => {
+
+        });
     }
 
     private _debugUpdateColliderBoxes() {
