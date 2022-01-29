@@ -21,10 +21,10 @@ interface SpriteObject {
 }
 
 export class Scene {
-    private static readonly MIN_ANIMAL_SPAWN_INTERVAL = 5_000;
-    private static readonly MAX_ANIMAL_SPAWN_INTERVAL = 9_000;
-    private static readonly MIN_COMET_SPAWN_INTERVAL = 1_000;
-    private static readonly MAX_COMET_SPAWN_INTERVAL = 2_000;
+    private static readonly MIN_ANIMAL_SPAWN_INTERVAL_SECONDS = 5.0;
+    private static readonly MAX_ANIMAL_SPAWN_INTERVAL_SECONDS = 9.0;
+    private static readonly MIN_COMET_SPAWN_INTERVAL_SECONDS = 1.0;
+    private static readonly MAX_COMET_SPAWN_INTERVAL_SECONDS = 2.0;
 
     private readonly _scr: Screen;
 
@@ -33,15 +33,14 @@ export class Scene {
     private readonly _dino: Dino;
     private _sprites: SpriteObject[] = [];
 
-    private _createAnimalTimeout?: NodeJS.Timer;
-    private _createCometTimeout?: NodeJS.Timer;
+    private _createAnimalTime?: number;
+    private _createCometTime?: number;
 
     private _isPaused: boolean = false;
 
     constructor(scr: Screen) {
         this._scr = scr;
         this._dino = new Dino(scr);
-        this._startEnemySpawning();
 
         this._score = new Score(scr);
         this._lives = new Lives(scr);
@@ -50,7 +49,6 @@ export class Scene {
     }
 
     destroy() {
-        this._stopEnemySpawning();
         this._sprites.forEach(x => x.sprite.destroy());
         this._dino.destroy();
         this._score.destroy();
@@ -59,21 +57,11 @@ export class Scene {
 
     update() {
         this._dino.update();
+        this._updateRandomAnimalRespawn();
+        this._updateCometRespawn();
         this._sprites.forEach(x => x.sprite.update());
         this._score.update();
         this._lives.update();
-    }
-
-    private _startEnemySpawning() {
-        this._createRandomAnimal();
-        this._createComet();
-    }
-
-    private _stopEnemySpawning() {
-        if (this._createAnimalTimeout !== undefined) clearTimeout(this._createAnimalTimeout);
-        if (this._createCometTimeout !== undefined) clearTimeout(this._createCometTimeout);
-        this._createAnimalTimeout = undefined;
-        this._createCometTimeout = undefined;
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
@@ -85,11 +73,9 @@ export class Scene {
     private _switchPause() {
         if (this._isPaused) {
             Time.setFactor(1.0);
-            this._startEnemySpawning();
             this._dino.unpause();
         } else {
             Time.setFactor(0.0);
-            this._stopEnemySpawning();
             this._dino.pause();
         }
         this._isPaused = !this._isPaused;
@@ -101,30 +87,36 @@ export class Scene {
         //console.log("onDestroy", sprite.id, "count", this._sprites.length);
     }
 
-    private _createRandomAnimal() {
-        const delayMillis = Math.random() * (Scene.MAX_ANIMAL_SPAWN_INTERVAL - Scene.MIN_ANIMAL_SPAWN_INTERVAL) +
-            Scene.MIN_ANIMAL_SPAWN_INTERVAL;
-        this._createAnimalTimeout = setTimeout(() => {
+    private _updateRandomAnimalRespawn() {
+        if (this._createAnimalTime === undefined) {
+            const delaySeconds = Scene.MIN_ANIMAL_SPAWN_INTERVAL_SECONDS + Math.random() *
+                (Scene.MAX_ANIMAL_SPAWN_INTERVAL_SECONDS - Scene.MIN_ANIMAL_SPAWN_INTERVAL_SECONDS);
+            this._createAnimalTime = Time.time + delaySeconds;
+        }
+
+        if (Time.time >= this._createAnimalTime) {
             const direction = Math.random() > 0.5 ? EnemyMoveDirection.MoveLeft : EnemyMoveDirection.MoveRight;
             const enemy = Math.random() > 0.5
                 ? new Pterosaur(this._scr, direction, this._onSpriteDestroy)
                 : new Raptor(this._scr, direction, this._onSpriteDestroy);
             this._sprites.push({sprite: enemy, id: enemy.id});
 
-            if (this._createAnimalTimeout !== undefined) clearTimeout(this._createAnimalTimeout);
-            this._createRandomAnimal();
-        }, delayMillis);
+            this._createAnimalTime = undefined;
+        }
     }
 
-    private _createComet() {
-        const delayMillis = Math.random() * (Scene.MAX_COMET_SPAWN_INTERVAL - Scene.MIN_COMET_SPAWN_INTERVAL) +
-            Scene.MIN_COMET_SPAWN_INTERVAL;
-        this._createCometTimeout = setTimeout(() => {
+    private _updateCometRespawn() {
+        if (this._createCometTime === undefined) {
+            const delaySeconds = Scene.MIN_COMET_SPAWN_INTERVAL_SECONDS + Math.random() *
+                    (Scene.MAX_COMET_SPAWN_INTERVAL_SECONDS - Scene.MIN_COMET_SPAWN_INTERVAL_SECONDS);
+            this._createCometTime = Time.time + delaySeconds;
+        }
+
+        if (Time.time >= this._createCometTime) {
             const comet = new Comet(this._scr, this._onSpriteDestroy);
             this._sprites.push({sprite: comet, id: comet.id});
 
-            if (this._createCometTimeout !== undefined) clearTimeout(this._createCometTimeout);
-            this._createComet();
-        }, delayMillis);
+            this._createCometTime = undefined;
+        }
     }
 }
