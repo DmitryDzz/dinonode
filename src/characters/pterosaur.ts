@@ -37,4 +37,8 @@ export class Pterosaur extends Enemy {
         this._localCollider.c1 = direction === EnemyMoveDirection.MoveLeft ? 19 : w;
         this._localCollider.r1 = 6;
     }
+
+    onCollision() {
+        console.log("Change direction");
+    }
 }

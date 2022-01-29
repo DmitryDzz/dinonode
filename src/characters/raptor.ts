@@ -35,4 +35,8 @@ export class Raptor extends Enemy {
         this._localCollider.c1 = direction === EnemyMoveDirection.MoveLeft ? 23 : w - 1;
         this._localCollider.r1 = 7;
     }
+
+    onCollision() {
+        console.log("Change direction");
+    }
 }

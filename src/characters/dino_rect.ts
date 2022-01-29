@@ -56,12 +56,8 @@ export class DinoRect {
     private _rect?: Rect;
 
     private _setLimits() {
-        this._rect = {
-            c0: 0,
-            r0: 0,
-            c1: this._scr.width as number - this.width,
-            r1: this._scr.height as number - this.height
-        };
+        this._rect = new Rect({c0: 0, r0: 0,
+            c1: this._scr.width as number - this.width, r1: this._scr.height as number - this.height});
     }
 
     get speed(): float {

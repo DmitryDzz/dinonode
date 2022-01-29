@@ -34,4 +34,8 @@ export class Comet extends Enemy {
         this._localCollider.c1 = 3;
         this._localCollider.r1 = 4;
     }
+
+    onCollision() {
+        this.destroy();
+    }
 }

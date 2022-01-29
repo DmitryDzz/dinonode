@@ -22,8 +22,8 @@ export abstract class Enemy extends Sprite {
 
     protected readonly _state: State;
 
-    protected readonly _localCollider: Rect = {c0: 0, r0: 0, c1: 0, r1: 0};
-    readonly collider: Rect = {c0: 0, r0: 0, c1: 0, r1: 0};
+    protected readonly _localCollider: Rect = new Rect({c0: 0, r0: 0, c1: 0, r1: 0});
+    readonly collider: Rect = new Rect({c0: 0, r0: 0, c1: 0, r1: 0});
     private _debugColliderBox?: BoxElement;
 
     protected constructor(scr: Screen, direction: EnemyMoveDirection, absSpeed: float,
@@ -104,4 +104,6 @@ export abstract class Enemy extends Sprite {
     checkColliders(enemies: Enemy[]) {
         //TODO DZZ Enumerate comets only.
     }
+
+    abstract onCollision(): void;
 }
