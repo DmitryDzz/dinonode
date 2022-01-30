@@ -101,7 +101,7 @@ export class Dino extends Sprite {
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
-        if (this._isPaused) return;
+        if (this._isPaused || this._isDead) return;
 
         const jumpAction = () => {
             this._dinoRect.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION);
@@ -159,7 +159,7 @@ export class Dino extends Sprite {
     }
 
     private _changeState(stateType: DinoStateType): DinoState {
-        if (this._state.type === stateType) return this._state;
+        if (this._state.type === stateType || this._isDead) return this._state;
         this._state = this._states.getState(stateType);
         this._state.clear();
         this._dinoColliders.updateLocalColliders(this._state.type);
@@ -216,6 +216,8 @@ export class Dino extends Sprite {
 
     private _die() {
         if (this._isDead) return;
+        this._isDead = true;
+        this._dinoRect.setLean(false);
         this._dinoRect.die();
         if (this._onDeathCallback !== undefined) {
             this._onDeathCallback();

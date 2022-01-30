@@ -201,7 +201,31 @@ export namespace Texture {
             "                    \n" +
             "       ▄█████████▄  \n" +
             "    ▄▄████████████▄ \n" +
-            "▄██████████████████▄";
+            "▄█████████{#A02000-fg}▒▒▒▒▒{/}████▄";
+        static readonly deadHeadI =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "       ▄█████████▄  \n" +
+            "    ▄▄████████████▄ \n" +
+            "▄█████{#A02000-fg}▒▒▒▒▒▒▒▒▒▒▒{/}██▄";
+        static readonly deadHeadJ =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "       ▄█████████▄  \n" +
+            "    ▄▄████████████▄ \n{#A02000-fg}" +
+            "▄▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▄{/}";
 
     }
 }
@@ -257,6 +281,8 @@ export namespace Sprite {
                 Texture.Dino.deadHeadA,
                 Texture.Dino.deadHeadG,
                 Texture.Dino.deadHeadH,
+                Texture.Dino.deadHeadI,
+                Texture.Dino.deadHeadJ,
             ],
         };
         static readonly left: DinoAnimations = {
@@ -298,6 +324,8 @@ export namespace Sprite {
                 SpriteClass.flip(Texture.Dino.deadHeadA),
                 SpriteClass.flip(Texture.Dino.deadHeadG),
                 SpriteClass.flip(Texture.Dino.deadHeadH),
+                SpriteClass.flip(Texture.Dino.deadHeadI),
+                SpriteClass.flip(Texture.Dino.deadHeadJ),
             ],
         };
     }
