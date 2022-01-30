@@ -23,6 +23,11 @@ export abstract class Sprite {
     protected _destroyed: boolean = false;
     private readonly _onDestroy?: OnDestroyCallback;
 
+    get column() { return this._column; }
+    get row() { return this._row; }
+    get width() { return this._width; }
+    get height() { return this._height; }
+
     protected constructor(scr: Screen,
                           column: integer, row: integer, width: integer, height: integer,
                           baseColor: string, onDestroy?: OnDestroyCallback) {

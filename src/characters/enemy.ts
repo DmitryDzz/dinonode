@@ -17,10 +17,11 @@ export enum EnemyMoveDirection {
 export abstract class Enemy extends Sprite {
     private _x: float;
     private _y: float;
-    private readonly _speedX: float;
-    private readonly _speedY: float;
+    private _speedX: float;
+    private _speedY: float;
 
-    protected readonly _state: State;
+    private readonly _absSpeed: float;
+    protected _state: State;
 
     protected readonly _localCollider: Rect = new Rect({c0: 0, r0: 0, c1: 0, r1: 0});
     readonly collider: Rect = new Rect({c0: 0, r0: 0, c1: 0, r1: 0});
@@ -31,28 +32,36 @@ export abstract class Enemy extends Sprite {
                           baseColor: string, onDestroy?: OnDestroyCallback) {
         super(scr, column, row, width, height, baseColor, onDestroy);
 
+        this._absSpeed = absSpeed;
         this._x = this._column;
         this._y = this._row;
-
-        if (direction === EnemyMoveDirection.MoveDown) {
-            this._speedX = 0;
-            this._speedY = absSpeed;
-        } else {
-            this._speedX = direction === EnemyMoveDirection.MoveRight ? absSpeed : -absSpeed;
-            this._speedY = 0;
-        }
-
-        this._state = this._createState(direction);
-        this._setLocalCollider(direction);
+        this._speedX = 0;
+        this._speedY = 0;
+        this._state = this.changeState(direction);
     }
 
     destroy() {
         super.destroy();
     }
 
-    protected abstract _createState(direction: EnemyMoveDirection): State;
+    protected abstract _getState(direction: EnemyMoveDirection): State;
+
+    changeState(direction: EnemyMoveDirection) {
+        if (direction === EnemyMoveDirection.MoveDown) {
+            this._speedX = 0;
+            this._speedY = this._absSpeed;
+        } else {
+            this._speedX = direction === EnemyMoveDirection.MoveRight ? this._absSpeed : -this._absSpeed;
+            this._speedY = 0;
+        }
+
+        this._state = this._getState(direction);
+        this._setLocalCollider(direction);
+        return this._state;
+    }
 
     update(): void {
+        // console.log(this._column, this._row);
         if (this._destroyed) return;
         this._x += this._speedX * Time.deltaTime;
         this._y += this._speedY * Time.deltaTime;
@@ -105,5 +114,5 @@ export abstract class Enemy extends Sprite {
         //TODO DZZ Enumerate comets only.
     }
 
-    abstract onCollision(): void;
+    abstract onCollision(other: Sprite): void;
 }

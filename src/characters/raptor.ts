@@ -3,13 +3,16 @@ import {State} from "../states";
 import {Enemy, EnemyMoveDirection} from "./enemy";
 import {float, integer} from "../types";
 import {RunLeft, RunRight} from "./raptor_states";
-import {OnDestroyCallback} from "../sprite";
+import {OnDestroyCallback, Sprite} from "../sprite";
 import Screen = Widgets.Screen;
 
 export class Raptor extends Enemy {
     private static readonly ABS_SPEED: float = 50.0; // symbols per second
     private static readonly WIDTH: integer = 28;
     private static readonly HEIGHT: integer = 8;
+
+    private static readonly _runLeftState = new RunLeft();
+    private static readonly _runRightState = new RunRight();
 
     constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: OnDestroyCallback) {
         const row: integer = scr.height as number - Raptor.HEIGHT;
@@ -19,8 +22,8 @@ export class Raptor extends Enemy {
         super(scr, direction, Raptor.ABS_SPEED, column, row, Raptor.WIDTH, Raptor.HEIGHT, "#608080", onDestroy);
     }
 
-    protected _createState(direction: EnemyMoveDirection): State {
-        return direction === EnemyMoveDirection.MoveLeft ? new RunLeft() : new RunRight();
+    protected _getState(direction: EnemyMoveDirection): State {
+        return direction === EnemyMoveDirection.MoveLeft ? Raptor._runLeftState : Raptor._runRightState;
     }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
@@ -36,7 +39,11 @@ export class Raptor extends Enemy {
         this._localCollider.r1 = 7;
     }
 
-    onCollision() {
-        console.log("Change direction");
+    onCollision(other: Sprite) {
+        if (this._column < other.column) {
+            this.changeState(EnemyMoveDirection.MoveRight);
+        } else if (this._column >= other.column) {
+            this.changeState(EnemyMoveDirection.MoveLeft);
+        }
     }
 }

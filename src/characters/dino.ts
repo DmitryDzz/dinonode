@@ -186,15 +186,15 @@ export class Dino extends Sprite {
         enemies.forEach((enemy: Enemy) => {
             if (this._dinoColliders.headCollider.intersects(enemy.collider)) {
                 console.log("HeadDead");
-                enemy.onCollision();
+                enemy.onCollision(this);
             }
             if (this._dinoColliders.tailCollider.intersects(enemy.collider)) {
                 console.log("TailDead");
-                enemy.onCollision();
+                enemy.onCollision(this);
             }
             if (this._dinoColliders.bodyCollider.intersects(enemy.collider)) {
                 console.log("BodyDead");
-                enemy.onCollision();
+                enemy.onCollision(this);
             }
         });
     }

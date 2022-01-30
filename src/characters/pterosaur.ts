@@ -3,7 +3,7 @@ import {State} from "../states";
 import {FlyLeft, FlyRight} from "./pterosaur_states";
 import {Enemy, EnemyMoveDirection} from "./enemy";
 import {float, integer} from "../types";
-import {OnDestroyCallback} from "../sprite";
+import {OnDestroyCallback, Sprite} from "../sprite";
 import Screen = Widgets.Screen;
 
 export class Pterosaur extends Enemy {
@@ -11,6 +11,9 @@ export class Pterosaur extends Enemy {
     private static readonly WIDTH: integer = 23;
     private static readonly HEIGHT: integer = 10;
     private static readonly BASE_Y: integer = 7;
+
+    private static readonly _flyLeftState = new FlyLeft();
+    private static readonly _flyRightState = new FlyRight();
 
     constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: OnDestroyCallback) {
         const row: integer = scr.height as number - Pterosaur.HEIGHT - Pterosaur.BASE_Y;
@@ -21,8 +24,8 @@ export class Pterosaur extends Enemy {
             "#B04000", onDestroy);
     }
 
-    protected _createState(direction: EnemyMoveDirection): State {
-        return direction === EnemyMoveDirection.MoveLeft ? new FlyLeft() : new FlyRight();
+    protected _getState(direction: EnemyMoveDirection): State {
+        return direction === EnemyMoveDirection.MoveLeft ? Pterosaur._flyLeftState : Pterosaur._flyRightState;
     }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
@@ -38,7 +41,11 @@ export class Pterosaur extends Enemy {
         this._localCollider.r1 = 6;
     }
 
-    onCollision() {
-        console.log("Change direction");
+    onCollision(other: Sprite) {
+        if (this._column < other.column) {
+            this.changeState(EnemyMoveDirection.MoveRight);
+        } else if (this._column >= other.column) {
+            this.changeState(EnemyMoveDirection.MoveLeft);
+        }
     }
 }

@@ -1,7 +1,7 @@
 import {State} from "../states";
 import {Sprite} from "../resources/comet_resources";
 
-export class Fall extends State {
+export class FallState extends State {
     constructor() {
         super(Sprite.Comet.fall, true);
     }

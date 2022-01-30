@@ -2,14 +2,16 @@ import {Widgets} from "blessed";
 import {State} from "../states";
 import {Enemy, EnemyMoveDirection} from "./enemy";
 import {float, integer} from "../types";
-import {OnDestroyCallback} from "../sprite";
+import {OnDestroyCallback, Sprite} from "../sprite";
 import Screen = Widgets.Screen;
-import {Fall} from "./comet_states";
+import {FallState} from "./comet_states";
 
 export class Comet extends Enemy {
     private static readonly ABS_SPEED: float = 30.0; // symbols per second
     private static readonly WIDTH: integer = 4;
     private static readonly HEIGHT: integer = 5;
+
+    private static readonly _fallState = new FallState();
 
     constructor(scr: Screen, onDestroy?: OnDestroyCallback) {
         const scrWidth: integer = scr.width as number;
@@ -19,8 +21,8 @@ export class Comet extends Enemy {
             "#808000",onDestroy);
     }
 
-    protected _createState(direction: EnemyMoveDirection): State {
-        return new Fall();
+    protected _getState(direction: EnemyMoveDirection): State {
+        return Comet._fallState;
     }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
@@ -35,7 +37,7 @@ export class Comet extends Enemy {
         this._localCollider.r1 = 4;
     }
 
-    onCollision() {
+    onCollision(_other: Sprite) {
         this.destroy();
     }
 }
