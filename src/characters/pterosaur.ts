@@ -1,6 +1,6 @@
 import {Widgets} from "blessed";
 import {State} from "../states";
-import {FlyLeft, FlyRight} from "./pterosaur_states";
+import {FlyLeftState, FlyRightState} from "./pterosaur_states";
 import {Enemy, EnemyMoveDirection} from "./enemy";
 import {float, integer} from "../types";
 import {OnDestroyCallback, Sprite} from "../sprite";
@@ -12,8 +12,8 @@ export class Pterosaur extends Enemy {
     private static readonly HEIGHT: integer = 10;
     private static readonly BASE_Y: integer = 7;
 
-    private static readonly _flyLeftState = new FlyLeft();
-    private static readonly _flyRightState = new FlyRight();
+    private static readonly _flyLeftState = new FlyLeftState();
+    private static readonly _flyRightState = new FlyRightState();
 
     constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: OnDestroyCallback) {
         const row: integer = scr.height as number - Pterosaur.HEIGHT - Pterosaur.BASE_Y;
@@ -43,9 +43,9 @@ export class Pterosaur extends Enemy {
 
     onCollision(other: Sprite) {
         if (this._column < other.column) {
-            this.changeState(EnemyMoveDirection.MoveRight);
-        } else if (this._column >= other.column) {
             this.changeState(EnemyMoveDirection.MoveLeft);
+        } else if (this._column >= other.column) {
+            this.changeState(EnemyMoveDirection.MoveRight);
         }
     }
 }

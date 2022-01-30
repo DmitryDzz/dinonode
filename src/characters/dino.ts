@@ -21,6 +21,8 @@ enum Key {
     DeadHead = "2",
 }
 
+export type OnDeathCallback = () => void;
+
 export class Dino extends Sprite {
     private static readonly JUMP_HEIGHT = 8;
     private static readonly JUMP_DURATION = 0.8;
@@ -28,6 +30,9 @@ export class Dino extends Sprite {
 
     private static readonly ABS_NORMAL_SPEED: float = 40.0; // symbols per second
     private static readonly ABS_FAST_SPEED: float = 52.0; // symbols per second
+
+    private readonly _onDeathCallback?: OnDeathCallback;
+
     private readonly _dinoRect: DinoRect;
     private readonly _dinoColliders: DinoColliders;
 
@@ -37,13 +42,15 @@ export class Dino extends Sprite {
     private _returnToPrevStateTime?: number;
 
     private _isPaused: boolean = false;
+    private _isDead: boolean = false;
 
     private _debugHeadColliderBox?: BoxElement;
     private _debugTailColliderBox?: BoxElement;
     private _debugBodyColliderBox?: BoxElement;
 
-    constructor(scr: Screen) {
+    constructor(scr: Screen, onDeathCallback?: OnDeathCallback) {
         super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT, "#608000");
+        this._onDeathCallback = onDeathCallback;
         this._dinoRect = new DinoRect(scr, (scr.width as number - DinoRect.DEFAULT_WIDTH) / 2);
 
         this._box.left = this._dinoRect.column;
@@ -171,6 +178,8 @@ export class Dino extends Sprite {
         }
 
         this._dinoRect.update();
+        this._column = this._dinoRect.column;
+        this._row = this._dinoRect.row;
         bx.left = this._dinoRect.column;
         bx.top = this._dinoRect.row;
 
@@ -185,18 +194,32 @@ export class Dino extends Sprite {
     checkColliders(enemies: Enemy[]) {
         enemies.forEach((enemy: Enemy) => {
             if (this._dinoColliders.headCollider.intersects(enemy.collider)) {
-                console.log("HeadDead");
                 enemy.onCollision(this);
+                this._state = this._state.isLeftDirection()
+                    ? this._changeState("deadHeadL") : this._changeState("deadHeadR");
+                this._die();
             }
             if (this._dinoColliders.tailCollider.intersects(enemy.collider)) {
-                console.log("TailDead");
                 enemy.onCollision(this);
+                this._state = this._state.isLeftDirection()
+                    ? this._changeState("deadL") : this._changeState("deadR");
+                this._die();
             }
             if (this._dinoColliders.bodyCollider.intersects(enemy.collider)) {
-                console.log("BodyDead");
                 enemy.onCollision(this);
+                this._state = this._state.isLeftDirection()
+                    ? this._changeState("deadL") : this._changeState("deadR");
+                this._die();
             }
         });
+    }
+
+    private _die() {
+        if (this._isDead) return;
+        this._dinoRect.die();
+        if (this._onDeathCallback !== undefined) {
+            this._onDeathCallback();
+        }
     }
 
     private _debugUpdateColliderBoxes() {

@@ -2,7 +2,7 @@ import {Widgets} from "blessed";
 import {State} from "../states";
 import {Enemy, EnemyMoveDirection} from "./enemy";
 import {float, integer} from "../types";
-import {RunLeft, RunRight} from "./raptor_states";
+import {RunLeftState, RunRightState} from "./raptor_states";
 import {OnDestroyCallback, Sprite} from "../sprite";
 import Screen = Widgets.Screen;
 
@@ -11,8 +11,8 @@ export class Raptor extends Enemy {
     private static readonly WIDTH: integer = 28;
     private static readonly HEIGHT: integer = 8;
 
-    private static readonly _runLeftState = new RunLeft();
-    private static readonly _runRightState = new RunRight();
+    private static readonly _runLeftState = new RunLeftState();
+    private static readonly _runRightState = new RunRightState();
 
     constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: OnDestroyCallback) {
         const row: integer = scr.height as number - Raptor.HEIGHT;
@@ -41,9 +41,9 @@ export class Raptor extends Enemy {
 
     onCollision(other: Sprite) {
         if (this._column < other.column) {
-            this.changeState(EnemyMoveDirection.MoveRight);
-        } else if (this._column >= other.column) {
             this.changeState(EnemyMoveDirection.MoveLeft);
+        } else if (this._column >= other.column) {
+            this.changeState(EnemyMoveDirection.MoveRight);
         }
     }
 }

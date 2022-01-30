@@ -15,7 +15,8 @@ export class Rect {
 
     intersects(other: Rect): boolean {
         return this._isPointInside(other.c0, other.r0) || this._isPointInside(other.c1, other.r0) ||
-            this._isPointInside(other.c0, other.r1) || this._isPointInside(other.c1, other.r1);
+            this._isPointInside(other.c0, other.r1) || this._isPointInside(other.c1, other.r1) ||
+            other._isPointInside(this.c0, this.r0) /* in case "this" is inside "other" */;
     }
 
     private _isPointInside(c: integer, r: integer): boolean {

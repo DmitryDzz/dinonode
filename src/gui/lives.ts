@@ -15,6 +15,8 @@ export class Lives {
     private readonly _hearts: Heart[] = [];
     private _value: number = Lives.COUNT;
 
+    get value() {return this._value;}
+
     constructor(scr: Screen) {
         for (let i = 0; i < Lives.COUNT; i++) {
             const heart = new Heart(scr);

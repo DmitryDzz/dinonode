@@ -5,7 +5,7 @@ export abstract class RaptorState extends State {
     abstract isLeftDirection(): boolean;
 }
 
-export class RunLeft extends RaptorState {
+export class RunLeftState extends RaptorState {
     constructor() {
         super(Sprite.Raptor.left.run, true);
     }
@@ -19,7 +19,7 @@ export class RunLeft extends RaptorState {
     }
 }
 
-export class RunRight extends RaptorState {
+export class RunRightState extends RaptorState {
     constructor() {
         super(Sprite.Raptor.right.run, true);
     }

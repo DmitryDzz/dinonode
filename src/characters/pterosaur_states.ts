@@ -5,7 +5,7 @@ export abstract class PterosaurState extends State {
     abstract isLeftDirection(): boolean;
 }
 
-export class FlyLeft extends PterosaurState {
+export class FlyLeftState extends PterosaurState {
     constructor() {
         super(Sprite.Pterosaur.left.fly, true);
     }
@@ -19,7 +19,7 @@ export class FlyLeft extends PterosaurState {
     }
 }
 
-export class FlyRight extends PterosaurState {
+export class FlyRightState extends PterosaurState {
     constructor() {
         super(Sprite.Pterosaur.right.fly, true);
     }

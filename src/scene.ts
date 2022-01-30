@@ -35,10 +35,11 @@ export class Scene {
 
     constructor(scr: Screen) {
         this._scr = scr;
-        this._dino = new Dino(scr);
-
         this._score = new Score(scr);
         this._lives = new Lives(scr);
+        this._dino = new Dino(scr, () => {
+            this._lives.decreaseHealth();
+        });
 
         scr.key([Key.Pause], this._keyPressed);
     }
