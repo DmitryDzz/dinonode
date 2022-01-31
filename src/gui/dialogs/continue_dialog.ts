@@ -1,4 +1,4 @@
-import {Dialog} from "./dialog";
+import {Dialog, OnHideCallback} from "./dialog";
 import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
@@ -9,8 +9,8 @@ enum Key {
 }
 
 export class ContinueDialog extends Dialog {
-    constructor(scr: Screen) {
-        super(scr);
+    constructor(scr: Screen, onHideCallback: OnHideCallback) {
+        super(scr, onHideCallback);
         // scr.key(Key.Space, this._keyPressed);
     }
 

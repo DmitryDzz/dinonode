@@ -38,6 +38,11 @@ export class DinoRect {
         return this._column;
     }
 
+    set column(value: integer) {
+        this._column = value;
+        this._x = value;
+    }
+
     get row(): integer {
         return this._row;
     }
@@ -120,6 +125,13 @@ export class DinoRect {
     die() {
         this._isDead = true;
     }
+
+    reborn() {
+        this._isDead = false;
+        this._speed = 0.0;
+    }
+
+    get isDead(): boolean { return this._isDead; }
 
     update() {
         if (this._isDead) return;

@@ -11,19 +11,23 @@ interface DialogRect {
     row: integer;
 }
 
+export type OnHideCallback = () => void;
+
 export abstract class Dialog {
     // private static readonly BORDER_COLOR = "#008000";
     private static readonly TEXT_COLOR = "#008000";
 
     protected readonly _scr: Screen;
+    protected readonly _onHideCallback?: OnHideCallback;
     protected _box?: BoxElement;
 
     private _destroyed: boolean = false;
     private _content?: string;
     private _rect?: DialogRect;
 
-    protected constructor(scr: Screen) {
+    protected constructor(scr: Screen, onHideCallback?: OnHideCallback) {
         this._scr = scr;
+        this._onHideCallback = onHideCallback;
         ApplicationPublisher.getInstance().addListener("onWindowResize", this._onWindowResizeHandler);
     }
 
@@ -69,6 +73,9 @@ export abstract class Dialog {
 
     hide() {
         if (this._destroyed) return;
+        if (this._onHideCallback !== undefined) {
+            this._onHideCallback();
+        }
         if (this._box !== undefined) {
             this._scr.remove(this._box);
             this._box.destroy();

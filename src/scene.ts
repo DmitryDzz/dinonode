@@ -35,23 +35,31 @@ export class Scene {
     private _createCometTime?: number;
 
     private _isPaused: boolean = false;
+    private _spawningEnemies: boolean = true;
 
     constructor(scr: Screen) {
         this._scr = scr;
-        this._continueDialog = new ContinueDialog(scr);
         this._score = new Score(scr);
         this._lives = new Lives(scr);
         this._dino = new Dino(scr, () => {
             this._lives.decreaseHealth();
+            this._spawningEnemies = false;
             if (this._lives.value > 0) {
                 this._continueDialog.show();
             }
+        });
+        this._continueDialog = new ContinueDialog(scr, () => {
+            this._spawningEnemies = true;
+            this._createAnimalTime = undefined;
+            this._createCometTime = undefined;
+            this._dino.reborn();
         });
 
         scr.key([Key.Pause], this._keyPressed);
     }
 
     destroy() {
+        this._scr.unkey(Key.Pause, this._keyPressed);
         this._enemies.forEach(x => x.destroy());
         this._dino.destroy();
         this._score.destroy();
@@ -87,18 +95,20 @@ export class Scene {
     }
 
     private readonly _onEnemyDestroy: OnDestroyCallback = (sprite: Sprite): void => {
-        this._score.value++;
+        if (this._dino.isAlive) {
+            this._score.value++;
+        }
         this._enemies = this._enemies.filter(s => s.id !== sprite.id);
     }
 
     private _updateRandomAnimalRespawn() {
-        if (this._createAnimalTime === undefined) {
+        if (this._createAnimalTime === undefined && this._spawningEnemies) {
             const delaySeconds = Scene.MIN_ANIMAL_SPAWN_INTERVAL_SECONDS + Math.random() *
                 (Scene.MAX_ANIMAL_SPAWN_INTERVAL_SECONDS - Scene.MIN_ANIMAL_SPAWN_INTERVAL_SECONDS);
             this._createAnimalTime = Time.time + delaySeconds;
         }
 
-        if (Time.time >= this._createAnimalTime) {
+        if (this._createAnimalTime !== undefined && Time.time >= this._createAnimalTime && this._spawningEnemies) {
             const direction = Math.random() > 0.5 ? EnemyMoveDirection.MoveLeft : EnemyMoveDirection.MoveRight;
             const enemy = Math.random() > 0.5
                 ? new Pterosaur(this._scr, direction, this._onEnemyDestroy)
@@ -110,13 +120,13 @@ export class Scene {
     }
 
     private _updateCometRespawn() {
-        if (this._createCometTime === undefined) {
+        if (this._createCometTime === undefined && this._spawningEnemies) {
             const delaySeconds = Scene.MIN_COMET_SPAWN_INTERVAL_SECONDS + Math.random() *
                     (Scene.MAX_COMET_SPAWN_INTERVAL_SECONDS - Scene.MIN_COMET_SPAWN_INTERVAL_SECONDS);
             this._createCometTime = Time.time + delaySeconds;
         }
 
-        if (Time.time >= this._createCometTime) {
+        if (this._createCometTime !== undefined && Time.time >= this._createCometTime && this._spawningEnemies) {
             const comet = new Comet(this._scr, this._onEnemyDestroy);
             this._enemies.push(comet);
 

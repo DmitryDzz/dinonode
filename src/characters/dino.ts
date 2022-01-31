@@ -33,16 +33,15 @@ export class Dino extends Sprite {
 
     private readonly _onDeathCallback?: OnDeathCallback;
 
-    private readonly _dinoRect: DinoRect;
-    private readonly _dinoColliders: DinoColliders;
+    private _dinoRect: DinoRect;
+    private _dinoColliders: DinoColliders;
 
-    private readonly _states: DinoStates;
+    private _states: DinoStates;
     private _state: DinoState;
 
     private _returnToPrevStateTime?: number;
 
     private _isPaused: boolean = false;
-    private _isDead: boolean = false;
 
     private _debugHeadColliderBox?: BoxElement;
     private _debugTailColliderBox?: BoxElement;
@@ -51,6 +50,7 @@ export class Dino extends Sprite {
     constructor(scr: Screen, onDeathCallback?: OnDeathCallback) {
         super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT, "#608000");
         this._onDeathCallback = onDeathCallback;
+
         this._dinoRect = new DinoRect(scr, (scr.width as number - DinoRect.DEFAULT_WIDTH) / 2);
 
         this._box.left = this._dinoRect.column;
@@ -73,6 +73,19 @@ export class Dino extends Sprite {
         super.destroy();
     }
 
+    reborn() {
+        this._dinoRect.column = (this._scr.width as number - DinoRect.DEFAULT_WIDTH) / 2;
+
+        this._box.left = this._dinoRect.column;
+        this._box.top = this._dinoRect.row;
+
+        this._state = this._states.getState("idleR");
+
+        this._dinoColliders.updateLocalColliders(this._state.type);
+
+        this._dinoRect.reborn();
+    }
+
     pause() {
         this._isPaused = true;
     }
@@ -80,6 +93,9 @@ export class Dino extends Sprite {
     unpause() {
         this._isPaused = false;
     }
+
+    get isDead(): boolean { return this._dinoRect.isDead; }
+    get isAlive(): boolean { return !this.isDead; }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
         //TODO DZZ
@@ -101,7 +117,7 @@ export class Dino extends Sprite {
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
-        if (this._isPaused || this._isDead) return;
+        if (this._isPaused || this.isDead) return;
 
         const jumpAction = () => {
             this._dinoRect.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION);
@@ -159,7 +175,7 @@ export class Dino extends Sprite {
     }
 
     private _changeState(stateType: DinoStateType): DinoState {
-        if (this._state.type === stateType || this._isDead) return this._state;
+        if (this._state.type === stateType || this.isDead) return this._state;
         this._state = this._states.getState(stateType);
         this._state.clear();
         this._dinoColliders.updateLocalColliders(this._state.type);
@@ -194,35 +210,34 @@ export class Dino extends Sprite {
     checkColliders(enemies: Enemy[]) {
         enemies.forEach((enemy: Enemy) => {
             if (this._dinoColliders.headCollider.intersects(enemy.collider)) {
-                enemy.onCollision(this);
                 this._state = this._state.isLeftDirection()
                     ? this._changeState("deadHeadL") : this._changeState("deadHeadR");
                 this._die();
+                enemy.onCollision(this);
             }
             if (this._dinoColliders.tailCollider.intersects(enemy.collider)) {
-                enemy.onCollision(this);
                 this._state = this._state.isLeftDirection()
                     ? this._changeState("deadL") : this._changeState("deadR");
                 this._die();
+                enemy.onCollision(this);
             }
             if (this._dinoColliders.bodyCollider.intersects(enemy.collider)) {
-                enemy.onCollision(this);
                 this._state = this._state.isLeftDirection()
                     ? this._changeState("deadL") : this._changeState("deadR");
                 this._die();
+                enemy.onCollision(this);
             }
         });
     }
 
     private _die() {
-        if (this._isDead) return;
-        this._isDead = true;
+        if (this.isDead) return;
+        this._dinoRect.die();
 
         //TODO DZZ Add animations and remove these two lines:
         this._changeState(this._state.isLeftDirection() ? "runL" : "runR");
         this._dinoRect.setLean(false);
 
-        this._dinoRect.die();
         if (this._onDeathCallback !== undefined) {
             this._onDeathCallback();
         }

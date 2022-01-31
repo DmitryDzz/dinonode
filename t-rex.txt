@@ -151,7 +151,9 @@
  6│  ▐▌  ▜▄▄▛     ▐▌  █ ▜▙  ▐▌     █  █ ▜▄▄▛ █  █ ▟▙ █ ▝█ │
   └───────────────────────────────────────────────────────┘
 
-
+    Dinosaurs survived!
+Humanity will never born now.
+   Press space to quit.
 
 
 
