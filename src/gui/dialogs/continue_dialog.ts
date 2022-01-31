@@ -2,6 +2,7 @@ import {Dialog} from "./dialog";
 import {Widgets} from "blessed";
 import Screen = Widgets.Screen;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
+import {Texture} from "../../resources/dialog_resources";
 
 enum Key {
     Space = "space",
@@ -10,11 +11,11 @@ enum Key {
 export class ContinueDialog extends Dialog {
     constructor(scr: Screen) {
         super(scr);
-        scr.key(Key.Space, this._keyPressed);
+        // scr.key(Key.Space, this._keyPressed);
     }
 
     destroy() {
-        this._scr.unkey(Key.Space, this._keyPressed)
+        // this._scr.unkey(Key.Space, this._keyPressed)
         super.destroy();
     }
 
@@ -30,7 +31,8 @@ export class ContinueDialog extends Dialog {
     }
 
     show() {
-        this._initialize(" Press Space \n to continue ");
+        this._initialize(Texture.Dialog.continue);
+        this._scr.onceKey(Key.Space, this._keyPressed);
         super.show();
     }
 }

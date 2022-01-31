@@ -12,7 +12,7 @@ interface DialogRect {
 }
 
 export abstract class Dialog {
-    private static readonly BORDER_COLOR = "#008000";
+    // private static readonly BORDER_COLOR = "#008000";
     private static readonly TEXT_COLOR = "#008000";
 
     protected readonly _scr: Screen;
@@ -76,22 +76,21 @@ export abstract class Dialog {
         }
     }
 
-    static createBox(column: number, row: number, width: number, height: number, fgColor: string, bgColor?: string): BoxElement {
+    static createBox(column: number, row: number, width: number, height: number, fgColor: string): BoxElement {
         const boxOptions: Widgets.BoxOptions = {
             width: width,
             height: height,
             top: row,
             left: column,
             tags: true,
-            border: {
-                type: 'line',
-            },
+            // border: {
+            //     type: 'line',
+            // },
             style: {
                 fg: fgColor,
-                bg: bgColor,
-                border: {
-                    fg: Dialog.BORDER_COLOR,
-                }
+                // border: {
+                //     fg: Dialog.BORDER_COLOR,
+                // }
             }
         };
         return box(boxOptions);
