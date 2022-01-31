@@ -10,6 +10,7 @@ import {Score} from "./gui/score";
 import {Lives} from "./gui/lives";
 import {Time} from "./time";
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
+import {ContinueDialog} from "./gui/dialogs/continue_dialog";
 
 enum Key {
     Pause = "p",
@@ -28,6 +29,8 @@ export class Scene {
     private readonly _dino: Dino;
     private _enemies: Enemy[] = [];
 
+    private readonly _continueDialog: ContinueDialog;
+
     private _createAnimalTime?: number;
     private _createCometTime?: number;
 
@@ -35,10 +38,14 @@ export class Scene {
 
     constructor(scr: Screen) {
         this._scr = scr;
+        this._continueDialog = new ContinueDialog(scr);
         this._score = new Score(scr);
         this._lives = new Lives(scr);
         this._dino = new Dino(scr, () => {
             this._lives.decreaseHealth();
+            if (this._lives.value > 0) {
+                this._continueDialog.show();
+            }
         });
 
         scr.key([Key.Pause], this._keyPressed);
@@ -49,6 +56,7 @@ export class Scene {
         this._dino.destroy();
         this._score.destroy();
         this._lives.destroy();
+        this._continueDialog.destroy();
     }
 
     update() {
@@ -58,6 +66,7 @@ export class Scene {
         this._enemies.forEach(x => x.update());
         this._score.update();
         this._lives.update();
+        this._continueDialog.update();
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {

@@ -217,7 +217,11 @@ export class Dino extends Sprite {
     private _die() {
         if (this._isDead) return;
         this._isDead = true;
+
+        //TODO DZZ Add animations and remove these two lines:
+        this._changeState(this._state.isLeftDirection() ? "runL" : "runR");
         this._dinoRect.setLean(false);
+
         this._dinoRect.die();
         if (this._onDeathCallback !== undefined) {
             this._onDeathCallback();
