@@ -25,7 +25,7 @@ export abstract class Dialog {
     private _content?: string;
     private _rect?: DialogRect;
 
-    protected constructor(scr: Screen, onHideCallback?: OnHideCallback) {
+    constructor(scr: Screen, onHideCallback?: OnHideCallback) {
         this._scr = scr;
         this._onHideCallback = onHideCallback;
         ApplicationPublisher.getInstance().addListener("onWindowResize", this._onWindowResizeHandler);

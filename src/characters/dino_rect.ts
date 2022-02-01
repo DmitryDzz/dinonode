@@ -65,6 +65,7 @@ export class DinoRect {
             c1: this._scr.width as number - this.width, r1: this._scr.height as number - this.height});
     }
 
+    // noinspection JSUnusedGlobalSymbols
     get speed(): float {
         return this._speed;
     }
@@ -121,6 +122,7 @@ export class DinoRect {
     }
 
     private _isDead: boolean = false;
+    private _isWin: boolean = false;
 
     die() {
         this._isDead = true;
@@ -132,6 +134,13 @@ export class DinoRect {
     }
 
     get isDead(): boolean { return this._isDead; }
+
+    win() {
+        this._isWin = true;
+        this._speed = 0.0;
+    }
+
+    get isWin(): boolean { return this._isWin; }
 
     update() {
         if (this._isDead) return;

@@ -10,6 +10,7 @@ export class ApplicationPublisher extends TypedEmitter<ApplicationEvents> {
     static getInstance(): ApplicationPublisher {
         if (ApplicationPublisher._instance === undefined) {
             ApplicationPublisher._instance = new ApplicationPublisher();
+            ApplicationPublisher._instance.setMaxListeners(20);
         }
         return ApplicationPublisher._instance;
     }

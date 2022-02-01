@@ -11,6 +11,8 @@ import {Lives} from "./gui/lives";
 import {Time} from "./time";
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {ContinueDialog} from "./gui/dialogs/continue_dialog";
+import {FailFinalDialog} from "./gui/dialogs/fail_final_dialog";
+import {SuccessFinalDialog} from "./gui/dialogs/success_final_dialog";
 
 enum Key {
     Pause = "p",
@@ -30,6 +32,8 @@ export class Scene {
     private _enemies: Enemy[] = [];
 
     private readonly _continueDialog: ContinueDialog;
+    private readonly _failFinalDialog: FailFinalDialog;
+    private readonly _successFinalDialog: SuccessFinalDialog;
 
     private _createAnimalTime?: number;
     private _createCometTime?: number;
@@ -46,14 +50,20 @@ export class Scene {
             this._spawningEnemies = false;
             if (this._lives.value > 0) {
                 this._continueDialog.show();
+            } else {
+                this._failFinalDialog.show();
             }
         });
-        this._continueDialog = new ContinueDialog(scr, () => {
+
+        const onDialogHideHandler = () => {
             this._spawningEnemies = true;
             this._createAnimalTime = undefined;
             this._createCometTime = undefined;
             this._dino.reborn();
-        });
+        }
+        this._continueDialog = new ContinueDialog(scr, onDialogHideHandler);
+        this._failFinalDialog = new FailFinalDialog(scr, onDialogHideHandler);
+        this._successFinalDialog = new SuccessFinalDialog(scr);
 
         scr.key([Key.Pause], this._keyPressed);
     }
@@ -65,6 +75,8 @@ export class Scene {
         this._score.destroy();
         this._lives.destroy();
         this._continueDialog.destroy();
+        this._failFinalDialog.destroy();
+        this._successFinalDialog.destroy();
     }
 
     update() {
@@ -75,6 +87,8 @@ export class Scene {
         this._score.update();
         this._lives.update();
         this._continueDialog.update();
+        this._failFinalDialog.update();
+        this._successFinalDialog.update();
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
@@ -97,8 +111,16 @@ export class Scene {
     private readonly _onEnemyDestroy: OnDestroyCallback = (sprite: Sprite): void => {
         if (this._dino.isAlive) {
             this._score.value++;
+            if (this._score.value === 999) {
+                this._spawningEnemies = false;
+            }
         }
         this._enemies = this._enemies.filter(s => s.id !== sprite.id);
+        if (this._score.value === 999 && this._dino.isAlive && this._enemies.length === 0) {
+            this._spawningEnemies = false;
+            this._dino.win();
+            this._successFinalDialog.show();
+        }
     }
 
     private _updateRandomAnimalRespawn() {

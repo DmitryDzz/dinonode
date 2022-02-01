@@ -96,6 +96,7 @@ export class Dino extends Sprite {
 
     get isDead(): boolean { return this._dinoRect.isDead; }
     get isAlive(): boolean { return !this.isDead; }
+    get isWin(): boolean { return this._dinoRect.isWin; }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
         //TODO DZZ
@@ -117,7 +118,7 @@ export class Dino extends Sprite {
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
-        if (this._isPaused || this.isDead) return;
+        if (this._isPaused || this.isDead || this.isWin) return;
 
         const jumpAction = () => {
             this._dinoRect.jump(Dino.JUMP_HEIGHT, Dino.JUMP_DURATION);
@@ -241,6 +242,12 @@ export class Dino extends Sprite {
         if (this._onDeathCallback !== undefined) {
             this._onDeathCallback();
         }
+    }
+
+    win() {
+        this._dinoRect.win();
+        this._changeState(this._state.isLeftDirection() ? "idleL" : "idleR");
+        this._dinoRect.setLean(false);
     }
 
     private _debugUpdateColliderBoxes() {
