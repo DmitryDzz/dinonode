@@ -226,6 +226,114 @@ export namespace Texture {
             "       ▄█████████▄  \n" +
             "    ▄▄████████████▄ \n{#A02000-fg}" +
             "▄▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▄{/}";
+        static readonly deadTailA =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "       ▗▄█████      \n" +
+            "     ▄████████▀█    \n" +
+            "     ▜████████      \n" +
+            "      ███████▘      \n" +
+            "      ██████▘       \n" +
+            "     ▟█▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadTailB =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "       ▗▄█████      \n" +
+            "     ▄████████▀█    \n" +
+            "     ▜████████      \n" +
+            "  ▄▛▀▀███████▘      \n" +
+            "   ▗▛▀██████▘       \n" +
+            "     ▟█▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadTailC =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "       ▗▄█████      \n" +
+            "     ▄████████▀█    \n" +
+            "     ▜████████      \n" +
+            " ▄▄▛▀▀███████▘      \n" +
+            "▟▘ ▄▛▀██████▘       \n" +
+            "▀  ▀ ▟█▀ ▀█         \n" +
+            "     █▄   █▄        ";
+        static readonly deadTailD =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "       ▗▄█████      \n" +
+            "     ▄████████▀█    \n" +
+            "     ▜████████      \n" +
+            " ▄▄▛▀▀███████▘      \n" +
+            "▟▘ ▄▛▀██████▘       \n" +
+            "█  █ ▟█▀ ▀█         \n" +
+            "█  █ █▄   █▄        ";
+        static readonly deadTailE =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "       ▗▄█████      \n" +
+            "     ▄████████▀█    \n" +
+            "     ▜████████      \n" +
+            " ▄    ███████▘      \n" +
+            "▟▘ ▟▘ ██████▘       \n" +
+            "█  █ ▟█▀ ▀█         \n" +
+            "█▄ █▄█▄   █▄        ";
+        static readonly deadTailF =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "       ▗▄█████      \n" +
+            "     ▄████████▀█    \n" +
+            "     ▜████████      \n" +
+            "      ███████▘      \n" +
+            "      ██████▘       \n" +
+            "▄  ▄ ▟█▀ ▀█         \n" +
+            "█▄▄█▄█▄   █▄        ";
+        static readonly deadTailG =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "       ▗▄█████      \n" +
+            "     ▄████████▀█    \n" +
+            "     ▜████████      \n" +
+            "      ███████▘      \n" +
+            "      ██████▘       \n" +
+            "     ▟█▀ ▀█         \n" +
+            "▄▄▄▄▄█▄   █▄        ";
+        static readonly deadTailH =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "          ▄████████▄\n" +
+            "          ██▄▄██████\n" +
+            "          ██████████\n" +
+            "       ▄██████████▀▀\n" +
+            "      ████████▜▖    \n" +
+            "     ▟███████ ▄█    \n" +
+            "   ▄▄██▀▄█▀         ";
+        static readonly deadTailI =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "       ▄█████████▄  \n" +
+            "     ▄████████████▄ \n" +
+            "▄██████████████████▄";
 
     }
 }
@@ -239,6 +347,7 @@ export namespace Sprite {
         leanRun: string[];
         dead: string[];
         deadHead: string[];
+        deadTail: string[];
     }
 
     export class Dino {
@@ -284,6 +393,17 @@ export namespace Sprite {
                 Texture.Dino.deadHeadI,
                 Texture.Dino.deadHeadJ,
             ],
+            deadTail: [
+                Texture.Dino.deadTailA,
+                Texture.Dino.deadTailB,
+                Texture.Dino.deadTailC,
+                Texture.Dino.deadTailD,
+                Texture.Dino.deadTailE,
+                Texture.Dino.deadTailF,
+                Texture.Dino.deadTailG,
+                Texture.Dino.deadTailH,
+                Texture.Dino.deadTailI,
+            ],
         };
         static readonly left: DinoAnimations = {
             idle: [
@@ -326,6 +446,17 @@ export namespace Sprite {
                 SpriteClass.flip(Texture.Dino.deadHeadH),
                 SpriteClass.flip(Texture.Dino.deadHeadI),
                 SpriteClass.flip(Texture.Dino.deadHeadJ),
+            ],
+            deadTail: [
+                SpriteClass.flip(Texture.Dino.deadTailA),
+                SpriteClass.flip(Texture.Dino.deadTailB),
+                SpriteClass.flip(Texture.Dino.deadTailC),
+                SpriteClass.flip(Texture.Dino.deadTailD),
+                SpriteClass.flip(Texture.Dino.deadTailE),
+                SpriteClass.flip(Texture.Dino.deadTailF),
+                SpriteClass.flip(Texture.Dino.deadTailG),
+                SpriteClass.flip(Texture.Dino.deadTailH),
+                SpriteClass.flip(Texture.Dino.deadTailI),
             ],
         };
     }

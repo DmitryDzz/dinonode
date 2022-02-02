@@ -20,6 +20,8 @@ export class DinoStates {
             ["deadR", new DeadRightState()],
             ["deadHeadL", new DeadHeadLeftState()],
             ["deadHeadR", new DeadHeadRightState()],
+            ["deadTailL", new DeadTailLeftState()],
+            ["deadTailR", new DeadTailRightState()],
         ]);
     }
 
@@ -30,7 +32,7 @@ export class DinoStates {
 
 export type DinoStateType =
     "idleL" | "idleR" | "runL" | "runR" | "jumpL" | "jumpR" | "leanIdleL" | "leanIdleR" | "leanRunL" | "leanRunR" |
-    "deadL" | "deadR" | "deadHeadL" | "deadHeadR";
+    "deadL" | "deadR" | "deadHeadL" | "deadHeadR" | "deadTailL" | "deadTailR";
 
 export abstract class DinoState extends State {
     private readonly _type: DinoStateType;
@@ -221,6 +223,34 @@ export class DeadHeadLeftState extends DinoState {
 export class DeadHeadRightState extends DinoState {
     constructor() {
         super("deadHeadR", Sprite.Dino.right.deadHead, false);
+    }
+
+    protected setFrameDuration() {
+        this._frameDuration = 0.125;
+    }
+
+    isLeftDirection(): boolean {
+        return false;
+    }
+}
+
+export class DeadTailLeftState extends DinoState {
+    constructor() {
+        super("deadTailL", Sprite.Dino.left.deadTail, false);
+    }
+
+    protected setFrameDuration() {
+        this._frameDuration = 0.2;
+    }
+
+    isLeftDirection(): boolean {
+        return true;
+    }
+}
+
+export class DeadTailRightState extends DinoState {
+    constructor() {
+        super("deadTailR", Sprite.Dino.right.deadTail, false);
     }
 
     protected setFrameDuration() {
