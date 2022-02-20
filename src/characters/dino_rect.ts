@@ -143,7 +143,9 @@ export class DinoRect {
     get isWin(): boolean { return this._isWin; }
 
     update() {
-        if (this._isDead) return;
+        if (this._isDead) {
+            this._speed = 0.0;
+        }
 
         this._x += this._speed * Time.deltaTime;
         this._y = this._baseY - this.height - this._getDeltaY();
