@@ -126,6 +126,7 @@ export class DinoRect {
 
     die() {
         this._isDead = true;
+        this.setLean(false);
     }
 
     reborn() {
