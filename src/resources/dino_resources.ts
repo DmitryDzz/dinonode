@@ -26,6 +26,7 @@ export namespace Texture {
             "   ▀████████▘       \n" +
             "     ██▀ ▀█         \n" +
             "     █▄   █▄        ";
+
         static readonly runA =
             "          ▄████████▄\n" +
             "          ██▄███████\n" +
@@ -50,6 +51,7 @@ export namespace Texture {
             "   ▀████████▘       \n" +
             "     ▀█▄ ▀█         \n" +
             "          █▄        ";
+
         static readonly jump =
             "          ▄████████▄\n" +
             "          ██▄███████\n" +
@@ -62,6 +64,7 @@ export namespace Texture {
             "   ▀████████▘       \n" +
             "     ██▀ █▛         \n" +
             "     ▜▙  ▜▙         ";
+
         static readonly leanIdleA =
             "▖                 ▄▄▄▄▄▄▄▄ \n" +
             "█▄▄    ▄▄▄▄▄▄▄  ▄██▀███████\n" +
@@ -78,6 +81,7 @@ export namespace Texture {
             "    ▜███████▀▀█▘           \n" +
             "      ██▀ ▀█  ▀▀           \n" +
             "      █▄   █▄              ";
+
         static readonly leanRunA =
             "▖                 ▄▄▄▄▄▄▄▄ \n" +
             "█▄▄    ▄▄▄▄▄▄▄  ▄██▀███████\n" +
@@ -94,6 +98,7 @@ export namespace Texture {
             "    ▜█████▛▀▀▀█▘           \n" +
             "    ██▀  ▀█▄▄ ▀▀           \n" +
             "    █▄                     ";
+
         static readonly dead =
             "          ▄████████▄\n" +
             "          ██  ██████\n" +
@@ -106,6 +111,7 @@ export namespace Texture {
             "   ▀████████▘       \n" +
             "     ██▀ ▀█         \n" +
             "     █▄   █▄        ";
+
         static readonly deadHeadA =
             "                    \n" +
             "                    \n" +
@@ -226,6 +232,7 @@ export namespace Texture {
             "       ▄█████████▄  \n" +
             "    ▄▄████████████▄ \n{#A02000-fg}" +
             "▄▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▄{/}";
+
         static readonly deadTailA =
             "          ▄████████▄\n" +
             "          ██  ██████\n" +
@@ -359,6 +366,138 @@ export namespace Texture {
             "     ▄████████████▄ \n" +
             "{#A02000-fg}▄▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▄{/}";
 
+        static readonly deadLegsA =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▘▝         \n" +
+            "     █▄             ";
+        static readonly deadLegsB =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▌▐         \n" +
+            "     █▄             ";
+        static readonly deadLegsC =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▌▐         \n" +
+            "     █▄  ▘▝         ";
+        static readonly deadLegsD =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▖▗         \n" +
+            "     █▄  ▌▐         ";
+        static readonly deadLegsE =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▘▝         \n" +
+            "     █▄ ▗▙▟▖        ";
+        static readonly deadLegsF =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀ ▖▗         \n" +
+            "     █▄ ▄▄▄▄        ";
+        static readonly deadLegsG =
+            "          ▄████████▄\n" +
+            "          ██  ██████\n" +
+            "          ██████████\n" +
+            "          ████████▀▀\n" +
+            "█      ▗▄█████      \n" +
+            "██▄  ▄████████▀█    \n" +
+            "▜█████████████      \n" +
+            " ▀███████████▘      \n" +
+            "   ▀████████▘       \n" +
+            "     ██▀            \n" +
+            "     █▄▄▄▙▟▄▄       ";
+        static readonly deadLegsH =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "          ▄████████▄\n" +
+            "▄▄        ██▄▄██████\n" +
+            " ███▄     ██████████\n" +
+            "  ▜███▙▄██████████▀▀\n" +
+            "   ▀██████████▜▖    \n" +
+            "     ▟███████ ▄█    \n" +
+            "   ▄▄██▄▄█▄█▄▄      ";
+        static readonly deadLegsI =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "       ▄█████████▄  \n" +
+            "    ▄▄████████████▄ \n" +
+            "▄██████████████████▄";
+        static readonly deadLegsJ =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "       ▄█████████▄  \n" +
+            "    ▄▄████████████▄ \n" +
+            "▄██████████████████▄";
+        static readonly deadLegsK =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "       ▄█████████▄  \n" +
+            "    ▄▄████████████▄ \n" +
+            "▄██████████████████▄";
     }
 }
 
@@ -372,6 +511,7 @@ export namespace Sprite {
         dead: string[];
         deadHead: string[];
         deadTail: string[];
+        deadLegs: string[];
     }
 
     export class Dino {
@@ -430,6 +570,19 @@ export namespace Sprite {
                 Texture.Dino.deadTailJ,
                 Texture.Dino.deadTailK,
             ],
+            deadLegs: [
+                Texture.Dino.deadLegsA,
+                Texture.Dino.deadLegsB,
+                Texture.Dino.deadLegsC,
+                Texture.Dino.deadLegsD,
+                Texture.Dino.deadLegsE,
+                Texture.Dino.deadLegsF,
+                Texture.Dino.deadLegsG,
+                Texture.Dino.deadLegsH,
+                Texture.Dino.deadLegsI,
+                Texture.Dino.deadLegsJ,
+                Texture.Dino.deadLegsK,
+            ],
         };
         static readonly left: DinoAnimations = {
             idle: [
@@ -485,6 +638,19 @@ export namespace Sprite {
                 SpriteClass.flip(Texture.Dino.deadTailI),
                 SpriteClass.flip(Texture.Dino.deadTailJ),
                 SpriteClass.flip(Texture.Dino.deadTailK),
+            ],
+            deadLegs: [
+                SpriteClass.flip(Texture.Dino.deadLegsA),
+                SpriteClass.flip(Texture.Dino.deadLegsB),
+                SpriteClass.flip(Texture.Dino.deadLegsC),
+                SpriteClass.flip(Texture.Dino.deadLegsD),
+                SpriteClass.flip(Texture.Dino.deadLegsE),
+                SpriteClass.flip(Texture.Dino.deadLegsF),
+                SpriteClass.flip(Texture.Dino.deadLegsG),
+                SpriteClass.flip(Texture.Dino.deadLegsH),
+                SpriteClass.flip(Texture.Dino.deadLegsI),
+                SpriteClass.flip(Texture.Dino.deadLegsJ),
+                SpriteClass.flip(Texture.Dino.deadLegsK),
             ],
         };
     }

@@ -20,6 +20,7 @@ enum Key {
     Dead = "1",
     DeadHead = "2",
     DeadTail = "3",
+    DeadLegs = "4",
 }
 
 export type OnDeathCallback = () => void;
@@ -168,6 +169,8 @@ export class Dino extends Sprite {
             this._performDeadHead();
         } else if (ch === Key.DeadTail) {
             this._performDeadTail();
+        } else if (ch === Key.DeadLegs) {
+            this._performDeadLegs();
         }
     }
 
@@ -183,6 +186,13 @@ export class Dino extends Sprite {
         this._state = this._state.isLeftDirection()
             ? this._changeState("deadTailL")
             : this._changeState("deadTailR");
+    }
+
+    private _performDeadLegs() {
+        this._dinoRect.die();
+        this._state = this._state.isLeftDirection()
+            ? this._changeState("deadLegsL")
+            : this._changeState("deadLegsR");
     }
 
     private _changeState(stateType: DinoStateType): DinoState {
@@ -234,7 +244,7 @@ export class Dino extends Sprite {
             }
             if (this._dinoColliders.bodyCollider.intersects(enemy.collider)) {
                 this._state = this._state.isLeftDirection()
-                    ? this._changeState("deadL") : this._changeState("deadR");
+                    ? this._changeState("deadLegsL") : this._changeState("deadLegsR");
                 this._die();
                 enemy.onCollision(this);
             }
