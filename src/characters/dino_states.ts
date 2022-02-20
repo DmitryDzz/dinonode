@@ -242,7 +242,7 @@ export class DeadTailLeftState extends DinoState {
     }
 
     protected setFrameDuration() {
-        this._frameDuration = 0.2;
+        this._frameDuration = 0.2; //5;
     }
 
     isLeftDirection(): boolean {
@@ -256,7 +256,7 @@ export class DeadTailRightState extends DinoState {
     }
 
     protected setFrameDuration() {
-        this._frameDuration = 0.125;
+        this._frameDuration = 0.2;
     }
 
     isLeftDirection(): boolean {
@@ -284,7 +284,7 @@ export class DeadLegsRightState extends DinoState {
     }
 
     protected setFrameDuration() {
-        this._frameDuration = 0.125;
+        this._frameDuration = 0.2;
     }
 
     isLeftDirection(): boolean {
