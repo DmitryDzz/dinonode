@@ -1,7 +1,4 @@
 import {Widgets} from "blessed";
-import BoxElement = Widgets.BoxElement;
-import Screen = Widgets.Screen;
-import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {DinoState, DinoStates, DinoStateType} from "./dino_states";
 import {DinoRect} from "./dino_rect";
 import {Sprite} from "../sprite";
@@ -9,7 +6,10 @@ import {float} from "../types";
 import {Time} from "../time";
 import {DinoColliders} from "./dino_colliders";
 import {Options} from "../options";
-import {Enemy} from "./enemy";
+import {Enemy, EnemyType} from "./enemy";
+import BoxElement = Widgets.BoxElement;
+import Screen = Widgets.Screen;
+import IKeyEventArg = Widgets.Events.IKeyEventArg;
 
 enum Key {
     Left = "a",
@@ -230,24 +230,51 @@ export class Dino extends Sprite {
 
     checkColliders(enemies: Enemy[]) {
         enemies.forEach((enemy: Enemy) => {
-            if (this._dinoColliders.headCollider.intersects(enemy.collider)) {
-                this._state = this._state.isLeftDirection()
-                    ? this._changeState("deadHeadL") : this._changeState("deadHeadR");
+            let collision = false;
+            const headCollision = this._dinoColliders.headCollider.intersects(enemy.collider);
+            collision = headCollision;
+            const tailCollision = collision || this._dinoColliders.tailCollider.intersects(enemy.collider);
+            collision = tailCollision;
+            const bodyCollision = collision || this._dinoColliders.bodyCollider.intersects(enemy.collider);
+            collision = bodyCollision;
+
+            if (collision) {
+                if (enemy.enemyType === EnemyType.Comet) {
+                    this._state = this._state.isLeftDirection()
+                        ? this._changeState("deadBurnedL") : this._changeState("deadBurnedR");
+                } else {
+                    if (headCollision) {
+                        this._state = this._state.isLeftDirection()
+                            ? this._changeState("deadHeadL") : this._changeState("deadHeadR");
+                    } else if (tailCollision) {
+                        this._state = this._state.isLeftDirection()
+                            ? this._changeState("deadTailL") : this._changeState("deadTailR");
+                    } else if (bodyCollision) {
+                        this._state = this._state.isLeftDirection()
+                            ? this._changeState("deadLegsL") : this._changeState("deadLegsR");
+                    }
+                }
                 this._die();
                 enemy.onCollision(this);
             }
-            if (this._dinoColliders.tailCollider.intersects(enemy.collider)) {
-                this._state = this._state.isLeftDirection()
-                    ? this._changeState("deadTailL") : this._changeState("deadTailR");
-                this._die();
-                enemy.onCollision(this);
-            }
-            if (this._dinoColliders.bodyCollider.intersects(enemy.collider)) {
-                this._state = this._state.isLeftDirection()
-                    ? this._changeState("deadLegsL") : this._changeState("deadLegsR");
-                this._die();
-                enemy.onCollision(this);
-            }
+            // if (this._dinoColliders.headCollider.intersects(enemy.collider)) {
+            //     this._state = this._state.isLeftDirection()
+            //         ? this._changeState("deadHeadL") : this._changeState("deadHeadR");
+            //     this._die();
+            //     enemy.onCollision(this);
+            // }
+            // if (this._dinoColliders.tailCollider.intersects(enemy.collider)) {
+            //     this._state = this._state.isLeftDirection()
+            //         ? this._changeState("deadTailL") : this._changeState("deadTailR");
+            //     this._die();
+            //     enemy.onCollision(this);
+            // }
+            // if (this._dinoColliders.bodyCollider.intersects(enemy.collider)) {
+            //     this._state = this._state.isLeftDirection()
+            //         ? this._changeState("deadLegsL") : this._changeState("deadLegsR");
+            //     this._die();
+            //     enemy.onCollision(this);
+            // }
         });
     }
 

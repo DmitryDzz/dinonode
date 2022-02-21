@@ -1,7 +1,7 @@
 import {Widgets} from "blessed";
 import {State} from "../states";
 import {FlyLeftState, FlyRightState} from "./pterosaur_states";
-import {Enemy, EnemyMoveDirection} from "./enemy";
+import {Enemy, EnemyMoveDirection, EnemyType} from "./enemy";
 import {float, integer} from "../types";
 import {OnDestroyCallback, Sprite} from "../sprite";
 import Screen = Widgets.Screen;
@@ -20,8 +20,8 @@ export class Pterosaur extends Enemy {
         const column: integer = direction === EnemyMoveDirection.MoveRight
             ? 1 - Pterosaur.WIDTH
             : scr.width as number - 1;
-        super(scr, direction, Pterosaur.ABS_SPEED, column, row, Pterosaur.WIDTH, Pterosaur.HEIGHT,
-            "#B04000", onDestroy);
+        super(scr, EnemyType.Pterosaur, direction, Pterosaur.ABS_SPEED, column, row,
+            Pterosaur.WIDTH, Pterosaur.HEIGHT, "#B04000", onDestroy);
     }
 
     protected _getState(direction: EnemyMoveDirection): State {

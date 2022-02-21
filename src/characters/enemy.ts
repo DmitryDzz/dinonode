@@ -14,7 +14,16 @@ export enum EnemyMoveDirection {
     MoveDown
 }
 
+export enum EnemyType {
+    Unknown,
+    Comet,
+    Raptor,
+    Pterosaur
+}
+
 export abstract class Enemy extends Sprite {
+    readonly enemyType: EnemyType;
+
     private _x: float;
     private _y: float;
     private _speedX: float;
@@ -27,11 +36,12 @@ export abstract class Enemy extends Sprite {
     readonly collider: Rect = new Rect({c0: 0, r0: 0, c1: 0, r1: 0});
     private _debugColliderBox?: BoxElement;
 
-    protected constructor(scr: Screen, direction: EnemyMoveDirection, absSpeed: float,
+    protected constructor(scr: Screen, enemyType: EnemyType, direction: EnemyMoveDirection, absSpeed: float,
                           column: integer, row: integer, width: integer, height: integer,
                           baseColor: string, onDestroy?: OnDestroyCallback) {
         super(scr, column, row, width, height, baseColor, onDestroy);
 
+        this.enemyType = enemyType;
         this._absSpeed = absSpeed;
         this._x = this._column;
         this._y = this._row;

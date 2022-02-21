@@ -1,6 +1,6 @@
 import {Widgets} from "blessed";
 import {State} from "../states";
-import {Enemy, EnemyMoveDirection} from "./enemy";
+import {Enemy, EnemyMoveDirection, EnemyType} from "./enemy";
 import {float, integer} from "../types";
 import {RunLeftState, RunRightState} from "./raptor_states";
 import {OnDestroyCallback, Sprite} from "../sprite";
@@ -19,7 +19,8 @@ export class Raptor extends Enemy {
         const column: integer = direction === EnemyMoveDirection.MoveRight
             ? 1 - Raptor.WIDTH
             : scr.width as number - 1;
-        super(scr, direction, Raptor.ABS_SPEED, column, row, Raptor.WIDTH, Raptor.HEIGHT, "#608080", onDestroy);
+        super(scr, EnemyType.Raptor, direction, Raptor.ABS_SPEED, column, row,
+            Raptor.WIDTH, Raptor.HEIGHT, "#608080", onDestroy);
     }
 
     protected _getState(direction: EnemyMoveDirection): State {

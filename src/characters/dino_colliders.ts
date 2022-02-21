@@ -34,6 +34,7 @@ export class DinoColliders {
                 break;
             case "deadTailR":
             case "deadLegsR":
+            case "deadBurnedR":
                 this._headLocalCollider = new Rect({c0: 2, r0: 8, c1: 18, r1: 10});
                 this._tailLocalCollider = new Rect({c0: 2, r0: 8, c1: 18, r1: 10});
                 this._bodyLocalCollider = new Rect({c0: 2, r0: 8, c1: 18, r1: 10});
@@ -59,6 +60,7 @@ export class DinoColliders {
                 break;
             case "deadTailL":
             case "deadLegsL":
+            case "deadBurnedL":
                 this._headLocalCollider = new Rect({c0: 1, r0: 8, c1: 17, r1: 10});
                 this._tailLocalCollider = new Rect({c0: 1, r0: 8, c1: 17, r1: 10});
                 this._bodyLocalCollider = new Rect({c0: 1, r0: 8, c1: 17, r1: 10});

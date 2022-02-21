@@ -498,6 +498,126 @@ export namespace Texture {
             "       ▄█████████▄  \n" +
             "    ▄▄████████████▄ \n" +
             "{#A02000-fg}▄▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▄{/}";
+        static readonly deadBurnedA =
+            "           ▓▓▓▓▓▓▓▓ \n" +
+            "          ▓▓ ▓▓▓▓▓▓▓\n" +
+            "          ▓▓▓▓▓▓▓▓▓▓\n" +
+            "          ▓▓▓▓▓▓▓▓  \n" +
+            "▓       ▓▓▓▓▓▓      \n" +
+            "▓▓    ▓▓▓▓▓▓▓▓ ▓    \n" +
+            " ▓▓▓▓▓▓▓▓▓▓▓▓▓      \n" +
+            "  ▓▓▓▓▓▓▓▓▓▓▓       \n" +
+            "    ▓▓▓▓▓▓▓▓        \n" +
+            "     ▓▓   ▓         \n" +
+            "     ▓    ▓         ";
+        static readonly deadBurnedB =
+            "                    \n" +
+            "           ▓▓▓▓▓▓▓▓ \n" +
+            "          ▓▓ ▓▓▓▓▓▓▓\n" +
+            "          ▓▓▓▓▓▓▓▓▓▓\n" +
+            "        ▓▓▓▓▓▓      \n" +
+            "▓    ▓▓▓▓▓▓▓▓▓      \n" +
+            "▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ▓    \n" +
+            "  ▓▓▓▓▓▓▓▓▓▓▓       \n" +
+            "  ▓▓▓▓▓▓▓▓▓▓▓       \n" +
+            "    ▓▓▓▓▓▓▓▓        \n" +
+            "     ▓▓   ▓         ";
+        static readonly deadBurnedC =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "           ▓▓▓▓▓▓▓▓ \n" +
+            "          ▓▓ ▓▓▓▓▓▓▓\n" +
+            "         ▓▓▓▓▓▓▓▓▓▓▓\n" +
+            "       ▓▓▓▓▓▓▓▓     \n" +
+            "▓   ▓▓▓▓▓▓▓▓▓▓      \n" +
+            "▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ▓    \n" +
+            "  ▓▓▓▓▓▓▓▓▓▓▓       \n" +
+            "     ▓▓   ▓         ";
+        static readonly deadBurnedD =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "           ▓▓▓▓▓▓▓▓ \n" +
+            "          ▓▓ ▓▓▓▓▓▓▓\n" +
+            "         ▓▓▓▓▓▓▓▓▓▓▓\n" +
+            "▓   ▓▓▓▓▓▓▓▓▓▓▓▓▓   \n" +
+            "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓    ";
+        static readonly deadBurnedE =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "           ▓▓▓▓▓▓▓▓ \n" +
+            "▓  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓\n" +
+            "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓";
+        static readonly deadBurnedF =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "           ▒▒▒▒▒▒▒▒ \n" +
+            "▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\n" +
+            "▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒";
+        static readonly deadBurnedG =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "             ░   ░  \n" +
+            "            ▒░░▒▒░░ \n" +
+            "░    ░░▒▒░▒░▒▒░▒▒░░ \n" +
+            "▒▒░░▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒";
+        static readonly deadBurnedH =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "            ░  ░    \n" +
+            "    ░    ░░░░░▒▒░▒░ \n" +
+            " ░░░░░▒▒░░▒▒░▒░░░▒░░";
+        static readonly deadBurnedI =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "       ░░  ░░ ░   ░ ";
+        static readonly deadBurnedJ =
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    \n" +
+            "                    ";
     }
 }
 
@@ -512,6 +632,7 @@ export namespace Sprite {
         deadHead: string[];
         deadTail: string[];
         deadLegs: string[];
+        deadBurned: string[];
     }
 
     export class Dino {
@@ -583,6 +704,18 @@ export namespace Sprite {
                 Texture.Dino.deadLegsJ,
                 Texture.Dino.deadLegsK,
             ],
+            deadBurned: [
+                Texture.Dino.deadBurnedA,
+                Texture.Dino.deadBurnedB,
+                Texture.Dino.deadBurnedC,
+                Texture.Dino.deadBurnedD,
+                Texture.Dino.deadBurnedE,
+                Texture.Dino.deadBurnedF,
+                Texture.Dino.deadBurnedG,
+                Texture.Dino.deadBurnedH,
+                Texture.Dino.deadBurnedI,
+                Texture.Dino.deadBurnedJ,
+            ],
         };
         static readonly left: DinoAnimations = {
             idle: [
@@ -651,6 +784,18 @@ export namespace Sprite {
                 SpriteClass.flip(Texture.Dino.deadLegsI),
                 SpriteClass.flip(Texture.Dino.deadLegsJ),
                 SpriteClass.flip(Texture.Dino.deadLegsK),
+            ],
+            deadBurned: [
+                SpriteClass.flip(Texture.Dino.deadBurnedA),
+                SpriteClass.flip(Texture.Dino.deadBurnedB),
+                SpriteClass.flip(Texture.Dino.deadBurnedC),
+                SpriteClass.flip(Texture.Dino.deadBurnedD),
+                SpriteClass.flip(Texture.Dino.deadBurnedE),
+                SpriteClass.flip(Texture.Dino.deadBurnedF),
+                SpriteClass.flip(Texture.Dino.deadBurnedG),
+                SpriteClass.flip(Texture.Dino.deadBurnedH),
+                SpriteClass.flip(Texture.Dino.deadBurnedI),
+                SpriteClass.flip(Texture.Dino.deadBurnedJ),
             ],
         };
     }

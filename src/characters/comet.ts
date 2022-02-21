@@ -1,10 +1,10 @@
 import {Widgets} from "blessed";
 import {State} from "../states";
-import {Enemy, EnemyMoveDirection} from "./enemy";
+import {Enemy, EnemyMoveDirection, EnemyType} from "./enemy";
 import {float, integer} from "../types";
 import {OnDestroyCallback, Sprite} from "../sprite";
-import Screen = Widgets.Screen;
 import {FallState} from "./comet_states";
+import Screen = Widgets.Screen;
 
 export class Comet extends Enemy {
     private static readonly ABS_SPEED: float = 30.0; // symbols per second
@@ -17,8 +17,8 @@ export class Comet extends Enemy {
         const scrWidth: integer = scr.width as number;
         const column: integer = Math.round(Math.random() * 0.95 * scrWidth + 0.025 * scrWidth);
         const row: integer = 1 - Comet.HEIGHT;
-        super(scr, EnemyMoveDirection.MoveDown, Comet.ABS_SPEED, column, row, Comet.WIDTH, Comet.HEIGHT,
-            "#808000",onDestroy);
+        super(scr, EnemyType.Comet, EnemyMoveDirection.MoveDown, Comet.ABS_SPEED, column, row,
+            Comet.WIDTH, Comet.HEIGHT, "#808000",onDestroy);
     }
 
     protected _getState(direction: EnemyMoveDirection): State {
