@@ -5,14 +5,14 @@ import {Texture} from "../resources/score";
 import BoxElement = Widgets.BoxElement;
 
 export class Score extends Sprite {
-    private static readonly DESCR_WIDTH = 43;
-    private static readonly DIGIT_WIDTH = 7;
-    private static readonly HEIGHT = 5;
+    private static readonly DESCR_WIDTH = 27;
+    private static readonly DIGIT_WIDTH = 4;
+    private static readonly HEIGHT = 3;
     private static readonly TOP = 1;
-    private static readonly DESCR_RIGHT = 69;
-    private static readonly DIGIT_2_RIGHT = 24;
-    private static readonly DIGIT_1_RIGHT = 16;
-    private static readonly DIGIT_0_RIGHT = 8;
+    private static readonly DESCR_RIGHT = 43;
+    private static readonly DIGIT_2_RIGHT = 15;
+    private static readonly DIGIT_1_RIGHT = 10;
+    private static readonly DIGIT_0_RIGHT = 5;
 
     private readonly _boxD2: BoxElement;
     private readonly _boxD1: BoxElement;
