@@ -109,7 +109,10 @@ export class Scene {
     }
 
     private readonly _onEnemyDestroy: OnDestroyCallback = (sprite: Sprite): void => {
-        if (this._dino.isAlive) {
+        let isEnemyDead = (sprite as Enemy).isDead;
+        if (isEnemyDead === undefined) return;
+
+        if (this._dino.isAlive && !isEnemyDead) {
             this._score.value++;
             if (this._score.value === 999) {
                 this._spawningEnemies = false;
