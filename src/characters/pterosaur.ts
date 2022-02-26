@@ -1,6 +1,6 @@
 import {Widgets} from "blessed";
 import {State} from "../states";
-import {FlyLeftState, FlyRightState} from "./pterosaur_states";
+import {FlyLeftState, FlyRightState, DeadLeftState, DeadRightState} from "./pterosaur_states";
 import {Enemy, EnemyMoveDirection, EnemyType} from "./enemy";
 import {float, integer} from "../types";
 import {OnDestroyCallback, Sprite} from "../sprite";
@@ -12,20 +12,32 @@ export class Pterosaur extends Enemy {
     private static readonly HEIGHT: integer = 10;
     private static readonly BASE_Y: integer = 7;
 
-    private static readonly _flyLeftState = new FlyLeftState();
-    private static readonly _flyRightState = new FlyRightState();
+    private readonly _flyLeftState: FlyLeftState;
+    private readonly _flyRightState: FlyRightState;
+    private readonly _deadLeftState: DeadLeftState;
+    private readonly _deadRightState: DeadRightState;
 
     constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: OnDestroyCallback) {
         const row: integer = scr.height as number - Pterosaur.HEIGHT - Pterosaur.BASE_Y;
         const column: integer = direction === EnemyMoveDirection.MoveRight
             ? 1 - Pterosaur.WIDTH
             : scr.width as number - 1;
-        super(scr, EnemyType.Pterosaur, direction, Pterosaur.ABS_SPEED, column, row,
+        super(scr, EnemyType.Pterosaur, Pterosaur.ABS_SPEED, column, row,
             Pterosaur.WIDTH, Pterosaur.HEIGHT, "#B04000", onDestroy);
+
+        this._flyLeftState = new FlyLeftState();
+        this._flyRightState = new FlyRightState();
+        this._deadLeftState = new DeadLeftState(this._afterDeathAnimation);
+        this._deadRightState = new DeadRightState(this._afterDeathAnimation);
+        this.changeDirection(direction);
     }
 
-    protected _getState(direction: EnemyMoveDirection): State {
-        return direction === EnemyMoveDirection.MoveLeft ? Pterosaur._flyLeftState : Pterosaur._flyRightState;
+    private _afterDeathAnimation = (): void => {
+        this.destroy();
+    }
+
+    protected _directionToState(direction: EnemyMoveDirection): State {
+        return direction === EnemyMoveDirection.MoveLeft ? this._flyLeftState : this._flyRightState;
     }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
@@ -43,9 +55,14 @@ export class Pterosaur extends Enemy {
 
     onCollision(other: Sprite) {
         if (this._column < other.column) {
-            this.changeState(EnemyMoveDirection.MoveLeft);
+            this.changeDirection(EnemyMoveDirection.MoveLeft);
         } else if (this._column >= other.column) {
-            this.changeState(EnemyMoveDirection.MoveRight);
+            this.changeDirection(EnemyMoveDirection.MoveRight);
         }
+    }
+
+    die(): void {
+        super.die();
+        this._state = this._state === this._flyLeftState ? this._deadLeftState : this._deadRightState;
     }
 }

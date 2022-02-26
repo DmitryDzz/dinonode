@@ -15,7 +15,7 @@ export enum EnemyMoveDirection {
 }
 
 export enum EnemyType {
-    Unknown,
+    // Unknown,
     Comet,
     Raptor,
     Pterosaur
@@ -30,13 +30,15 @@ export abstract class Enemy extends Sprite {
     private _speedY: float;
 
     private readonly _absSpeed: float;
-    protected _state: State;
+    protected _state: State | null = null;
 
     protected readonly _localCollider: Rect = new Rect({c0: 0, r0: 0, c1: 0, r1: 0});
     readonly collider: Rect = new Rect({c0: 0, r0: 0, c1: 0, r1: 0});
     private _debugColliderBox?: BoxElement;
 
-    protected constructor(scr: Screen, enemyType: EnemyType, direction: EnemyMoveDirection, absSpeed: float,
+    private _isDead: boolean = false;
+
+    protected constructor(scr: Screen, enemyType: EnemyType, absSpeed: float,
                           column: integer, row: integer, width: integer, height: integer,
                           baseColor: string, onDestroy?: OnDestroyCallback) {
         super(scr, column, row, width, height, baseColor, onDestroy);
@@ -47,16 +49,16 @@ export abstract class Enemy extends Sprite {
         this._y = this._row;
         this._speedX = 0;
         this._speedY = 0;
-        this._state = this.changeState(direction);
     }
 
     destroy() {
         super.destroy();
     }
 
-    protected abstract _getState(direction: EnemyMoveDirection): State;
+    protected abstract _directionToState(direction: EnemyMoveDirection): State;
 
-    changeState(direction: EnemyMoveDirection) {
+    changeDirection(direction: EnemyMoveDirection) {
+        if (this._isDead) return;
         if (direction === EnemyMoveDirection.MoveDown) {
             this._speedX = 0;
             this._speedY = this._absSpeed;
@@ -65,14 +67,13 @@ export abstract class Enemy extends Sprite {
             this._speedY = 0;
         }
 
-        this._state = this._getState(direction);
+        this._state = this._directionToState(direction);
         this._setLocalCollider(direction);
-        return this._state;
     }
 
     update(): void {
         // console.log(this._column, this._row);
-        if (this._destroyed) return;
+        if (this._destroyed || this._state === null) return;
         this._x += this._speedX * Time.deltaTime;
         this._y += this._speedY * Time.deltaTime;
         this._column = Math.round(this._x);
@@ -99,6 +100,16 @@ export abstract class Enemy extends Sprite {
         }
     }
 
+    protected die(): void {
+        this._isDead = true;
+        this._speedX = 0;
+        this._speedY = 0;
+    }
+
+    get isDead(): boolean {
+        return this._isDead;
+    }
+
     protected abstract _setLocalCollider(direction: EnemyMoveDirection): void;
 
     private _updateCollider(): void {
@@ -121,7 +132,13 @@ export abstract class Enemy extends Sprite {
     }
 
     checkColliders(enemies: Enemy[]) {
-        //TODO DZZ Enumerate comets only.
+        if (this._isDead || this.enemyType !== EnemyType.Comet) return;
+        enemies.forEach((enemy: Enemy) => {
+            if (enemy.enemyType !== EnemyType.Comet) {
+                const hasCollision = this.collider.intersects(enemy.collider);
+                if (hasCollision) enemy.die();
+            }
+        });
     }
 
     abstract onCollision(other: Sprite): void;

@@ -2,7 +2,7 @@ import {Widgets} from "blessed";
 import {State} from "../states";
 import {Enemy, EnemyMoveDirection, EnemyType} from "./enemy";
 import {float, integer} from "../types";
-import {RunLeftState, RunRightState} from "./raptor_states";
+import {DeadLeftState, DeadRightState, RunLeftState, RunRightState} from "./raptor_states";
 import {OnDestroyCallback, Sprite} from "../sprite";
 import Screen = Widgets.Screen;
 
@@ -11,20 +11,32 @@ export class Raptor extends Enemy {
     private static readonly WIDTH: integer = 28;
     private static readonly HEIGHT: integer = 8;
 
-    private static readonly _runLeftState = new RunLeftState();
-    private static readonly _runRightState = new RunRightState();
+    private readonly _runLeftState: RunLeftState;
+    private readonly _runRightState: RunRightState;
+    private readonly _deadLeftState: DeadLeftState;
+    private readonly _deadRightState: DeadRightState;
 
     constructor(scr: Screen, direction: EnemyMoveDirection, onDestroy?: OnDestroyCallback) {
         const row: integer = scr.height as number - Raptor.HEIGHT;
         const column: integer = direction === EnemyMoveDirection.MoveRight
             ? 1 - Raptor.WIDTH
             : scr.width as number - 1;
-        super(scr, EnemyType.Raptor, direction, Raptor.ABS_SPEED, column, row,
+        super(scr, EnemyType.Raptor, Raptor.ABS_SPEED, column, row,
             Raptor.WIDTH, Raptor.HEIGHT, "#608080", onDestroy);
+
+        this._runLeftState = new RunLeftState();
+        this._runRightState = new RunRightState();
+        this._deadLeftState = new DeadLeftState(this._afterDeathAnimation);
+        this._deadRightState = new DeadRightState(this._afterDeathAnimation);
+        this.changeDirection(direction);
     }
 
-    protected _getState(direction: EnemyMoveDirection): State {
-        return direction === EnemyMoveDirection.MoveLeft ? Raptor._runLeftState : Raptor._runRightState;
+    private _afterDeathAnimation = (): void => {
+        this.destroy();
+    }
+
+    protected _directionToState(direction: EnemyMoveDirection): State {
+        return direction === EnemyMoveDirection.MoveLeft ? this._runLeftState : this._runRightState;
     }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
@@ -42,9 +54,14 @@ export class Raptor extends Enemy {
 
     onCollision(other: Sprite) {
         if (this._column < other.column) {
-            this.changeState(EnemyMoveDirection.MoveLeft);
+            this.changeDirection(EnemyMoveDirection.MoveLeft);
         } else if (this._column >= other.column) {
-            this.changeState(EnemyMoveDirection.MoveRight);
+            this.changeDirection(EnemyMoveDirection.MoveRight);
         }
+    }
+
+    die(): void {
+        super.die();
+        this._state = this._state === this._runLeftState ? this._deadLeftState : this._deadRightState;
     }
 }

@@ -230,6 +230,8 @@ export class Dino extends Sprite {
 
     checkColliders(enemies: Enemy[]) {
         enemies.forEach((enemy: Enemy) => {
+            if (enemy.isDead) return;
+
             let collision = false;
             const headCollision = this._dinoColliders.headCollider.intersects(enemy.collider);
             collision = headCollision;
@@ -257,24 +259,6 @@ export class Dino extends Sprite {
                 this._die();
                 enemy.onCollision(this);
             }
-            // if (this._dinoColliders.headCollider.intersects(enemy.collider)) {
-            //     this._state = this._state.isLeftDirection()
-            //         ? this._changeState("deadHeadL") : this._changeState("deadHeadR");
-            //     this._die();
-            //     enemy.onCollision(this);
-            // }
-            // if (this._dinoColliders.tailCollider.intersects(enemy.collider)) {
-            //     this._state = this._state.isLeftDirection()
-            //         ? this._changeState("deadTailL") : this._changeState("deadTailR");
-            //     this._die();
-            //     enemy.onCollision(this);
-            // }
-            // if (this._dinoColliders.bodyCollider.intersects(enemy.collider)) {
-            //     this._state = this._state.isLeftDirection()
-            //         ? this._changeState("deadLegsL") : this._changeState("deadLegsR");
-            //     this._die();
-            //     enemy.onCollision(this);
-            // }
         });
     }
 

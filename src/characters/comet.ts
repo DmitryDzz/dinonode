@@ -11,18 +11,20 @@ export class Comet extends Enemy {
     private static readonly WIDTH: integer = 4;
     private static readonly HEIGHT: integer = 5;
 
-    private static readonly _fallState = new FallState();
+    private readonly _fallState: FallState;
 
     constructor(scr: Screen, onDestroy?: OnDestroyCallback) {
         const scrWidth: integer = scr.width as number;
         const column: integer = Math.round(Math.random() * 0.95 * scrWidth + 0.025 * scrWidth);
         const row: integer = 1 - Comet.HEIGHT;
-        super(scr, EnemyType.Comet, EnemyMoveDirection.MoveDown, Comet.ABS_SPEED, column, row,
-            Comet.WIDTH, Comet.HEIGHT, "#808000",onDestroy);
+        super(scr, EnemyType.Comet, Comet.ABS_SPEED, column, row, Comet.WIDTH, Comet.HEIGHT, "#808000",onDestroy);
+
+        this._fallState = new FallState();
+        this.changeDirection(EnemyMoveDirection.MoveDown);
     }
 
-    protected _getState(direction: EnemyMoveDirection): State {
-        return Comet._fallState;
+    protected _directionToState(direction: EnemyMoveDirection): State {
+        return this._fallState;
     }
 
     protected _onWindowResizeHandler(width: number, height: number): void {
@@ -39,5 +41,9 @@ export class Comet extends Enemy {
 
     onCollision(_other: Sprite) {
         this.destroy();
+    }
+
+    die(): void {
+        super.die();
     }
 }

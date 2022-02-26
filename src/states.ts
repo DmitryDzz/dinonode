@@ -1,5 +1,7 @@
 import {Time} from "./time";
 
+export type AfterAnimationCallback = (() => void) | null;
+
 export abstract class State {
     protected _frameDuration: number = -1;
     protected _framesCount: number = 1;
@@ -12,9 +14,13 @@ export abstract class State {
     protected readonly _frames: string[];
     protected readonly _isLooped: boolean;
 
-    protected constructor(frames: string[], isLooped: boolean) {
+    private _animationCompleted: boolean = false;
+    private readonly _afterAnimationCallback: AfterAnimationCallback;
+
+    protected constructor(frames: string[], isLooped: boolean, afterAnimationCallback: AfterAnimationCallback = null) {
         this._frames = frames;
         this._isLooped = isLooped;
+        this._afterAnimationCallback = afterAnimationCallback;
         this._framesCount = frames.length;
         this.setFrameDuration();
         this.clear();
@@ -23,6 +29,7 @@ export abstract class State {
     clear() {
         this._frameTime = undefined;
         this._frameIndex = 0;
+        this._animationCompleted = false;
     }
 
     private setNextFrame(): void {
@@ -33,6 +40,10 @@ export abstract class State {
             this._frameIndex++;
             if (this._frameIndex / this._framesCount < 1) return;
             this._frameIndex = this._framesCount - 1;
+            if (!this._animationCompleted) {
+                this._animationCompleted = true;
+                if (this._afterAnimationCallback !== null) this._afterAnimationCallback();
+            }
         }
     }
 
