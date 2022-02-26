@@ -53,6 +53,7 @@ export class Raptor extends Enemy {
     }
 
     onCollision(other: Sprite) {
+        if (this.isDead) return;
         if (this._column < other.column) {
             this.changeDirection(EnemyMoveDirection.MoveLeft);
         } else if (this._column >= other.column) {
@@ -62,6 +63,9 @@ export class Raptor extends Enemy {
 
     die(): void {
         super.die();
-        this._state = this._state === this._runLeftState ? this._deadLeftState : this._deadRightState;
+        if (this._state === this._runLeftState)
+            this._state = this._deadLeftState;
+        else if (this._state === this._runRightState)
+            this._state = this._deadRightState;
     }
 }

@@ -108,12 +108,16 @@ export class Dino extends Sprite {
     private _updatePrevState() {
         if (this._returnToPrevStateTime !== undefined && Time.time >= this._returnToPrevStateTime) {
             this._dinoRect.setLean(false);
-            if (this._state.isLeftDirection()) {
-                this._dinoRect.speed = -Dino.ABS_NORMAL_SPEED;
-                this._state = this._changeState("runL");
+            if (this.isWin) {
+                this._changeState(this._state.isLeftDirection() ? "idleL" : "idleR");
             } else {
-                this._dinoRect.speed = Dino.ABS_NORMAL_SPEED;
-                this._state = this._changeState("runR");
+                if (this._state.isLeftDirection()) {
+                    this._dinoRect.speed = -Dino.ABS_NORMAL_SPEED;
+                    this._state = this._changeState("runL");
+                } else {
+                    this._dinoRect.speed = Dino.ABS_NORMAL_SPEED;
+                    this._state = this._changeState("runR");
+                }
             }
             this._returnToPrevStateTime = undefined;
         }

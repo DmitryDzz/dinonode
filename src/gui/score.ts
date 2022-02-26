@@ -3,6 +3,7 @@ import Screen = Widgets.Screen;
 import {Sprite} from "../sprite";
 import {Texture} from "../resources/score";
 import BoxElement = Widgets.BoxElement;
+import {Options} from "../options";
 
 export class Score extends Sprite {
     private static readonly DESCR_WIDTH = 27;
@@ -53,7 +54,7 @@ export class Score extends Sprite {
     }
 
     set value(value: number) {
-        this._value = value > 999 ? 999 : value;
+        this._value = value > Options.maxScore ? Options.maxScore : value;
     }
 
     update(): void {

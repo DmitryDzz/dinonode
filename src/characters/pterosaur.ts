@@ -54,6 +54,7 @@ export class Pterosaur extends Enemy {
     }
 
     onCollision(other: Sprite) {
+        if (this.isDead) return;
         if (this._column < other.column) {
             this.changeDirection(EnemyMoveDirection.MoveLeft);
         } else if (this._column >= other.column) {
@@ -63,6 +64,9 @@ export class Pterosaur extends Enemy {
 
     die(): void {
         super.die();
-        this._state = this._state === this._flyLeftState ? this._deadLeftState : this._deadRightState;
+        if (this._state === this._flyLeftState)
+            this._state = this._deadLeftState;
+        else if (this._state === this._flyRightState)
+            this._state = this._deadRightState;
     }
 }

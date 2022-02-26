@@ -13,6 +13,7 @@ import IKeyEventArg = Widgets.Events.IKeyEventArg;
 import {ContinueDialog} from "./gui/dialogs/continue_dialog";
 import {FailFinalDialog} from "./gui/dialogs/fail_final_dialog";
 import {SuccessFinalDialog} from "./gui/dialogs/success_final_dialog";
+import {Options} from "./options";
 
 enum Key {
     Pause = "p",
@@ -114,12 +115,12 @@ export class Scene {
 
         if (this._dino.isAlive && !isEnemyDead) {
             this._score.value++;
-            if (this._score.value === 999) {
+            if (this._score.value === Options.maxScore) {
                 this._spawningEnemies = false;
             }
         }
         this._enemies = this._enemies.filter(s => s.id !== sprite.id);
-        if (this._score.value === 999 && this._dino.isAlive && this._enemies.length === 0) {
+        if (this._score.value === Options.maxScore && this._dino.isAlive && this._enemies.length === 0) {
             this._spawningEnemies = false;
             this._dino.win();
             this._successFinalDialog.show();

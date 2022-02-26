@@ -18,6 +18,7 @@ export class Application {
             title: "Dinonode",
             smartCSR: true,
         });
+        this._screen.program.hideCursor();
 
         Time.update();
         this._scene = new Scene(this._screen);
@@ -55,6 +56,7 @@ export class Application {
             clearInterval(this._interval);
         }
         this._scene?.destroy();
+        this._screen?.program.showCursor();
         this._screen?.destroy();
         // return process.exit(0);
     }
