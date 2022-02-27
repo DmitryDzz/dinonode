@@ -57,6 +57,15 @@ export abstract class Enemy extends Sprite {
 
     protected abstract _directionToState(direction: EnemyMoveDirection): State;
 
+    protected setPosition(column: integer, row: integer): void {
+        this._column = column;
+        this._row = row;
+        this._x = column;
+        this._y = row;
+        this._box.left = column;
+        this._box.top = row;
+    }
+
     changeDirection(direction: EnemyMoveDirection) {
         if (this._isDead) return;
         if (direction === EnemyMoveDirection.MoveDown) {

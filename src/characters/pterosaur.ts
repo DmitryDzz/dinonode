@@ -41,8 +41,7 @@ export class Pterosaur extends Enemy {
     }
 
     protected _onWindowResize(width: number, height: number): void {
-        //TODO DZZ
-        console.log("Pterosaur", width, height);
+        this.setPosition(this.column, this._scr.height as number - Pterosaur.HEIGHT - Pterosaur.BASE_Y);
     }
 
     protected _setLocalCollider(direction: EnemyMoveDirection): void {

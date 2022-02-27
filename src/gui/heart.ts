@@ -18,8 +18,6 @@ export class Heart extends Sprite {
     }
 
     protected _onWindowResize(width: number, height: number): void {
-        //TODO DZZ
-        // console.log("Heart", width, height);
     }
 
     get width(): integer {

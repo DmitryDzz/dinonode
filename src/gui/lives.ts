@@ -34,8 +34,6 @@ export class Lives {
     }
 
     private _onWindowResizeHandler = (_width: number, _height: number): void => {
-        //TODO DZZ
-        // console.log("Lives", width, height);
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {

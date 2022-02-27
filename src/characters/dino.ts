@@ -239,7 +239,6 @@ export class Dino extends Sprite {
         if (this.isDead) return;
         this._dinoRect.die();
 
-        //TODO DZZ Add animations and remove these two lines:
         this._changeState(this._state.isLeftDirection() ? "runL" : "runR");
         this._dinoRect.setLean(false);
 

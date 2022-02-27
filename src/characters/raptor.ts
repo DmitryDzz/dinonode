@@ -40,8 +40,7 @@ export class Raptor extends Enemy {
     }
 
     protected _onWindowResize(width: number, height: number): void {
-        //TODO DZZ
-        console.log("Raptor", width, height);
+        this.setPosition(this.column, this._scr.height as number - Raptor.HEIGHT);
     }
 
     protected _setLocalCollider(direction: EnemyMoveDirection): void {

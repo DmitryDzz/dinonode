@@ -67,7 +67,6 @@ export abstract class Sprite {
         let result: string = "";
         rows.forEach(row => {
             if (result.length > 0) result += "\n";
-            // result += row.split("").reverse().join("");
             result += Sprite.flipRow(row);
         });
         result = result
