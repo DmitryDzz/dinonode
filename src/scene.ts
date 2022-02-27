@@ -10,10 +10,12 @@ import {Score} from "./gui/score";
 import {Lives} from "./gui/lives";
 import {Time} from "./time";
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
+import {PausedDialog} from "./gui/dialogs/paused_dialog";
 import {ContinueDialog} from "./gui/dialogs/continue_dialog";
 import {FailFinalDialog} from "./gui/dialogs/fail_final_dialog";
 import {SuccessFinalDialog} from "./gui/dialogs/success_final_dialog";
 import {Options} from "./options";
+import {Dialog} from "./gui/dialogs/dialog";
 
 enum Key {
     Pause = "p",
@@ -32,6 +34,7 @@ export class Scene {
     private readonly _dino: Dino;
     private _enemies: Enemy[] = [];
 
+    private readonly _pausedDialog: PausedDialog;
     private readonly _continueDialog: ContinueDialog;
     private readonly _failFinalDialog: FailFinalDialog;
     private readonly _successFinalDialog: SuccessFinalDialog;
@@ -62,6 +65,7 @@ export class Scene {
             this._createCometTime = undefined;
             this._dino.reborn();
         }
+        this._pausedDialog = new PausedDialog(scr);
         this._continueDialog = new ContinueDialog(scr, onDialogHideHandler);
         this._failFinalDialog = new FailFinalDialog(scr, onDialogHideHandler);
         this._successFinalDialog = new SuccessFinalDialog(scr);
@@ -75,6 +79,7 @@ export class Scene {
         this._dino.destroy();
         this._score.destroy();
         this._lives.destroy();
+        this._pausedDialog.destroy();
         this._continueDialog.destroy();
         this._failFinalDialog.destroy();
         this._successFinalDialog.destroy();
@@ -87,6 +92,7 @@ export class Scene {
         this._enemies.forEach(x => x.update());
         this._score.update();
         this._lives.update();
+        this._pausedDialog.update();
         this._continueDialog.update();
         this._failFinalDialog.update();
         this._successFinalDialog.update();
@@ -100,11 +106,14 @@ export class Scene {
 
     private _switchPause() {
         if (this._isPaused) {
+            this._pausedDialog.hide();
             Time.setFactor(1.0);
             this._dino.unpause();
         } else {
+            if (Dialog.dialogVisible) return;
             Time.setFactor(0.0);
             this._dino.pause();
+            this._pausedDialog.show();
         }
         this._isPaused = !this._isPaused;
     }

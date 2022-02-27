@@ -14,6 +14,9 @@ interface DialogRect {
 export type OnHideCallback = () => void;
 
 export abstract class Dialog {
+    private static _dialogVisible: boolean = false;
+    static get dialogVisible(): boolean { return Dialog._dialogVisible; }
+
     // private static readonly BORDER_COLOR = "#008000";
     private static readonly TEXT_COLOR = "#008000";
 
@@ -69,6 +72,7 @@ export abstract class Dialog {
 
         this._box = Dialog.createBox(this._rect.column, this._rect.row, this._rect.width, this._rect.height, Dialog.TEXT_COLOR);
         this._scr.append(this._box);
+        Dialog._dialogVisible = true;
     }
 
     hide() {
@@ -80,6 +84,7 @@ export abstract class Dialog {
             this._scr.remove(this._box);
             this._box.destroy();
             this._box = undefined;
+            Dialog._dialogVisible = false;
         }
     }
 

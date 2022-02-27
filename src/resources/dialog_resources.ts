@@ -1,5 +1,9 @@
 export namespace Texture {
     export class Dialog {
+        static readonly paused =
+            " █▀▀▙ ▗▛▜▖ █  █ ▟▀▀▙ █▀▀▀ █▀▀▙ \n" +
+            " █▄▄▀ █▄▄█ █  █ ▝▀▙▖ █▀▀  █  █ \n" +
+            " █    █  █ ▜▄▄▛ ▜▄▄▛ █▄▄▄ █▄▄▛ ";
         static readonly continue =
             " █▀▀▙ █▀▀▙ █▀▀▀ ▟▀▀▙ ▟▀▀▙     ▟▀▀▙ █▀▀▙ ▗▛▜▖ ▟▀▀▙ █▀▀▀ \n" +
             " █▄▄▀ █▄▄▀ █▀▀  ▝▀▙▖ ▝▀▙▖     ▝▀▙▖ █▄▄▀ █▄▄█ █    █▀▀  \n" +
