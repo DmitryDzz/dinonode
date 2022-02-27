@@ -13,14 +13,18 @@ import IKeyEventArg = Widgets.Events.IKeyEventArg;
 
 enum Key {
     Left = "a",
+    LeftAlt = "left",
     Right = "d",
+    RightAlt = "right",
     Jump = "w",
+    JumpAlt = "up",
     Lean = "s",
-    Stop = "z",
-    Dead = "1",
-    DeadHead = "2",
-    DeadTail = "3",
-    DeadLegs = "4",
+    LeanAlt = "down",
+    // Stop = "z",
+    // Dead = "1",
+    // DeadHead = "2",
+    // DeadTail = "3",
+    // DeadLegs = "4",
 }
 
 export type OnDeathCallback = () => void;
@@ -35,7 +39,7 @@ export class Dino extends Sprite {
 
     private readonly _onDeathCallback?: OnDeathCallback;
 
-    private _dinoRect: DinoRect;
+    private readonly _dinoRect: DinoRect;
     private _dinoColliders: DinoColliders;
 
     private _states: DinoStates;
@@ -64,11 +68,11 @@ export class Dino extends Sprite {
         this._dinoColliders = new DinoColliders(this._dinoRect);
         this._dinoColliders.updateLocalColliders(this._state.type);
 
-        scr.key([Key.Left, Key.Right, Key.Jump, Key.Lean, Key.Stop,
-            Key.Dead, Key.DeadHead], this._keyPressed);
+        scr.on("keypress", this._keyPressed);
     }
 
     destroy() {
+        this._scr.off("keypress", this._keyPressed);
         this._debugHeadColliderBox?.destroy();
         this._debugTailColliderBox?.destroy();
         this._debugBodyColliderBox?.destroy();
@@ -123,7 +127,7 @@ export class Dino extends Sprite {
         }
     }
 
-    private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
+    private readonly _keyPressed = (_ch: string, key: IKeyEventArg) => {
         if (this._isPaused || this.isDead || this.isWin) return;
 
         const jumpAction = () => {
@@ -145,58 +149,25 @@ export class Dino extends Sprite {
             this._returnToPrevStateTime = Time.time + Dino.LEAN_DURATION;
         };
 
-        if (ch === Key.Left) {
+        const leftPressed: boolean = key.name === Key.Left || key.name === Key.LeftAlt;
+        const rightPressed: boolean = key.name === Key.Right || key.name === Key.RightAlt;
+        const jumpPressed: boolean = key.name === Key.Jump || key.name === Key.JumpAlt;
+        const leanPressed: boolean = key.name === Key.Lean || key.name === Key.LeanAlt;
+        if (leftPressed) {
             this._dinoRect.speed = this._dinoRect.leaning ? -Dino.ABS_FAST_SPEED : -Dino.ABS_NORMAL_SPEED;
             this._state = this._dinoRect.jumping
                 ? this._changeState("jumpL")
                 : this._changeState(this._dinoRect.leaning ? "leanRunL" : "runL");
-        } else if (ch === Key.Right) {
+        } else if (rightPressed) {
             this._dinoRect.speed = this._dinoRect.leaning ? Dino.ABS_FAST_SPEED : Dino.ABS_NORMAL_SPEED;
             this._state = this._dinoRect.jumping
                 ? this._changeState("jumpR")
                 : this._changeState(this._dinoRect.leaning ? "leanRunR" : "runR");
-        } else if (ch === Key.Jump && !this._dinoRect.jumping && !this._dinoRect.leaning) {
+        } else if (jumpPressed && !this._dinoRect.jumping && !this._dinoRect.leaning) {
             jumpAction();
-        } else if (ch === Key.Lean && !this._dinoRect.jumping && !this._dinoRect.leaning) {
+        } else if (leanPressed && !this._dinoRect.jumping && !this._dinoRect.leaning) {
             leanAction();
-        } else if (ch === Key.Stop && !this._dinoRect.jumping && !this._dinoRect.leaning) {
-            this._state = this._state.isLeftDirection()
-                ? this._changeState(this._dinoRect.leaning ? "leanIdleL" : "idleL")
-                : this._changeState(this._dinoRect.leaning ? "leanIdleR" : "idleR");
-            this._dinoRect.speed = 0;
-        } else if (ch === Key.Dead && !this._dinoRect.jumping && !this._dinoRect.leaning) {
-            this._state = this._state.isLeftDirection()
-                ? this._changeState("deadL")
-                : this._changeState("deadR");
-            this._dinoRect.speed = 0;
-        } else if (ch === Key.DeadHead) {
-            this._performDeadHead();
-        } else if (ch === Key.DeadTail) {
-            this._performDeadTail();
-        } else if (ch === Key.DeadLegs) {
-            this._performDeadLegs();
         }
-    }
-
-    private _performDeadHead() {
-        this._dinoRect.die();
-        this._state = this._state.isLeftDirection()
-            ? this._changeState("deadHeadL")
-            : this._changeState("deadHeadR");
-    }
-
-    private _performDeadTail() {
-        this._dinoRect.die();
-        this._state = this._state.isLeftDirection()
-            ? this._changeState("deadTailL")
-            : this._changeState("deadTailR");
-    }
-
-    private _performDeadLegs() {
-        this._dinoRect.die();
-        this._state = this._state.isLeftDirection()
-            ? this._changeState("deadLegsL")
-            : this._changeState("deadLegsR");
     }
 
     private _changeState(stateType: DinoStateType): DinoState {
@@ -236,9 +207,8 @@ export class Dino extends Sprite {
         enemies.forEach((enemy: Enemy) => {
             if (enemy.isDead) return;
 
-            let collision = false;
             const headCollision = this._dinoColliders.headCollider.intersects(enemy.collider);
-            collision = headCollision;
+            let collision = headCollision;
             const tailCollision = collision || this._dinoColliders.tailCollider.intersects(enemy.collider);
             collision = tailCollision;
             const bodyCollision = collision || this._dinoColliders.bodyCollider.intersects(enemy.collider);
