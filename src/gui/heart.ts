@@ -17,7 +17,7 @@ export class Heart extends Sprite {
         this._state = this._states.getState("alive");
     }
 
-    protected _onWindowResizeHandler(width: number, height: number): void {
+    protected _onWindowResize(width: number, height: number): void {
         //TODO DZZ
         // console.log("Heart", width, height);
     }

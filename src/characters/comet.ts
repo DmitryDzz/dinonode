@@ -27,7 +27,7 @@ export class Comet extends Enemy {
         return this._fallState;
     }
 
-    protected _onWindowResizeHandler(width: number, height: number): void {
+    protected _onWindowResize(width: number, height: number): void {
         //TODO DZZ
         // console.log("Comet", width, height);
     }

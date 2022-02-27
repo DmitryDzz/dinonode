@@ -33,7 +33,7 @@ export class Lives {
         this._hearts.forEach(heart => heart.destroy());
     }
 
-    protected _onWindowResizeHandler(_width: number, _height: number): void {
+    private _onWindowResizeHandler = (_width: number, _height: number): void => {
         //TODO DZZ
         // console.log("Lives", width, height);
     }

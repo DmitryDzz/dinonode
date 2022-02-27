@@ -24,10 +24,8 @@ export class Score extends Sprite {
     private static readonly COLOR = "#008000";
 
     constructor(scr: Screen) {
-        super(scr, scr.width as number - Score.DESCR_RIGHT, Score.TOP, Score.DESCR_WIDTH, Score.HEIGHT,
-            Score.COLOR);
-
         const w = scr.width as number;
+        super(scr, scr.width as number - Score.DESCR_RIGHT, Score.TOP, Score.DESCR_WIDTH, Score.HEIGHT, Score.COLOR);
         this._boxD2 = Sprite.createBox(w - Score.DIGIT_2_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT, Score.COLOR);
         this._boxD1 = Sprite.createBox(w - Score.DIGIT_1_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT, Score.COLOR);
         this._boxD0 = Sprite.createBox(w - Score.DIGIT_0_RIGHT, Score.TOP, Score.DIGIT_WIDTH, Score.HEIGHT, Score.COLOR);
@@ -44,9 +42,11 @@ export class Score extends Sprite {
         super.destroy();
     }
 
-    protected _onWindowResizeHandler(width: number, height: number): void {
-        //TODO DZZ
-        // console.log("Score", width, height);
+    protected _onWindowResize(width: number, height: number): void {
+        this._box.left = width - Score.DESCR_RIGHT;
+        this._boxD2.left = width - Score.DIGIT_2_RIGHT;
+        this._boxD1.left = width - Score.DIGIT_1_RIGHT;
+        this._boxD0.left = width - Score.DIGIT_0_RIGHT;
     }
 
     get value(): number {

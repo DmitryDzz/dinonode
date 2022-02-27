@@ -48,8 +48,8 @@ export abstract class Dialog {
         lines.forEach((line: string) => {if (line.length > maxLength) maxLength = line.length});
 
         this._rect = {
-            width: maxLength + 2,
-            height: lines.length + 2,
+            width: maxLength,
+            height: lines.length,
             column: 0,
             row: 0,
         };

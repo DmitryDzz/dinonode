@@ -104,7 +104,7 @@ export class Dino extends Sprite {
     get isAlive(): boolean { return !this.isDead; }
     get isWin(): boolean { return this._dinoRect.isWin; }
 
-    protected _onWindowResizeHandler(width: number, height: number): void {
+    protected _onWindowResize(width: number, height: number): void {
         //TODO DZZ
         //console.log("Dino", width, height);
     }

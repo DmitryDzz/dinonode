@@ -56,7 +56,11 @@ export abstract class Sprite {
 
     abstract update(): void;
 
-    protected abstract _onWindowResizeHandler(width: number, height: number): void;
+    private _onWindowResizeHandler = (width: number, height: number): void => {
+        this._onWindowResize(width, height);
+    };
+
+    protected abstract _onWindowResize(width: number, height: number): void;
 
     static flip(tex: string): string {
         const rows: string[] = tex.split("\n");

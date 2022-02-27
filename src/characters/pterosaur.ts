@@ -40,7 +40,7 @@ export class Pterosaur extends Enemy {
         return direction === EnemyMoveDirection.MoveLeft ? this._flyLeftState : this._flyRightState;
     }
 
-    protected _onWindowResizeHandler(width: number, height: number): void {
+    protected _onWindowResize(width: number, height: number): void {
         //TODO DZZ
         console.log("Pterosaur", width, height);
     }
