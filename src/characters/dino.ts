@@ -105,8 +105,7 @@ export class Dino extends Sprite {
     get isWin(): boolean { return this._dinoRect.isWin; }
 
     protected _onWindowResize(width: number, height: number): void {
-        //TODO DZZ
-        //console.log("Dino", width, height);
+        this._dinoRect.onWindowResize(width, height);
     }
 
     private _updatePrevState() {

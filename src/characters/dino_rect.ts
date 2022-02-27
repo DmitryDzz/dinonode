@@ -18,13 +18,15 @@ export class DinoRect {
 
     private _x: float;
     private _y: float;
-    private readonly _baseY: float;
+    private _baseY: float;
     private _column: integer;
     private _row: integer;
 
     private _speed: float;
 
     private _leaning: boolean = false;
+
+    private _rect?: Rect;
 
     get width(): integer {
         return this._leaning ? 27 : DinoRect.DEFAULT_WIDTH;
@@ -58,7 +60,10 @@ export class DinoRect {
         this._setLimits();
     }
 
-    private _rect?: Rect;
+    onWindowResize(_width: number, _height: number): void {
+        this._baseY = this._scr.height as number;
+        this._setLimits();
+    }
 
     private _setLimits() {
         this._rect = new Rect({c0: 0, r0: 0,
