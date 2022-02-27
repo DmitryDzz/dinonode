@@ -29,7 +29,7 @@ export class Comet extends Enemy {
 
     protected _onWindowResizeHandler(width: number, height: number): void {
         //TODO DZZ
-        console.log("Comet", width, height);
+        // console.log("Comet", width, height);
     }
 
     protected _setLocalCollider(_direction: EnemyMoveDirection): void {

@@ -8,11 +8,6 @@ enum Key {
 }
 
 export class ContinueDialog extends Dialog {
-    protected _onWindowResizeHandler(width: number, height: number): void {
-        //TODO DZZ
-        // console.log("ContinueDialog", width, height);
-    }
-
     private readonly _keyPressed = (_ch: string, key: IKeyEventArg) => {
         if (key.full === Key.Space) {
             this.hide();

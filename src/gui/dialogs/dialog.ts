@@ -50,12 +50,30 @@ export abstract class Dialog {
         this._rect = {
             width: maxLength + 2,
             height: lines.length + 2,
-            column: Math.round(((this._scr.width as number) - maxLength) / 2 - 1),
-            row: Math.round(((this._scr.height as number) - lines.length) / 2 - 1),
+            column: 0,
+            row: 0,
         };
+        this._setRectPosition(this._scr.width as number, this._scr.height as number);
     }
 
-    protected abstract _onWindowResizeHandler(width: number, height: number): void;
+    private _setRectPosition(scrWidth: number, scrHeight: number) {
+        if (this._rect) {
+            this._rect.column = Math.round((scrWidth - this._rect.width) / 2);
+            this._rect.row = Math.round((scrHeight - this._rect.height) / 2);
+        }
+    }
+
+    private readonly _updatePosition = (scrWidth: number, scrHeight: number): void => {
+        if (this._rect && this._box) {
+            this._setRectPosition(scrWidth, scrHeight);
+            this._box.left = this._rect.column;
+            this._box.top = this._rect.row;
+        }
+    }
+
+    protected readonly _onWindowResizeHandler = (width: number, height: number): void => {
+        this._updatePosition(width, height);
+    }
 
     update() {
         if (this._destroyed) return;
