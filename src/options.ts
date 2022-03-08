@@ -16,8 +16,8 @@ export class Options {
 
     static readonly profiles: Map<GameDifficulty, GameProfile> = new Map<GameDifficulty, GameProfile>([
         [GameDifficulty.Easy, {maxScore: 99, maxSpeedFactor: 1.0}],
-        [GameDifficulty.Medium, {maxScore: 499, maxSpeedFactor: 1.2}],
-        [GameDifficulty.Hard, {maxScore: 999, maxSpeedFactor: 1.5}],
+        [GameDifficulty.Medium, {maxScore: 199, maxSpeedFactor: 1.25}],
+        [GameDifficulty.Hard, {maxScore: 299, maxSpeedFactor: 1.5}],
     ]);
 
     static difficulty: GameDifficulty = GameDifficulty.Medium;

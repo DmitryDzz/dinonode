@@ -104,6 +104,10 @@ export class Scene {
         }
     }
 
+    private _getUpdatedSpeedFactor(): number {
+        return 1.0 + (Options.maxSpeedFactor - 1.0) * this._score.value / Options.maxScore;
+    }
+
     private _switchPause() {
         if (this._isPaused) {
             this._pausedDialog.hide();
@@ -124,6 +128,7 @@ export class Scene {
 
         if (this._dino.isAlive && !isEnemyDead) {
             this._score.value++;
+            Time.setFactor(this._getUpdatedSpeedFactor());
             if (this._score.value === Options.maxScore) {
                 this._spawningEnemies = false;
             }
@@ -133,6 +138,7 @@ export class Scene {
             this._spawningEnemies = false;
             this._dino.win();
             this._successFinalDialog.show();
+            Time.setFactor(1.0);
         }
     }
 
