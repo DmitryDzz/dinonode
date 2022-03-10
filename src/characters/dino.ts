@@ -10,6 +10,7 @@ import {Enemy, EnemyType} from "./enemy";
 import BoxElement = Widgets.BoxElement;
 import Screen = Widgets.Screen;
 import IKeyEventArg = Widgets.Events.IKeyEventArg;
+import {AfterAnimationCallback} from "../states";
 
 enum Key {
     Left = "a",
@@ -53,7 +54,7 @@ export class Dino extends Sprite {
     private _debugTailColliderBox?: BoxElement;
     private _debugBodyColliderBox?: BoxElement;
 
-    constructor(scr: Screen, onDeathCallback?: OnDeathCallback) {
+    constructor(scr: Screen, onDeathCallback: OnDeathCallback, afterDeathAnimationCallback: AfterAnimationCallback) {
         super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT, "#608000");
         this._onDeathCallback = onDeathCallback;
 
@@ -62,7 +63,7 @@ export class Dino extends Sprite {
         this._box.left = this._dinoRect.column;
         this._box.top = this._dinoRect.row;
 
-        this._states = new DinoStates();
+        this._states = new DinoStates(afterDeathAnimationCallback);
         this._state = this._states.getState("idleR");
 
         this._dinoColliders = new DinoColliders(this._dinoRect);

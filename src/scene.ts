@@ -49,15 +49,19 @@ export class Scene {
         this._scr = scr;
         this._score = new Score(scr);
         this._lives = new Lives(scr);
-        this._dino = new Dino(scr, () => {
-            this._lives.decreaseHealth();
-            this._spawningEnemies = false;
-            if (this._lives.value > 0) {
-                this._continueDialog.show();
-            } else {
-                this._failFinalDialog.show();
+        this._dino = new Dino(scr,
+            () => {
+                this._lives.decreaseHealth();
+                this._spawningEnemies = false;
+            },
+            () => {
+                if (this._lives.value > 0) {
+                    this._continueDialog.show();
+                } else {
+                    this._failFinalDialog.show();
+                }
             }
-        });
+        );
 
         const onDialogHideHandler = () => {
             this._spawningEnemies = true;

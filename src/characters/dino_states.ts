@@ -1,10 +1,10 @@
-import {State} from "../states";
+import {AfterAnimationCallback, State} from "../states";
 import {Sprite} from "../resources/dino_resources";
 
 export class DinoStates {
     private readonly _states: Map<DinoStateType, DinoState>;
 
-    constructor() {
+    constructor(afterDeathAnimationCallback: AfterAnimationCallback) {
         this._states = new Map<DinoStateType, DinoState>([
             ["idleL", new IdleLeftState()],
             ["idleR", new IdleRightState()],
@@ -16,16 +16,16 @@ export class DinoStates {
             ["leanIdleR", new LeanIdleRightState()],
             ["leanRunL", new LeanRunLeftState()],
             ["leanRunR", new LeanRunRightState()],
-            ["deadL", new DeadLeftState()],
-            ["deadR", new DeadRightState()],
-            ["deadHeadL", new DeadHeadLeftState()],
-            ["deadHeadR", new DeadHeadRightState()],
-            ["deadTailL", new DeadTailLeftState()],
-            ["deadTailR", new DeadTailRightState()],
-            ["deadLegsL", new DeadLegsLeftState()],
-            ["deadLegsR", new DeadLegsRightState()],
-            ["deadBurnedL", new DeadBurnedLeftState()],
-            ["deadBurnedR", new DeadBurnedRightState()],
+            ["deadL", new DeadLeftState(afterDeathAnimationCallback)],
+            ["deadR", new DeadRightState(afterDeathAnimationCallback)],
+            ["deadHeadL", new DeadHeadLeftState(afterDeathAnimationCallback)],
+            ["deadHeadR", new DeadHeadRightState(afterDeathAnimationCallback)],
+            ["deadTailL", new DeadTailLeftState(afterDeathAnimationCallback)],
+            ["deadTailR", new DeadTailRightState(afterDeathAnimationCallback)],
+            ["deadLegsL", new DeadLegsLeftState(afterDeathAnimationCallback)],
+            ["deadLegsR", new DeadLegsRightState(afterDeathAnimationCallback)],
+            ["deadBurnedL", new DeadBurnedLeftState(afterDeathAnimationCallback)],
+            ["deadBurnedR", new DeadBurnedRightState(afterDeathAnimationCallback)],
         ]);
     }
 
@@ -43,8 +43,9 @@ export abstract class DinoState extends State {
     private readonly _type: DinoStateType;
     get type(): DinoStateType { return this._type; }
 
-    protected constructor(type: DinoStateType, frames: string[], isLooped: boolean) {
-        super(frames, isLooped);
+    protected constructor(type: DinoStateType, frames: string[], isLooped: boolean,
+                          afterAnimationCallback: AfterAnimationCallback = null) {
+        super(frames, isLooped, afterAnimationCallback);
         this._type = type;
     }
 
@@ -188,8 +189,8 @@ export class LeanRunRightState extends DinoState {
 }
 
 export class DeadLeftState extends DinoState {
-    constructor() {
-        super("deadL", Sprite.Dino.left.dead, true);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadL", Sprite.Dino.left.dead, true, afterAnimationCallback);
     }
 
     protected setFrameDuration() {}
@@ -200,8 +201,8 @@ export class DeadLeftState extends DinoState {
 }
 
 export class DeadRightState extends DinoState {
-    constructor() {
-        super("deadR", Sprite.Dino.right.dead, true);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadR", Sprite.Dino.right.dead, true, afterAnimationCallback);
     }
 
     protected setFrameDuration() {}
@@ -212,8 +213,8 @@ export class DeadRightState extends DinoState {
 }
 
 export class DeadHeadLeftState extends DinoState {
-    constructor() {
-        super("deadHeadL", Sprite.Dino.left.deadHead, false);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadHeadL", Sprite.Dino.left.deadHead, false, afterAnimationCallback);
     }
 
     protected setFrameDuration() {
@@ -226,8 +227,8 @@ export class DeadHeadLeftState extends DinoState {
 }
 
 export class DeadHeadRightState extends DinoState {
-    constructor() {
-        super("deadHeadR", Sprite.Dino.right.deadHead, false);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadHeadR", Sprite.Dino.right.deadHead, false, afterAnimationCallback);
     }
 
     protected setFrameDuration() {
@@ -240,8 +241,8 @@ export class DeadHeadRightState extends DinoState {
 }
 
 export class DeadTailLeftState extends DinoState {
-    constructor() {
-        super("deadTailL", Sprite.Dino.left.deadTail, false);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadTailL", Sprite.Dino.left.deadTail, false, afterAnimationCallback);
     }
 
     protected setFrameDuration() {
@@ -254,8 +255,8 @@ export class DeadTailLeftState extends DinoState {
 }
 
 export class DeadTailRightState extends DinoState {
-    constructor() {
-        super("deadTailR", Sprite.Dino.right.deadTail, false);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadTailR", Sprite.Dino.right.deadTail, false, afterAnimationCallback);
     }
 
     protected setFrameDuration() {
@@ -268,8 +269,8 @@ export class DeadTailRightState extends DinoState {
 }
 
 export class DeadLegsLeftState extends DinoState {
-    constructor() {
-        super("deadLegsL", Sprite.Dino.left.deadLegs, false);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadLegsL", Sprite.Dino.left.deadLegs, false, afterAnimationCallback);
     }
 
     protected setFrameDuration() {
@@ -282,8 +283,8 @@ export class DeadLegsLeftState extends DinoState {
 }
 
 export class DeadLegsRightState extends DinoState {
-    constructor() {
-        super("deadLegsR", Sprite.Dino.right.deadLegs, false);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadLegsR", Sprite.Dino.right.deadLegs, false, afterAnimationCallback);
     }
 
     protected setFrameDuration() {
@@ -296,8 +297,8 @@ export class DeadLegsRightState extends DinoState {
 }
 
 export class DeadBurnedLeftState extends DinoState {
-    constructor() {
-        super("deadBurnedL", Sprite.Dino.left.deadBurned, false);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadBurnedL", Sprite.Dino.left.deadBurned, false, afterAnimationCallback);
     }
 
     protected setFrameDuration() {
@@ -310,8 +311,8 @@ export class DeadBurnedLeftState extends DinoState {
 }
 
 export class DeadBurnedRightState extends DinoState {
-    constructor() {
-        super("deadBurnedR", Sprite.Dino.right.deadBurned, false);
+    constructor(afterAnimationCallback: AfterAnimationCallback) {
+        super("deadBurnedR", Sprite.Dino.right.deadBurned, false, afterAnimationCallback);
     }
 
     protected setFrameDuration() {
