@@ -16,6 +16,7 @@ import {FailFinalDialog} from "./gui/dialogs/fail_final_dialog";
 import {SuccessFinalDialog} from "./gui/dialogs/success_final_dialog";
 import {Options} from "./options";
 import {Dialog} from "./gui/dialogs/dialog";
+import {Ufo} from "./characters/ufo";
 
 enum Key {
     Pause = "p",
@@ -38,6 +39,8 @@ export class Scene {
     private readonly _continueDialog: ContinueDialog;
     private readonly _failFinalDialog: FailFinalDialog;
     private readonly _successFinalDialog: SuccessFinalDialog;
+
+    private _ufo?: Ufo = undefined;
 
     private _createAnimalTime?: number;
     private _createCometTime?: number;
@@ -68,11 +71,14 @@ export class Scene {
             this._createAnimalTime = undefined;
             this._createCometTime = undefined;
             this._dino.reborn();
-        }
+        };
         this._pausedDialog = new PausedDialog(scr);
         this._continueDialog = new ContinueDialog(scr, onDialogHideHandler);
         this._failFinalDialog = new FailFinalDialog(scr, onDialogHideHandler);
-        this._successFinalDialog = new SuccessFinalDialog(scr);
+        const startUfo = () => {
+            this._ufo = new Ufo(scr, this._dino);
+        };
+        this._successFinalDialog = new SuccessFinalDialog(scr, startUfo);
 
         scr.key([Key.Pause], this._keyPressed);
     }
@@ -87,6 +93,7 @@ export class Scene {
         this._continueDialog.destroy();
         this._failFinalDialog.destroy();
         this._successFinalDialog.destroy();
+        this._ufo?.destroy();
     }
 
     update() {
@@ -100,6 +107,7 @@ export class Scene {
         this._continueDialog.update();
         this._failFinalDialog.update();
         this._successFinalDialog.update();
+        this._ufo?.update();
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {

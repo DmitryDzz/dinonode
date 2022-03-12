@@ -54,6 +54,11 @@ export class Dino extends Sprite {
     private _debugTailColliderBox?: BoxElement;
     private _debugBodyColliderBox?: BoxElement;
 
+    get width() { return this._dinoRect.width; }
+    get height() { return this._dinoRect.height; }
+    get column() { return this._dinoRect.column; }
+    get row() { return this._dinoRect.row; }
+
     constructor(scr: Screen, onDeathCallback: OnDeathCallback, afterDeathAnimationCallback: AfterAnimationCallback) {
         super(scr, 0, 0, DinoRect.DEFAULT_WIDTH, DinoRect.DEFAULT_HEIGHT, "#608000");
         this._onDeathCallback = onDeathCallback;
