@@ -7,6 +7,7 @@ import {UfoState} from "./ufo_state";
 import {RectW} from "../rect";
 import {ArrivalPhase, DeparturePhase, KidnappingPhase, Phase} from "./ufo_phase";
 import {Texture} from "../resources/ufo_resources";
+import {TheEndDialog} from "../gui/dialogs/the_end_dialog";
 
 export class Ufo extends Sprite {
     private static readonly WIDTH = 31;
@@ -14,6 +15,7 @@ export class Ufo extends Sprite {
     private static readonly ALTITUDE = 26;
 
     private readonly _dino: Dino;
+    private readonly _theEndDialog: TheEndDialog;
 
     private readonly _state: UfoState;
 
@@ -24,7 +26,7 @@ export class Ufo extends Sprite {
     private readonly _aboveDinoColumn: integer;
     private _phase: Phase;
 
-    constructor(scr: Screen, dino: Dino) {
+    constructor(scr: Screen, dino: Dino, theEndDialog: TheEndDialog) {
         const row: integer = Math.round(scr.height as number) - Ufo.ALTITUDE;
         const targetColumn: integer = Math.round(dino.column + (dino.width - Ufo.WIDTH) / 2);
         const isLeftDirection = dino.column + (dino.width / 2) > (scr.width as number) / 2;
@@ -32,6 +34,7 @@ export class Ufo extends Sprite {
 
         super(scr, targetColumn, row,  Ufo.WIDTH, Ufo.HEIGHT, Texture.Ufo.BASE_COLOR);
         this._dino = dino;
+        this._theEndDialog = theEndDialog;
         this._state = new UfoState();
         this._x = targetColumn;
         this._y = row;
@@ -86,8 +89,7 @@ export class Ufo extends Sprite {
 
     private _finalDialogPhase = () => {
         this._phase.destroy();
-        // show "The end" dialog...
-        //...
+        this._theEndDialog.show();
         this.destroy();
     }
 }

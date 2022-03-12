@@ -17,6 +17,7 @@ import {SuccessFinalDialog} from "./gui/dialogs/success_final_dialog";
 import {Options} from "./options";
 import {Dialog} from "./gui/dialogs/dialog";
 import {Ufo} from "./characters/ufo";
+import {TheEndDialog} from "./gui/dialogs/the_end_dialog";
 
 enum Key {
     Pause = "p",
@@ -39,6 +40,7 @@ export class Scene {
     private readonly _continueDialog: ContinueDialog;
     private readonly _failFinalDialog: FailFinalDialog;
     private readonly _successFinalDialog: SuccessFinalDialog;
+    private readonly _theEndDialog: TheEndDialog;
 
     private _ufo?: Ufo = undefined;
 
@@ -76,9 +78,10 @@ export class Scene {
         this._continueDialog = new ContinueDialog(scr, onDialogHideHandler);
         this._failFinalDialog = new FailFinalDialog(scr, onDialogHideHandler);
         const startUfo = () => {
-            this._ufo = new Ufo(scr, this._dino);
+            this._ufo = new Ufo(scr, this._dino, this._theEndDialog);
         };
         this._successFinalDialog = new SuccessFinalDialog(scr, startUfo);
+        this._theEndDialog = new TheEndDialog(scr);
 
         scr.key([Key.Pause], this._keyPressed);
     }
@@ -93,6 +96,7 @@ export class Scene {
         this._continueDialog.destroy();
         this._failFinalDialog.destroy();
         this._successFinalDialog.destroy();
+        this._theEndDialog.destroy();
         this._ufo?.destroy();
     }
 
@@ -107,6 +111,7 @@ export class Scene {
         this._continueDialog.update();
         this._failFinalDialog.update();
         this._successFinalDialog.update();
+        this._theEndDialog.update();
         this._ufo?.update();
     }
 
