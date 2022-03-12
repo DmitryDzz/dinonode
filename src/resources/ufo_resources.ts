@@ -1,5 +1,7 @@
 export namespace Texture {
     export class Ufo {
+        static readonly BASE_COLOR = "#6897ED";
+
         private static readonly deckColorOpen = "{#2000F0-fg}";
         private static readonly colorClose = "{/}";
         private static readonly nozzleColorOpen = "{#FF8114-fg}"
@@ -10,25 +12,25 @@ export namespace Texture {
             "           █▀██▀██▀█           \n" +
             "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" + Ufo.colorClose +
             "  ▄▄███████████████████████▄▄  \n" +
-            " ▀█▄███▄████▄█████▄████▄███▄█▀ \n" + Ufo.deckColorOpen +
-         // "          ▀^▀▀▀^▀▀▀^▀          " + Ufo.colorClose;
-            `          ▀${Ufo.nozzle}▀▀▀${Ufo.nozzle}▀▀▀${Ufo.nozzle}▀          `;
+            " ▀█▄███▄████▄█████▄████▄███▄█▀ \n" +
+         // "          ▀^▀▀▀^▀▀▀^▀          ";
+            `          ${Ufo.deckColorOpen}▀${Ufo.colorClose}${Ufo.nozzle}${Ufo.deckColorOpen}▀▀▀${Ufo.colorClose}${Ufo.nozzle}${Ufo.deckColorOpen}▀▀▀${Ufo.colorClose}${Ufo.nozzle}${Ufo.deckColorOpen}▀${Ufo.colorClose}`;
         static readonly idleB = Ufo.deckColorOpen +
             "            ▄█████▄            \n" +
             "           ██▀██▀██▀           \n" +
             "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" + Ufo.colorClose +
             "  ▄▄███████████████████████▄▄  \n" +
-            "▀ ██▄███▄█████▄█████▄████▄██▄▀▀\n" + Ufo.deckColorOpen +
-         // "          ▀▀^▀▀▀▀^▀▀^          " + Ufo.colorClose;
-            `          ▀▀${Ufo.nozzle}▀▀▀▀${Ufo.nozzle}▀▀${Ufo.nozzle}          `;
+            "▀ ██▄███▄█████▄█████▄████▄██▄▀▀\n" +
+         // "          ▀▀^▀▀▀▀^▀▀^          ";
+            `          ${Ufo.deckColorOpen}▀▀${Ufo.colorClose}${Ufo.nozzle}${Ufo.deckColorOpen}▀▀▀▀${Ufo.colorClose}${Ufo.nozzle}${Ufo.deckColorOpen}▀▀${Ufo.colorClose}${Ufo.nozzle}`;
         static readonly idleC = Ufo.deckColorOpen +
             "            ▄█████▄            \n" +
             "           ▀██▀██▀██           \n" +
             "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" + Ufo.colorClose +
             "  ▄▄███████████████████████▄▄  \n" +
-            "▀▀▄██▄████▄█████▄█████▄███▄██ ▀\n" + Ufo.deckColorOpen +
-         // "          ^▀▀^▀▀▀▀^▀▀          " + Ufo.colorClose;
-            `          ${Ufo.nozzle}▀▀${Ufo.nozzle}▀▀▀▀${Ufo.nozzle}▀▀          `;
+            "▀▀▄██▄████▄█████▄█████▄███▄██ ▀\n" +
+         // "          ^▀▀^▀▀▀▀^▀▀          ";
+            `          ${Ufo.nozzle}${Ufo.deckColorOpen}▀▀${Ufo.colorClose}${Ufo.nozzle}${Ufo.deckColorOpen}▀▀▀▀${Ufo.colorClose}${Ufo.nozzle}${Ufo.deckColorOpen}▀▀${Ufo.colorClose}`;
     }
 }
 
