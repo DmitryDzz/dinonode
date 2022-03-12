@@ -47,7 +47,10 @@ export class Ufo extends Sprite {
 
     update(): void {
         if (this._destroyed) return;
+
         this._phase.update();
+        this._column = Math.round(this._phase.x);
+
         this._state.update();
 
         const spriteRect: RectW = {c: this._column, r: this._row, w: this._width, h: this._height};
@@ -71,6 +74,7 @@ export class Ufo extends Sprite {
     }
 
     private _startKidnappingPhase = () => {
+        this._dino.destroy();
         this._phase.destroy();
         this._phase = new KidnappingPhase(this._aboveDinoColumn, this._startDeparturePhase);
     }
