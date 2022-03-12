@@ -1,47 +1,34 @@
 export namespace Texture {
     export class Ufo {
-        static readonly idleA = "{#2000F0-fg}" +
+        private static readonly deckColorOpen = "{#2000F0-fg}";
+        private static readonly colorClose = "{/}";
+        private static readonly nozzleColorOpen = "{#FF8114-fg}"
+        private static readonly nozzle = `${Ufo.nozzleColorOpen}▀${Ufo.colorClose}`;
+
+        static readonly idleA = Ufo.deckColorOpen +
             "            ▄█████▄            \n" +
             "           █▀██▀██▀█           \n" +
-            "      ▄▄▄▄▟█████████▙▄▄▄▄      \n{/}" +
+            "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" + Ufo.colorClose +
             "  ▄▄███████████████████████▄▄  \n" +
-            " ▀█▄███▄████▄█████▄████▄███▄█▀ \n{#2000F0-fg}" +
-            "          ▀▀▀▀▀▀▀▀▀▀▀          {/}";
-        static readonly idleB = "{#2000F0-fg}" +
+            " ▀█▄███▄████▄█████▄████▄███▄█▀ \n" + Ufo.deckColorOpen +
+         // "          ▀^▀▀▀^▀▀▀^▀          " + Ufo.colorClose;
+            `          ▀${Ufo.nozzle}▀▀▀${Ufo.nozzle}▀▀▀${Ufo.nozzle}▀          `;
+        static readonly idleB = Ufo.deckColorOpen +
             "            ▄█████▄            \n" +
             "           ██▀██▀██▀           \n" +
-            "      ▄▄▄▄▟█████████▙▄▄▄▄      \n{/}" +
+            "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" + Ufo.colorClose +
             "  ▄▄███████████████████████▄▄  \n" +
-            "▀ ██▄███▄█████▄█████▄████▄██▄▀▀\n{#2000F0-fg}" +
-            "          ▀▀▀▀▀▀▀▀▀▀▀          {/}";
-        static readonly idleC = "{#2000F0-fg}" +
+            "▀ ██▄███▄█████▄█████▄████▄██▄▀▀\n" + Ufo.deckColorOpen +
+         // "          ▀▀^▀▀▀▀^▀▀^          " + Ufo.colorClose;
+            `          ▀▀${Ufo.nozzle}▀▀▀▀${Ufo.nozzle}▀▀${Ufo.nozzle}          `;
+        static readonly idleC = Ufo.deckColorOpen +
             "            ▄█████▄            \n" +
             "           ▀██▀██▀██           \n" +
-            "      ▄▄▄▄▟█████████▙▄▄▄▄      \n{/}" +
+            "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" + Ufo.colorClose +
             "  ▄▄███████████████████████▄▄  \n" +
-            "▀▀▄██▄████▄█████▄█████▄███▄██ ▀\n{#2000F0-fg}" +
-            "          ▀▀▀▀▀▀▀▀▀▀▀          {/}";
-        // static readonly idleA =
-        //     "            ▄█████▄            \n" +
-        //     "           █▀██▀██▀█           \n" +
-        //     "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" +
-        //     "  ▄▄███████████████████████▄▄  \n" +
-        //     "▀▀███████████████████████████▀▀\n" +
-        //     "          ▀▀▀▀▀▀▀▀▀▀▀          ";
-        // static readonly idleB =
-        //     "            ▄█████▄            \n" +
-        //     "           ██▀██▀██▀           \n" +
-        //     "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" +
-        //     "  ▄▄███████████████████████▄▄  \n" +
-        //     "▀▀███████████████████████████▀▀\n" +
-        //     "          ▀▀▀▀▀▀▀▀▀▀▀          ";
-        // static readonly idleC =
-        //     "            ▄█████▄            \n" +
-        //     "           ▀██▀██▀██           \n" +
-        //     "      ▄▄▄▄▟█████████▙▄▄▄▄      \n" +
-        //     "  ▄▄███████████████████████▄▄  \n" +
-        //     "▀▀███████████████████████████▀▀\n" +
-        //     "          ▀▀▀▀▀▀▀▀▀▀▀          ";
+            "▀▀▄██▄████▄█████▄█████▄███▄██ ▀\n" + Ufo.deckColorOpen +
+         // "          ^▀▀^▀▀▀▀^▀▀          " + Ufo.colorClose;
+            `          ${Ufo.nozzle}▀▀${Ufo.nozzle}▀▀▀▀${Ufo.nozzle}▀▀          `;
     }
 }
 
