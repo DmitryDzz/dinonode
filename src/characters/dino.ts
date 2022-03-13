@@ -109,6 +109,7 @@ export class Dino extends Sprite {
     get isDead(): boolean { return this._dinoRect.isDead; }
     get isAlive(): boolean { return !this.isDead; }
     get isWin(): boolean { return this._dinoRect.isWin; }
+    get isLeftDirected(): boolean { return this._state.isLeftDirection(); }
 
     protected _onWindowResize(width: number, height: number): void {
         this._dinoRect.onWindowResize(width, height);

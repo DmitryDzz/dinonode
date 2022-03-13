@@ -3,7 +3,7 @@ import {Texture} from "../../resources/dialog_resources";
 import {Time} from "../../time";
 
 export class SuccessFinalDialog extends Dialog {
-    private static readonly SHOW_DURATION = 0.5;//3;
+    private static readonly SHOW_DURATION = 3.0;
     private _timeToHide?: number;
 
     show() {

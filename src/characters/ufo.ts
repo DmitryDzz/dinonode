@@ -3,9 +3,9 @@ import Screen = Widgets.Screen;
 import {Sprite} from "../sprite";
 import {float, integer} from "../types";
 import {Dino} from "./dino";
-import {UfoState} from "./ufo_state";
+import {UfoState} from "./ufo_states";
 import {RectW} from "../rect";
-import {ArrivalPhase, DeparturePhase, KidnappingPhase, Phase} from "./ufo_phase";
+import {ArrivalPhase, DeparturePhase, KidnappingPhase, PausePhase, Phase} from "./ufo_phase";
 import {Texture} from "../resources/ufo_resources";
 import {TheEndDialog} from "../gui/dialogs/the_end_dialog";
 
@@ -77,14 +77,22 @@ export class Ufo extends Sprite {
     }
 
     private _startKidnappingPhase = () => {
+        const isLeftDirected = this._dino.isLeftDirected;
         this._dino.destroy();
         this._phase.destroy();
-        this._phase = new KidnappingPhase(this._aboveDinoColumn, this._startDeparturePhase);
+        this._phase = new KidnappingPhase(this._scr, isLeftDirected, this._aboveDinoColumn, this._startDeparturePhase);
     }
 
     private _startDeparturePhase = () => {
         this._phase.destroy();
-        this._phase = new DeparturePhase(this._aboveDinoColumn, this._outsideColumn, this._finalDialogPhase);
+        this._phase = new DeparturePhase(this._aboveDinoColumn, this._outsideColumn, this._pauseAfterDeparturePhase);
+    }
+
+    private _pauseAfterDeparturePhase = () => {
+        this._phase.destroy();
+        const duration = 2.0;
+        this._phase = new PausePhase(duration, this._finalDialogPhase);
+        this._box.hide();
     }
 
     private _finalDialogPhase = () => {

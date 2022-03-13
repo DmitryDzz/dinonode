@@ -1,5 +1,8 @@
+import {Widgets} from "blessed";
+import Screen = Widgets.Screen;
 import {float, integer} from "../types";
 import {Time} from "../time";
+import {Kidnapping} from "./kidnapping";
 
 export type AfterPhaseCallback = () => void;
 
@@ -87,23 +90,22 @@ export class ArrivalPhase extends Phase {
 }
 
 export class KidnappingPhase extends Phase {
-    private static readonly DURATION = 2.0;
+    private readonly _kidnapping: Kidnapping;
 
-    private _startTime?: number = undefined;
-
-    constructor(column: integer, afterPhaseCallback: AfterPhaseCallback) {
+    constructor(scr: Screen, isLeftDirected: boolean, column: integer, afterPhaseCallback: AfterPhaseCallback) {
         super(column, column, afterPhaseCallback);
+        this._kidnapping = new Kidnapping(scr, isLeftDirected, column, this._onKidnappingSpriteDestroy);
     }
 
     update(): void {
         if (this._isDestroyed || this._isDone) return;
-        const time = Time.time;
-        if (this._startTime === undefined) this._startTime = time;
-        if (time >= this._startTime + KidnappingPhase.DURATION) {
-            this._isDone = true;
-            this._afterPhaseCallback();
-        }
+        this._kidnapping.update();
     }
+
+    private _onKidnappingSpriteDestroy = (): void => {
+        this._isDone = true;
+        this._afterPhaseCallback();
+    };
 }
 
 export class DeparturePhase extends Phase {
@@ -125,6 +127,31 @@ export class DeparturePhase extends Phase {
         }
         if (this._isDone) {
             this._x = this._endColumn;
+            this._afterPhaseCallback();
+        }
+    }
+}
+
+export class PausePhase extends Phase {
+    private readonly _duration: number;
+
+    private _endTime?: number;
+
+    constructor(durationSeconds: number, afterPhaseCallback: AfterPhaseCallback) {
+        super(0, 0, afterPhaseCallback);
+        this._duration = durationSeconds;
+    }
+
+    update(): void {
+        if (this._isDestroyed || this._isDone) return;
+
+        const time = Time.time;
+        if (this._endTime === undefined) {
+            this._endTime = time + this._duration;
+        }
+
+        if (time >= this._endTime) {
+            this._isDone = true;
             this._afterPhaseCallback();
         }
     }
