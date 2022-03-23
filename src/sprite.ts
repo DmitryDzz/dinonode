@@ -256,7 +256,7 @@ export abstract class Sprite {
                     }
                 } else {
                     if (ch === "{") {
-                        colorTag = {position: i, tag: ch};
+                        colorTag = {position: strippedLine.length, tag: ch};
                     } else {
                         strippedLine += ch;
                     }
@@ -270,18 +270,13 @@ export abstract class Sprite {
         let unclosedLineTag: string = "";
         for (let lineIndex = 0; lineIndex < result.sourceLines.length; lineIndex++) {
             const sourceLine: string = result.sourceLines[lineIndex];
+            const strippedLine: string = result.strippedLines[lineIndex];
             let coloredLine: string = unclosedLineTag + sourceLine;
             result.coloredLinesMeta[lineIndex] = [];
             if (unclosedLineTag !== "") {
                 result.coloredLinesMeta[lineIndex].push({position: 0, tag: unclosedLineTag});
-                const offset = unclosedLineTag.length;
-                for (let i = 0; i < result.sourceMeta[lineIndex].length; i++) {
-                    const t = result.sourceMeta[lineIndex][i];
-                    result.coloredLinesMeta[lineIndex].push({position: t.position + offset, tag: t.tag});
-                }
-            } else {
-                result.coloredLinesMeta[lineIndex].push(...result.sourceMeta[lineIndex]);
             }
+            result.coloredLinesMeta[lineIndex].push(...result.sourceMeta[lineIndex]);
             if (result.coloredLinesMeta[lineIndex].length > 0) {
                 const tags: LineColorTags = result.coloredLinesMeta[lineIndex];
                 const lastTagInLine = tags[tags.length - 1].tag;
@@ -289,7 +284,7 @@ export abstract class Sprite {
                     unclosedLineTag = "";
                 } else {
                     unclosedLineTag = lastTagInLine;
-                    result.coloredLinesMeta[lineIndex].push({tag: "{/}", position: coloredLine.length});
+                    result.coloredLinesMeta[lineIndex].push({tag: "{/}", position: strippedLine.length});
                     coloredLine += "{/}";
                 }
             }

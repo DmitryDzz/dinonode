@@ -59,13 +59,13 @@ describe("Test meta data extraction", () => {
         expect(meta.sourceMeta[0][0].tag).toBe("{#123}");
         expect(meta.sourceMeta[0][0].position).toBe(0);
         expect(meta.sourceMeta[0][1].tag).toBe("{/}");
-        expect(meta.sourceMeta[0][1].position).toBe(10);
+        expect(meta.sourceMeta[0][1].position).toBe(4);
         expect(meta.sourceMeta[1].length).toBe(0);
         expect(meta.sourceMeta[2].length).toBe(2);
         expect(meta.sourceMeta[2][0].tag).toBe("{#321}");
         expect(meta.sourceMeta[2][0].position).toBe(1);
         expect(meta.sourceMeta[2][1].tag).toBe("{/}");
-        expect(meta.sourceMeta[2][1].position).toBe(9);
+        expect(meta.sourceMeta[2][1].position).toBe(3);
 
         expect(meta.coloredLines[0]).toBe("{#123}abcd{/}");
         expect(meta.coloredLines[1]).toBe("efgh");
@@ -75,13 +75,13 @@ describe("Test meta data extraction", () => {
         expect(meta.coloredLinesMeta[0][0].tag).toBe("{#123}");
         expect(meta.coloredLinesMeta[0][0].position).toBe(0);
         expect(meta.coloredLinesMeta[0][1].tag).toBe("{/}");
-        expect(meta.coloredLinesMeta[0][1].position).toBe(10);
+        expect(meta.coloredLinesMeta[0][1].position).toBe(4);
         expect(meta.coloredLinesMeta[1].length).toBe(0);
         expect(meta.coloredLinesMeta[2].length).toBe(2);
         expect(meta.coloredLinesMeta[2][0].tag).toBe("{#321}");
         expect(meta.coloredLinesMeta[2][0].position).toBe(1);
         expect(meta.coloredLinesMeta[2][1].tag).toBe("{/}");
-        expect(meta.coloredLinesMeta[2][1].position).toBe(9);
+        expect(meta.coloredLinesMeta[2][1].position).toBe(3);
     });
 
     it("A content with tags through lines", () => {
@@ -117,17 +117,17 @@ describe("Test meta data extraction", () => {
         expect(meta.coloredLinesMeta[0][0].tag).toBe("{#123}");
         expect(meta.coloredLinesMeta[0][0].position).toBe(0);
         expect(meta.coloredLinesMeta[0][1].tag).toBe("{/}");
-        expect(meta.coloredLinesMeta[0][1].position).toBe(10);
+        expect(meta.coloredLinesMeta[0][1].position).toBe(4);
         expect(meta.coloredLinesMeta[1].length).toBe(2);
         expect(meta.coloredLinesMeta[1][0].tag).toBe("{#123}");
         expect(meta.coloredLinesMeta[1][0].position).toBe(0);
         expect(meta.coloredLinesMeta[1][1].tag).toBe("{/}");
-        expect(meta.coloredLinesMeta[1][1].position).toBe(10);
+        expect(meta.coloredLinesMeta[1][1].position).toBe(4);
         expect(meta.coloredLinesMeta[2].length).toBe(2);
         expect(meta.coloredLinesMeta[2][0].tag).toBe("{#123}");
         expect(meta.coloredLinesMeta[2][0].position).toBe(0);
         expect(meta.coloredLinesMeta[2][1].tag).toBe("{/}");
-        expect(meta.coloredLinesMeta[2][1].position).toBe(9);
+        expect(meta.coloredLinesMeta[2][1].position).toBe(3);
     });
 });
 
