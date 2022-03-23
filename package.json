@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/blessed": "^0.1.19",
     "@types/jest": "^27.4.1",
-    "@types/yargs": "^17.0.9",
+    "@types/yargs": "^17.0.10",
     "jest": "^27.5.1",
     "madge": "^5.0.1",
     "npm-run-all": "^4.1.5",
@@ -39,7 +39,7 @@
   "dependencies": {
     "blessed": "^0.1.81",
     "tiny-typed-emitter": "^2.1.0",
-    "yargs": "^17.3.1"
+    "yargs": "^17.4.0"
   },
   "bin": "dist/src/index.js",
   "pkg": {

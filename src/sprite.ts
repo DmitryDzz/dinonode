@@ -228,6 +228,86 @@ export abstract class Sprite {
         rows = rows.slice(0, -rowsToDelete);
         return rows.join("\n");
     }
+
+    static extractMeta(frameContent: string): ContentMeta {
+        const sourceLines = frameContent.split("\n");
+        const result: ContentMeta = {
+            source: frameContent,
+            sourceLines,
+            linesCount: sourceLines.length,
+            strippedLines: [],
+            sourceMeta: [],
+            coloredLines: [],
+            coloredLinesMeta: [],
+        };
+
+        let colorTag: ColorTag | undefined = undefined;
+        for (let lineIndex = 0; lineIndex < sourceLines.length; lineIndex++) {
+            let strippedLine = "";
+            const line: string = sourceLines[lineIndex];
+            const lineColorTags: ColorTag[] = [];
+            for (let i = 0; i < line.length; i++) {
+                const ch: string = line[i];
+                if (colorTag) {
+                    colorTag.tag += ch;
+                    if (ch === "}") {
+                        lineColorTags.push(colorTag);
+                        colorTag = undefined;
+                    }
+                } else {
+                    if (ch === "{") {
+                        colorTag = {position: i, tag: ch};
+                    } else {
+                        strippedLine += ch;
+                    }
+                }
+            }
+
+            result.strippedLines.push(strippedLine);
+            result.sourceMeta.push(lineColorTags);
+        }
+
+        let unclosedLineTag: string = "";
+        for (let lineIndex = 0; lineIndex < result.sourceLines.length; lineIndex++) {
+            const sourceLine: string = result.sourceLines[lineIndex];
+            let coloredLine: string = unclosedLineTag + sourceLine;
+            result.coloredLinesMeta[lineIndex] = [];
+            if (unclosedLineTag !== "") {
+                result.coloredLinesMeta[lineIndex].push({position: 0, tag: unclosedLineTag});
+                const offset = unclosedLineTag.length;
+                for (let i = 0; i < result.sourceMeta[lineIndex].length; i++) {
+                    const t = result.sourceMeta[lineIndex][i];
+                    result.coloredLinesMeta[lineIndex].push({position: t.position + offset, tag: t.tag});
+                }
+            } else {
+                result.coloredLinesMeta[lineIndex].push(...result.sourceMeta[lineIndex]);
+            }
+            if (result.coloredLinesMeta[lineIndex].length > 0) {
+                const tags: LineColorTags = result.coloredLinesMeta[lineIndex];
+                const lastTagInLine = tags[tags.length - 1].tag;
+                if (lastTagInLine === "{/}") {
+                    unclosedLineTag = "";
+                } else {
+                    unclosedLineTag = lastTagInLine;
+                    result.coloredLinesMeta[lineIndex].push({tag: "{/}", position: coloredLine.length});
+                    coloredLine += "{/}";
+                }
+            }
+            result.coloredLines[lineIndex] = coloredLine;
+        }
+
+        return result;
+    }
+
+    static toColoredLines(frameContent: string): string {
+        const meta: ContentMeta = Sprite.extractMeta(frameContent);
+        return meta.coloredLines.join("\n");
+    }
+
+    static toStrippedLines(frameContent: string): string {
+        const meta: ContentMeta = Sprite.extractMeta(frameContent);
+        return meta.strippedLines.join("\n");
+    }
 }
 
 interface BlessCommand {
@@ -235,4 +315,21 @@ interface BlessCommand {
     beginCmdPos: number;
     endCmd?: string;
     endCmdPos?: number;
+}
+
+export interface ColorTag {
+    position: number;
+    tag: string;
+}
+
+export type LineColorTags = ColorTag[];
+
+export interface ContentMeta {
+    source: string;
+    linesCount: number;
+    sourceLines: string[];
+    strippedLines: string[];
+    coloredLines: string[];
+    sourceMeta: LineColorTags[];
+    coloredLinesMeta: LineColorTags[];
 }
