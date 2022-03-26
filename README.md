@@ -15,6 +15,10 @@ The goal is to save the world, of course. The dinosaur world.
 * **[p]:** pause/unpause
 * **[Escape], [Ctrl+C], [q]:** quit
 
+## Download
+
+[All public releases](https://drive.google.com/drive/folders/1WrZ0hNyxBav3kfOxc8FgfuZ-0R1qyMbM?usp=sharing)
+
 ## Cloning the project
 
 ```shell
