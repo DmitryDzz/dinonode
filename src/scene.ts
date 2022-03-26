@@ -18,7 +18,7 @@ import {Options} from "./options";
 import {Dialog} from "./gui/dialogs/dialog";
 import {Ufo} from "./characters/ufo";
 import {TheEndDialog} from "./gui/dialogs/the_end_dialog";
-import {DebugUfo} from "./characters/debuf_ufo";
+//import {DebugUfo} from "./characters/debug_ufo";
 
 enum Key {
     Pause = "p",
@@ -37,7 +37,7 @@ export class Scene {
     private readonly _dino: Dino;
     private _enemies: Enemy[] = [];
 
-    private readonly _debugUfo: DebugUfo;
+//    private readonly _debugUfo: DebugUfo;
 
     private readonly _pausedDialog: PausedDialog;
     private readonly _continueDialog: ContinueDialog;
@@ -88,7 +88,7 @@ export class Scene {
 
         scr.key([Key.Pause], this._keyPressed);
 
-        this._debugUfo = new DebugUfo(scr, -4, 10);
+//        this._debugUfo = new DebugUfo(scr, -4, 10);
     }
 
     destroy() {
@@ -103,7 +103,7 @@ export class Scene {
         this._successFinalDialog.destroy();
         this._theEndDialog.destroy();
         this._ufo?.destroy();
-        this._debugUfo.destroy();
+//        this._debugUfo.destroy();
     }
 
     update() {
@@ -119,7 +119,7 @@ export class Scene {
         this._successFinalDialog.update();
         this._theEndDialog.update();
         this._ufo?.update();
-        this._debugUfo.update();
+//        this._debugUfo.update();
     }
 
     private readonly _keyPressed = (ch: string, _key: IKeyEventArg) => {
