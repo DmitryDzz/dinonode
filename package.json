@@ -1,6 +1,6 @@
 {
   "name": "dinonode",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A node.js terminal game.",
   "main": "src/index.ts",
   "scripts": {

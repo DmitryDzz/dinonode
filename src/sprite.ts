@@ -157,7 +157,8 @@ export abstract class Sprite {
         { spriteRect?: RectW, frameContent?: string } {
 
         const meta: ContentMeta = Sprite.extractMeta(frameContent);
-        frameContent = meta.strippedLines.join("\n");
+        //TODO
+        // frameContent = meta.strippedLines.join("\n");
 
         let croppedRect: RectW = Object.assign({}, spriteRect);
 
@@ -199,20 +200,24 @@ export abstract class Sprite {
     }
 
     private static getTagToTheLeft(rowTags: LineColorTags, position: number): string {
-        let result: string = "";
-        for (let i = 0; i < rowTags.length; i++) {
-            const tag = rowTags[i];
-            if (tag.position < position && tag.tag !== "{/}") result = tag.tag;
-            else break;
-        }
-        return result;
+        //TODO
+        // let result: string = "";
+        // for (let i = 0; i < rowTags.length; i++) {
+        //     const tag = rowTags[i];
+        //     if (tag.position < position && tag.tag !== "{/}") result = tag.tag;
+        //     else break;
+        // }
+        // return result;
+        return "";
     }
 
     private static getTagToTheRight(rowTags: LineColorTags, position: number): string {
+        //TODO
         return "";
     }
 
     static deleteFirstColumns(meta: ContentMeta, columnsToDelete: number): string {
+        //TODO
         // Сделать всё тут: meta.coloredLines[i]
         // Считать "раздетые" символы, проходя по строке, игнорируя символы в тегах.
         // Затем добавить спереди тег, если надо. См. getTagToTheLeft().

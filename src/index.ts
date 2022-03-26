@@ -4,7 +4,7 @@ import {GameDifficulty, Options} from "./options";
 
 const main = (): void => {
     const argv = yargs(process.argv.slice(2))
-        .version("1.0.2")
+        .version("1.0.3")
         .alias("v", "version")
         .alias("h", "help")
         .options({

@@ -1,3 +1,3 @@
 # 1.0.3
 
-* First public release.
+* The first public release.
