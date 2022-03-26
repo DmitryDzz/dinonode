@@ -156,6 +156,9 @@ export abstract class Sprite {
     static cropFrame(spriteRect: RectW, scrWidth: integer, scrHeight: integer, frameContent: string):
         { spriteRect?: RectW, frameContent?: string } {
 
+        const meta: ContentMeta = Sprite.extractMeta(frameContent);
+        frameContent = meta.strippedLines.join("\n");
+
         let croppedRect: RectW = Object.assign({}, spriteRect);
 
         croppedRect.w = spriteRect.c < 0
@@ -177,10 +180,10 @@ export abstract class Sprite {
         if (croppedRect.w !== spriteRect.w) {
             const columnsToRemove: number = spriteRect.w - croppedRect.w;
             if (spriteRect.c < 0) {
-                croppedFrameContent = Sprite.deleteFirstColumns(croppedFrameContent, columnsToRemove);
+                croppedFrameContent = Sprite.deleteFirstColumns(meta, columnsToRemove);
                 croppedRect.c = 0;
             } else {
-                croppedFrameContent = Sprite.deleteLastColumns(croppedFrameContent, columnsToRemove);
+                croppedFrameContent = Sprite.deleteLastColumns(meta, columnsToRemove);
             }
         }
         if (croppedRect.h !== spriteRect.h) {
@@ -195,21 +198,42 @@ export abstract class Sprite {
         return {spriteRect: croppedRect, frameContent: croppedFrameContent};
     }
 
-    static deleteFirstColumns(frameContent: string, columnsToDelete: number): string {
-        const rows: string[] = frameContent.split("\n");
+    private static getTagToTheLeft(rowTags: LineColorTags, position: number): string {
+        let result: string = "";
+        for (let i = 0; i < rowTags.length; i++) {
+            const tag = rowTags[i];
+            if (tag.position < position && tag.tag !== "{/}") result = tag.tag;
+            else break;
+        }
+        return result;
+    }
+
+    private static getTagToTheRight(rowTags: LineColorTags, position: number): string {
+        return "";
+    }
+
+    static deleteFirstColumns(meta: ContentMeta, columnsToDelete: number): string {
+        // Сделать всё тут: meta.coloredLines[i]
+        // Считать "раздетые" символы, проходя по строке, игнорируя символы в тегах.
+        // Затем добавить спереди тег, если надо. См. getTagToTheLeft().
+        const rows: string[] = meta.coloredLines;
         let croppedFrameContent: string = "";
         rows.forEach((row: string, i: number) => {
-            croppedFrameContent += row.slice(columnsToDelete);
+            const rowTags: LineColorTags = meta.coloredLinesMeta[i];
+            const tag: string = Sprite.getTagToTheLeft(rowTags, columnsToDelete);
+            croppedFrameContent += tag + row.slice(columnsToDelete);
             if (i < rows.length - 1)
                 croppedFrameContent += "\n";
         });
         return croppedFrameContent;
     }
 
-    static deleteLastColumns(frameContent: string, columnsToDelete: number): string {
-        const rows: string[] = frameContent.split("\n");
+    static deleteLastColumns(meta: ContentMeta, columnsToDelete: number): string {
+        const rows: string[] = meta.coloredLines;
         let croppedFrameContent: string = "";
         rows.forEach((row: string, i: number) => {
+            const rowTags: LineColorTags = meta.coloredLinesMeta[i];
+            const tag: string = Sprite.getTagToTheRight(rowTags, row.length - columnsToDelete);
             croppedFrameContent += row.slice(0, -columnsToDelete);
             if (i < rows.length - 1)
                 croppedFrameContent += "\n";
