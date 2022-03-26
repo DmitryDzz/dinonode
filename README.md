@@ -4,6 +4,8 @@ Dinonode is an old school terminal platform open source game.
 The game protagonist is Google T-Rex in absolutely terrible apocalyptic circumstances.
 The goal is to save the world, of course. The dinosaur world.
 
+![Screenshot](https://raw.githubusercontent.com/DmitryDzz/dinonode/master/readme-images/screenshot.png)
+
 ## Keyboard controls
 
 * **[Left arrow], [a]:** run left
