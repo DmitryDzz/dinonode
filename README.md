@@ -6,6 +6,8 @@ The goal is to save the world, of course. The dinosaur world.
 
 ![Screenshot](https://raw.githubusercontent.com/DmitryDzz/dinonode/master/readme-images/screenshot.png)
 
+Game trailer: https://www.youtube.com/watch?v=PgDoDAzrWBA
+
 ## Keyboard controls
 
 * **[Left arrow], [a]:** run left
